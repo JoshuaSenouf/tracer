@@ -22,7 +22,9 @@ include_directories(src/camera/
                     api/glfw/include/
                     api/glm/
                     api/stb/
-                    api/imgui/)
+                    api/imgui/
+                    api/embree/include
+                    api/tbb/include)
 
 file(GLOB API_SOURCES api/glad/src/glad.c
                         api/imgui/*.cpp)
@@ -51,11 +53,11 @@ source_group("Shaders" FILES ${PROJECT_SHADERS})
 source_group("Sources" FILES ${PROJECT_SOURCES})
 source_group("API" FILES ${API_SOURCES})
 
-set(TBB_DIR "$ENV{TBB_CMAKE}" CACHE FILEPATH "TBB CMake directory that include every .cmake files")
-find_package(TBB REQUIRED tbb)
+set(TBB_DIR "api/tbb/cmake" CACHE FILEPATH "TBB CMake directory that include every .cmake files")
+find_package(TBB REQUIRED)
 
-set(EMBREE_DIR "$ENV{EMBREE_CMAKE}" CACHE FILEPATH "Embree CMake directory that include every .cmake files")
-find_package(EMBREE 2.16.4 REQUIRED embree)
+set(EMBREE_DIR "api/embree" CACHE FILEPATH "Embree CMake directory that include every .cmake files")
+find_package(EMBREE 2.16.4 REQUIRED)
 
 add_definitions(-DGLFW_INCLUDE_NONE
                 -DPROJECT_SOURCE_DIR=\"${PROJECT_SOURCE_DIR}\")
