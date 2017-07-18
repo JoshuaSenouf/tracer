@@ -1,0 +1,11 @@
+# Simple scene descriptor
+# Format    : objType(;radius if Sphere);position;color;emissivecolor;materialtype;
+# Material  : DIFFUSE = 1 / SPECULAR = 2 / REFRACT = 3 / METAL = 4 / GLOSSY-COAT = 5
+
+
+SPHERE;1.0;(-1.5,0.6,0.0);(0.8,0.15,0.15);(0.0,0.0,0.0);1; # Diffuse sphere
+SPHERE;1.0;(-4.5,0.6,0.0);(0.75,0.75,0.75);(0.0,0.0,0.0);2; # Specular sphere
+SPHERE;1.0;(1.5,0.60,0.0);(1.0,1.0,1.0);(0.0,0.0,0.0);4; # Metal sphere
+SPHERE;1.0;(4.5,0.60,0.0);(1.0,0.4,0.0);(0.0,0.0,0.0);5; # Glossy sphere
+SPHERE;1.5;(0.0,4.0,-7.0);(0.0,0.0,0.0);(4,3.6,3.2);1; # Light source
+SPHERE;1000;(0.0,-1000.4,0.0);(0.5,0.5,0.5);(0.0,0.0,0.0);1; # "Ground"

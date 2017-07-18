@@ -1,0 +1,8 @@
+# Folders
+
+build/*
+
+# Files
+
+imgui.ini
+CMakeLists.txt.user
