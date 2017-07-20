@@ -1,12 +1,12 @@
 // Tracer by Joshua Senouf - 2017
 
-#include "renderer.h"
+#include "window.h"
 
 
 int main(int argc, char *argv[])
 {
-    Renderer Tracer;
-    Tracer.runRenderer();
+    Window mainWindow;
+    mainWindow.renderWindow();
 
     return 0;
 }

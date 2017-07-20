@@ -7,90 +7,35 @@ Renderer::Renderer()
 }
 
 
-int Renderer::runRenderer()
+void Renderer::initRender(int renderWidth, int renderHeight)
 {
-    glfwInit();
-
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
-    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-    glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
-
-    window = glfwCreateWindow(renderWidth, renderHeight, "Tracer", nullptr, nullptr);
-    glfwMakeContextCurrent(window);
-
-    glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-    glfwSwapInterval(1);
-
-    gladLoadGL();
-
-    ImGui_ImplGlfwGL3_Init(window, true);
-
-    lumenGUI.setRenderResolution(renderWidth, renderHeight);
-
-    renderCamera.setCamera(glm::vec2(renderWidth, renderHeight));
-
     quadRenderShader.setShader("res/shaders/quadRender.vert", "res/shaders/quadRender.frag");
-    initQuadRender();
 
+    initQuadRender();
     initScene();
 
-    glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+    outputBuffer = new glm::vec3[renderWidth * renderHeight];
+}
 
 
-    while (!glfwWindowShouldClose(window))
+void Renderer::renderTracer(int renderWidth, int renderHeight, int renderSamples, int renderBounces)
+{
+    std::uniform_real_distribution<float> randURF(-2147483648, 2147483647);
+//    std::uniform_real_distribution<float> randURF(0, 255);
+
+    quadRenderShader.useShader();
+
+    for (int y = 0; y < renderHeight; y++)
     {
-        GLfloat currentFrame = glfwGetTime();
-        deltaTime = currentFrame - lastFrame;
-        lastFrame = currentFrame;
+        for (int x = 0; x < renderWidth; x++)
+        {
+            int pixelIndex = (renderHeight - y - 1) * renderWidth + x;
 
-        glfwPollEvents();
+            // RENDER CODE
 
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-        //--------------
-        // GUI setting & callbacks
-        //--------------
-        lumenGUI.setupGUI();
-
-        ImGuiIO& io = ImGui::GetIO();
-        ImVec2 currentMousePos = ImGui::GetMousePos();
-
-        keyboardCallback(&io);
-
-        if (lastPosX !=  currentMousePos.x || lastPosY != currentMousePos.y)
-            mouseCallback(&io, currentMousePos.x, currentMousePos.y);
-
-        //--------------
-        // CPU Rendering
-        //--------------
-        if (renderReset) // If anything in camera or scene data has changed, we flush the CUDA data and reinit them again
-            resetRender();
-
-        frameCounter++;
-
-        // RENDER CODE
-
-        quadRenderShader.useShader();
-        displayGLBuffer();
-
-        //----------------
-        // GUI rendering
-        //----------------
-        lumenGUI.renderGUI();
-
-        glfwSwapBuffers(window);
+//            outputBuffer[pixelIndex] = glm::vec3(randURF(randSeed), randURF(randSeed), randURF(randSeed));
+        }
     }
-
-    //---------
-    // Cleaning
-    //---------
-    lumenGUI.stopGUI();
-    cleanScene();
-
-    glfwTerminate();
-
-    return 0;
 }
 
 
@@ -149,15 +94,6 @@ void Renderer::cleanScene()
 }
 
 
-void Renderer::resetRender()
-{
-    frameCounter = 0;
-    // RESET CODE
-
-    renderReset = false;
-}
-
-
 void Renderer::displayGLBuffer()
 {
     glBindVertexArray(this->quadVAO);
@@ -168,78 +104,42 @@ void Renderer::displayGLBuffer()
 }
 
 
-void Renderer::keyboardCallback(ImGuiIO* guiIO)
+void Renderer::renderToPPM(int renderWidth, int renderHeight, int renderSamples, int renderBounces)
 {
-    if (guiIO->KeysDown[GLFW_KEY_ESCAPE])
-        glfwSetWindowShouldClose(window, GL_TRUE);
+    glm::vec3* ppmBuffer = new glm::vec3[renderWidth * renderHeight];
 
-    if (guiIO->KeysDown[GLFW_KEY_W])
+    std::uniform_real_distribution<float> randURF(LONG_MIN, LONG_MAX);
+//    std::uniform_real_distribution<float> randURF(0, 255);
+
+    for (int y = 0; y < renderHeight; y++)
     {
-        renderCamera.keyboardCall(FORWARD, deltaTime);
-        renderReset = true;
+        for (int x = 0; x < renderWidth; x++)
+        {
+            int pixelIndex = (renderHeight - y - 1) * renderWidth + x;
+
+            ppmBuffer[pixelIndex] = glm::vec3(randURF(randSeed), randURF(randSeed), randURF(randSeed));
+        }
     }
 
-    if (guiIO->KeysDown[GLFW_KEY_S])
+    FILE *f = fopen("tracerRender.ppm", "w");
+    fprintf(f, "P3\n%d %d\n%d\n", renderWidth, renderHeight, 255);
+
+    for (int i = 0; i < renderWidth * renderHeight; i++)
     {
-        renderCamera.keyboardCall(BACKWARD, deltaTime);
-        renderReset = true;
+        fprintf(f, "%d %d %d ", hdrToSRGB(ppmBuffer[i].x), hdrToSRGB(ppmBuffer[i].y), hdrToSRGB(ppmBuffer[i].z));
     }
 
-    if (guiIO->KeysDown[GLFW_KEY_A])
-    {
-        renderCamera.keyboardCall(LEFT, deltaTime);
-        renderReset = true;
-    }
-
-    if (guiIO->KeysDown[GLFW_KEY_D])
-    {
-        renderCamera.keyboardCall(RIGHT, deltaTime);
-        renderReset = true;
-    }
-
-    if (guiIO->KeysDown[GLFW_KEY_KP_ADD])
-    {
-        if (guiIO->KeysDown[GLFW_KEY_LEFT_CONTROL])
-            renderCamera.setCameraFocalDistance(renderCamera.getCameraFocalDistance() + 0.1f);
-        else
-            renderCamera.setCameraApertureRadius(renderCamera.getCameraApertureRadius() + 0.005f);
-
-        renderReset = true;
-    }
-
-    if (guiIO->KeysDown[GLFW_KEY_KP_SUBTRACT])
-    {
-        if (guiIO->KeysDown[GLFW_KEY_LEFT_CONTROL])
-            renderCamera.setCameraFocalDistance(renderCamera.getCameraFocalDistance() - 0.1f);
-        else
-            renderCamera.setCameraApertureRadius(renderCamera.getCameraApertureRadius() - 0.005f);
-
-        renderReset = true;
-    }
+    fclose(f);
 }
 
 
-void Renderer::mouseCallback(ImGuiIO* guiIO, float mousePosX, float mousePosY)
+inline float Renderer::clamp(float x)
 {
-    if (firstMouse)
-    {
-        lastPosX = mousePosX;
-        lastPosY = mousePosY;
-        firstMouse = false;
-    }
+    return x < 0.0f ? 0.0f : x > 1.0f ? 1.0f : x;
+}
 
-    float offsetX = mousePosX - lastPosX;
-    float offsetY = mousePosY - lastPosY;
 
-    lastPosX = mousePosX;
-    lastPosY = mousePosY;
-
-    if (guiIO->MouseDown[GLFW_MOUSE_BUTTON_RIGHT])
-    {
-        if (offsetX != 0 || offsetY != 0)
-        {
-            renderCamera.mouseCall(offsetX, offsetY, true);
-            renderReset = true;
-        }
-    }
+inline int Renderer::hdrToSRGB(float x)
+{
+    return int(pow(clamp(x), 1 / 2.2) * 255);
 }
