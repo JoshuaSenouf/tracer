@@ -62,7 +62,7 @@ std::string Scene::purgeString(std::string bloatedString)
 }
 
 
-glm::vec3 Scene::stringToFloat3(std::string vecString)
+Vector3 Scene::stringToFloat3(std::string vecString)
 {
     int componentCount = 0;
     float vecComponents[3];
@@ -77,7 +77,7 @@ glm::vec3 Scene::stringToFloat3(std::string vecString)
         componentCount++;
     }
 
-    return glm::vec3(vecComponents[0], vecComponents[1], vecComponents[2]);
+    return Vector3(vecComponents[0], vecComponents[1], vecComponents[2]);
 }
 
 

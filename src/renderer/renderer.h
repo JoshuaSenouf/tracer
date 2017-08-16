@@ -4,16 +4,14 @@
 #include <iostream>
 #include <fstream>
 #include <vector>
-#include "random"
+#include <random>
 
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
-#include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtc/type_ptr.hpp>
 
 #include "scene.h"
 #include "shader.h"
+#include "vector.h"
 
 
 static GLfloat quadVertices[] =
@@ -29,6 +27,8 @@ class Renderer
 {
     public:
         Renderer();
+        ~Renderer();
+
         void initRender(int renderWidth, int renderHeight);
         void renderTracer(int renderWidth, int renderHeight, int renderSamples, int renderBounces);
         void initQuadRender();
@@ -48,14 +48,14 @@ class Renderer
         GLuint quadVAO;
         GLuint quadVBO;
 
-        glm::vec3* outputBuffer;
-        glm::vec3* accumulationBuffer;
-
         SphereObject* spheresList;
 
         Shader quadRenderShader;
 
         std::random_device randSeed;
+
+        Vector3* accumulationBuffer;
+        Vector3* ppmBuffer;
 };
 
 

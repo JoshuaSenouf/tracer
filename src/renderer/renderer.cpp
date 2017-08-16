@@ -7,6 +7,13 @@ Renderer::Renderer()
 }
 
 
+Renderer::~Renderer()
+{
+    delete accumulationBuffer;
+    cleanScene();
+}
+
+
 void Renderer::initRender(int renderWidth, int renderHeight)
 {
     quadRenderShader.setShader("res/shaders/quadRender.vert", "res/shaders/quadRender.frag");
@@ -14,17 +21,17 @@ void Renderer::initRender(int renderWidth, int renderHeight)
     initQuadRender();
     initScene();
 
-    outputBuffer = new glm::vec3[renderWidth * renderHeight];
+    accumulationBuffer = new Vector3[renderWidth * renderHeight];
 }
 
 
 void Renderer::renderTracer(int renderWidth, int renderHeight, int renderSamples, int renderBounces)
 {
-    std::uniform_real_distribution<float> randURF(-2147483648, 2147483647);
-//    std::uniform_real_distribution<float> randURF(0, 255);
+    std::uniform_real_distribution<float> randURF(0, 1);
 
     quadRenderShader.useShader();
 
+    #pragma omp parallel for schedule(dynamic, 1)
     for (int y = 0; y < renderHeight; y++)
     {
         for (int x = 0; x < renderWidth; x++)
@@ -32,8 +39,7 @@ void Renderer::renderTracer(int renderWidth, int renderHeight, int renderSamples
             int pixelIndex = (renderHeight - y - 1) * renderWidth + x;
 
             // RENDER CODE
-
-//            outputBuffer[pixelIndex] = glm::vec3(randURF(randSeed), randURF(randSeed), randURF(randSeed));
+            accumulationBuffer[pixelIndex] = Vector3(randURF(randSeed), randURF(randSeed), randURF(randSeed));
         }
     }
 }
@@ -106,18 +112,18 @@ void Renderer::displayGLBuffer()
 
 void Renderer::renderToPPM(int renderWidth, int renderHeight, int renderSamples, int renderBounces)
 {
-    glm::vec3* ppmBuffer = new glm::vec3[renderWidth * renderHeight];
+    ppmBuffer = new Vector3[renderWidth * renderHeight];
 
-    std::uniform_real_distribution<float> randURF(LONG_MIN, LONG_MAX);
-//    std::uniform_real_distribution<float> randURF(0, 255);
+    std::uniform_real_distribution<float> randURF(0, 1);
 
+    #pragma omp parallel for schedule(dynamic, 1)
     for (int y = 0; y < renderHeight; y++)
     {
         for (int x = 0; x < renderWidth; x++)
         {
             int pixelIndex = (renderHeight - y - 1) * renderWidth + x;
 
-            ppmBuffer[pixelIndex] = glm::vec3(randURF(randSeed), randURF(randSeed), randURF(randSeed));
+            ppmBuffer[pixelIndex] = Vector3(randURF(randSeed), randURF(randSeed), randURF(randSeed));
         }
     }
 
@@ -130,6 +136,8 @@ void Renderer::renderToPPM(int renderWidth, int renderHeight, int renderSamples,
     }
 
     fclose(f);
+
+    delete ppmBuffer;
 }
 
 

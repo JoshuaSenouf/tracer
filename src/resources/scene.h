@@ -10,11 +10,8 @@
 #include <cstring>
 #include <algorithm>
 
-#include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtc/type_ptr.hpp>
-
 #include "object.h"
+#include "vector.h"
 
 
 class Scene
@@ -24,7 +21,7 @@ class Scene
 
         void loadScene(const char* scenePath);
         std::string purgeString(std::string  bloatedString);
-        glm::vec3 stringToFloat3(std::string vecString);
+        Vector3 stringToFloat3(std::string vecString);
 
         int getSphereCount();
         SphereObject* getSceneSpheresList();

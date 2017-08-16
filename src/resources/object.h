@@ -1,19 +1,16 @@
 #ifndef OBJECT_H
 #define OBJECT_H
 
-#include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtc/type_ptr.hpp>
-
 #include "material.h"
+#include "vector.h"
 
 
 struct RayObject
 {
-        glm::vec3 origin;
-        glm::vec3 direction;
+        Vector3 origin;
+        Vector3 direction;
 
-        RayObject(glm::vec3 tempOrigin, glm::vec3 tempDirection) : origin(tempOrigin), direction(tempDirection)
+        RayObject(Vector3 tempOrigin, Vector3 tempDirection) : origin(tempOrigin), direction(tempDirection)
         {
 
         }
@@ -24,9 +21,9 @@ struct SphereObject
 {
         float radius;
 
-        glm::vec3 position;
-        glm::vec3 color;
-        glm::vec3 emissiveColor;
+        Vector3 position;
+        Vector3 color;
+        Vector3 emissiveColor;
 
         materialType material;
 };
