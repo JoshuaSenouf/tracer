@@ -8,6 +8,7 @@
 
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
+#include "stb_image.h"
 
 #include "scene.h"
 #include "shader.h"
@@ -56,6 +57,8 @@ class Renderer
 
         Vector3* accumulationBuffer;
         Vector3* ppmBuffer;
+
+        GLuint renderTextureID;
 };
 
 

@@ -44,7 +44,7 @@ class Window
 
         int renderWidth = 800;
         int renderHeight = 600;
-        int renderSamples = 128;
+        int renderSamples = 4;
         int renderBounces = 4;
 
         GLfloat deltaTime = 0.0f;

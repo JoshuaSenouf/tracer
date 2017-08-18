@@ -22,6 +22,21 @@ void Renderer::initRender(int renderWidth, int renderHeight)
     initScene();
 
     accumulationBuffer = new Vector3[renderWidth * renderHeight];
+
+    glGenTextures(1, &this->renderTextureID);
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, this->renderTextureID);
+
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, renderWidth, renderHeight, 0, GL_RGB, GL_UNSIGNED_BYTE, accumulationBuffer);
+
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
+    glGenerateMipmap(GL_TEXTURE_2D);
+
+    glBindTexture(GL_TEXTURE_2D, 0);
 }
 
 
@@ -29,19 +44,29 @@ void Renderer::renderTracer(int renderWidth, int renderHeight, int renderSamples
 {
     std::uniform_real_distribution<float> randURF(0, 1);
 
-    quadRenderShader.useShader();
-
     #pragma omp parallel for schedule(dynamic, 1)
     for (int y = 0; y < renderHeight; y++)
     {
         for (int x = 0; x < renderWidth; x++)
         {
-            int pixelIndex = (renderHeight - y - 1) * renderWidth + x;
+            Vector3 radianceColor;
 
-            // RENDER CODE
-            accumulationBuffer[pixelIndex] = Vector3(randURF(randSeed), randURF(randSeed), randURF(randSeed));
+            for (int s = 0; s < renderSamples; s++)
+            {
+                radianceColor += Vector3(randURF(randSeed), randURF(randSeed), randURF(randSeed)) * (1.0 / renderSamples);
+            }
+
+            accumulationBuffer[x + y * renderWidth] += radianceColor;
         }
     }
+
+    glBindTexture(GL_TEXTURE_2D, this->renderTextureID);
+    glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, renderWidth, renderHeight, GL_RGB, GL_UNSIGNED_BYTE, accumulationBuffer);
+
+    quadRenderShader.useShader();
+
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, this->renderTextureID);
 }
 
 
@@ -121,9 +146,14 @@ void Renderer::renderToPPM(int renderWidth, int renderHeight, int renderSamples,
     {
         for (int x = 0; x < renderWidth; x++)
         {
-            int pixelIndex = (renderHeight - y - 1) * renderWidth + x;
+            Vector3 radianceColor;
 
-            ppmBuffer[pixelIndex] = Vector3(randURF(randSeed), randURF(randSeed), randURF(randSeed));
+            for (int s = 0; s < renderSamples; s++)
+            {
+                radianceColor += Vector3(randURF(randSeed), randURF(randSeed), randURF(randSeed)) * (1.0 / renderSamples);
+            }
+
+            ppmBuffer[(renderHeight - y - 1) * renderWidth + x] += radianceColor;
         }
     }
 
