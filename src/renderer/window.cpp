@@ -16,7 +16,7 @@ int Window::renderWindow()
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
     glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
 
-    window = glfwCreateWindow(renderWidth, renderHeight, "Tracer", nullptr, nullptr);
+    window = glfwCreateWindow(progressiveWidth, progressiveHeight, "Tracer", nullptr, nullptr);
     glfwMakeContextCurrent(window);
 
     glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
@@ -26,8 +26,8 @@ int Window::renderWindow()
 
     ImGui_ImplGlfwGL3_Init(window, true);
 
-    tracerRenderer.initRender(renderWidth, renderHeight);
-    renderCamera.setCamera(glm::vec2(renderWidth, renderHeight));
+    tracerRenderer.initRender(progressiveWidth, progressiveHeight);
+    renderCamera.setCamera(glm::vec2(progressiveWidth, progressiveHeight));
 
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 
@@ -62,7 +62,7 @@ int Window::renderWindow()
 
         frameCounter++;
 
-        tracerRenderer.renderTracer(renderWidth, renderHeight, renderSamples, renderBounces, frameCounter); // Progressive rendering
+        tracerRenderer.renderTracer(progressiveWidth, progressiveHeight, progressiveSamples, progressiveBounces, frameCounter); // Progressive rendering
         tracerRenderer.displayGLBuffer();
 
         //----------------
@@ -107,10 +107,17 @@ void Window::renderConfigWindow(bool* guiOpen)
 {
     ImGui::Begin("Render Config", guiOpen);
 
-    ImGui::InputInt("Width", &renderWidth);
-    ImGui::InputInt("Height", &renderHeight);
-    ImGui::InputInt("Samples", &renderSamples);
-    ImGui::InputInt("Bounces", &renderBounces);
+    ImGui::Text("Progressive configuration");
+    ImGui::InputInt("Width", &progressiveWidth);
+    ImGui::InputInt("Height", &progressiveHeight);
+    ImGui::InputInt("Samples", &progressiveSamples);
+    ImGui::InputInt("Bounces", &progressiveBounces);
+    ImGui::Separator();
+    ImGui::Text("PPM configuration");
+    ImGui::InputInt("PPM Width", &ppmWidth);
+    ImGui::InputInt("PPM Height", &ppmHeight);
+    ImGui::InputInt("PPM Samples", &ppmSamples);
+    ImGui::InputInt("PPM Bounces", &ppmBounces);
 
     ImGui::End();
 }
@@ -129,7 +136,7 @@ void Window::setupGUI()
         {
             if (ImGui::MenuItem("Render to PPM"))
             {
-                tracerRenderer.renderToPPM(renderWidth, renderHeight, renderSamples, renderBounces);
+                tracerRenderer.renderToPPM(ppmWidth, ppmHeight, ppmSamples, ppmBounces);
             }
 
             ImGui::Separator();

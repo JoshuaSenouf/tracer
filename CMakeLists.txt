@@ -19,6 +19,7 @@ include_directories(src/camera/
                     src/renderer/
                     src/resources/
                     src/geometry/
+                    src/math/
                     api/glad/include/
                     api/glfw/include/
                     api/glm/
@@ -32,12 +33,14 @@ file(GLOB API_SOURCES api/glad/src/glad.c
 file(GLOB PROJECT_HEADERS src/camera/*.h
                           src/renderer/*.h
                           src/resources/*.h
-                          src/geometry/*.h)
+                          src/geometry/*.h
+                          src/math/*.h)
 
 file(GLOB PROJECT_SOURCES src/camera/*.cpp
                           src/renderer/*.cpp
                           src/resources/*.cpp
                           src/geometry/*.cpp
+                          src/math/*.cpp
                           src/*.cpp)
 
 file(GLOB PROJECT_SHADERS res/shaders/*.glsl

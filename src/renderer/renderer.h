@@ -13,6 +13,7 @@
 #include "scene.h"
 #include "shader.h"
 #include "vector.h"
+#include "randomizer.h"
 
 
 static GLfloat quadVertices[] =
@@ -30,34 +31,35 @@ class Renderer
         Renderer();
         ~Renderer();
 
-        void initRender(int renderWidth, int renderHeight);
-        void renderTracer(int renderWidth, int renderHeight, int renderSamples, int renderBounces, int frameCounter);
+        void initRender(int progressiveWidth, int progressiveHeight);
+        void renderTracer(int progressiveWidth, int progressiveHeight, int progressiveSamples, int progressiveBounces, int frameCounter);
         void initQuadRender();
         void cleanQuadRender();
         void initScene();
         void cleanScene();
         void displayGLBuffer();
-        void renderToPPM(int renderWidth, int renderHeight, int renderSamples, int renderBounces);
+        void renderToPPM(int ppmWidth, int ppmHeight, int ppmSamples, int ppmBounces);
 
         inline float clamp(float x);
-        inline int hdrToSRGB(float x);
+        inline float convertToSRGB(float x);
+        inline float convertToLinear(float x);
+        inline int convertToRGB(float x);
 
     private:
         int sphereCount;
 
         GLuint quadVAO;
         GLuint quadVBO;
-
-        SphereObject* spheresList;
+        GLuint renderTextureID;
 
         Shader quadRenderShader;
 
-        std::random_device randSeed;
+        SphereObject* spheresList;
 
         Vector3* accumulationBuffer;
         Vector3* ppmBuffer;
 
-        GLuint renderTextureID;
+        Randomizer randEngine;
 };
 
 

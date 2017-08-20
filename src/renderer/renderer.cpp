@@ -3,7 +3,7 @@
 
 Renderer::Renderer()
 {
-    
+
 }
 
 
@@ -14,20 +14,20 @@ Renderer::~Renderer()
 }
 
 
-void Renderer::initRender(int renderWidth, int renderHeight)
+void Renderer::initRender(int progressiveWidth, int progressiveHeight)
 {
     quadRenderShader.setShader("res/shaders/quadRender.vert", "res/shaders/quadRender.frag");
 
     initQuadRender();
     initScene();
 
-    accumulationBuffer = new Vector3[renderWidth * renderHeight];
+    accumulationBuffer = new Vector3[progressiveWidth * progressiveHeight];
 
     glGenTextures(1, &this->renderTextureID);
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, this->renderTextureID);
 
-    glTexStorage2D(GL_TEXTURE_2D, 1, GL_RGB32F, renderWidth, renderHeight);
+    glTexStorage2D(GL_TEXTURE_2D, 1, GL_RGB32F, progressiveWidth, progressiveHeight);
 
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
@@ -40,21 +40,21 @@ void Renderer::initRender(int renderWidth, int renderHeight)
 }
 
 
-void Renderer::renderTracer(int renderWidth, int renderHeight, int renderSamples, int renderBounces, int frameCounter)
+void Renderer::renderTracer(int progressiveWidth, int progressiveHeight, int progressiveSamples, int progressiveBounces, int frameCounter)
 {
-    std::uniform_real_distribution<float> randURF(0, 1);
-
     #pragma omp parallel for schedule(dynamic, 1)
-    for (int y = 0; y < renderHeight; y++)
+    for (int y = 0; y < progressiveHeight; y++)
     {
-        for (int x = 0; x < renderWidth; x++)
+        for (int x = 0; x < progressiveWidth; x++)
         {
-            int pixelIndex = x + y * renderWidth;
+            int pixelIndex = x + y * progressiveWidth;
             Vector3 radianceColor;
 
-            for (int s = 0; s < renderSamples; s++)
+            for (int s = 0; s < progressiveSamples; s++)
             {
-                radianceColor += (accumulationBuffer[pixelIndex] * (frameCounter - 1) + Vector3(randURF(randSeed), randURF(randSeed), randURF(randSeed))) / frameCounter;
+                radianceColor += (accumulationBuffer[pixelIndex] * (frameCounter - 1) + Vector3(convertToSRGB(randEngine.getRandomFloat()),
+                                                                                                convertToSRGB(randEngine.getRandomFloat()),
+                                                                                                convertToSRGB(randEngine.getRandomFloat()))) / frameCounter;
             }
 
             accumulationBuffer[pixelIndex] = radianceColor;
@@ -62,7 +62,7 @@ void Renderer::renderTracer(int renderWidth, int renderHeight, int renderSamples
     }
 
     glBindTexture(GL_TEXTURE_2D, this->renderTextureID);
-    glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, renderWidth, renderHeight, GL_RGB, GL_FLOAT, accumulationBuffer);
+    glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, progressiveWidth, progressiveHeight, GL_RGB, GL_FLOAT, accumulationBuffer);
 
     quadRenderShader.useShader();
 
@@ -136,34 +136,32 @@ void Renderer::displayGLBuffer()
 }
 
 
-void Renderer::renderToPPM(int renderWidth, int renderHeight, int renderSamples, int renderBounces)
+void Renderer::renderToPPM(int ppmWidth, int ppmHeight, int ppmSamples, int ppmBounces)
 {
-    ppmBuffer = new Vector3[renderWidth * renderHeight];
-
-    std::uniform_real_distribution<float> randURF(0, 1);
+    ppmBuffer = new Vector3[ppmWidth * ppmHeight];
 
     #pragma omp parallel for schedule(dynamic, 1)
-    for (int y = 0; y < renderHeight; y++)
+    for (int y = 0; y < ppmHeight; y++)
     {
-        for (int x = 0; x < renderWidth; x++)
+        for (int x = 0; x < ppmWidth; x++)
         {
             Vector3 radianceColor;
 
-            for (int s = 0; s < renderSamples; s++)
+            for (int s = 0; s < ppmSamples; s++)
             {
-                radianceColor += Vector3(randURF(randSeed), randURF(randSeed), randURF(randSeed)) * (1.0 / renderSamples);
+                radianceColor += Vector3(randEngine.getRandomFloat(), randEngine.getRandomFloat(), randEngine.getRandomFloat()) * (1.0f / ppmSamples);
             }
 
-            ppmBuffer[(renderHeight - y - 1) * renderWidth + x] += radianceColor;
+            ppmBuffer[(ppmHeight - y - 1) * ppmWidth + x] += radianceColor;
         }
     }
 
     FILE *f = fopen("tracerRender.ppm", "w");
-    fprintf(f, "P3\n%d %d\n%d\n", renderWidth, renderHeight, 255);
+    fprintf(f, "P3\n%d %d\n%d\n", ppmWidth, ppmHeight, 255);
 
-    for (int i = 0; i < renderWidth * renderHeight; i++)
+    for (int i = 0; i < ppmWidth * ppmHeight; i++)
     {
-        fprintf(f, "%d %d %d ", hdrToSRGB(ppmBuffer[i].x), hdrToSRGB(ppmBuffer[i].y), hdrToSRGB(ppmBuffer[i].z));
+        fprintf(f, "%d %d %d ", convertToRGB(ppmBuffer[i].x), convertToRGB(ppmBuffer[i].y), convertToRGB(ppmBuffer[i].z));
     }
 
     fclose(f);
@@ -178,7 +176,18 @@ inline float Renderer::clamp(float x)
 }
 
 
-inline int Renderer::hdrToSRGB(float x)
+inline float Renderer::convertToSRGB(float x)
 {
-    return int(pow(clamp(x), 1 / 2.2) * 255);
+    return pow(x, 1.0f / 2.2f);
 }
+
+inline float Renderer::convertToLinear(float x)
+{
+    return pow(x, 2.2f);
+}
+
+inline int Renderer::convertToRGB(float x)
+{
+    return int(convertToSRGB(clamp(x)) * 255);
+}
+

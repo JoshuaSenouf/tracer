@@ -42,15 +42,19 @@ class Window
 
         int frameCounter = 0;
 
-        int renderWidth = 800;
-        int renderHeight = 600;
-        int renderSamples = 1;
-        int renderBounces = 4;
+        int progressiveWidth = 800;
+        int progressiveHeight = 600;
+        int progressiveSamples = 1;
+        int progressiveBounces = 4;
+        int ppmWidth = 800;
+        int ppmHeight = 600;
+        int ppmSamples = 16;
+        int ppmBounces = 4;
 
         GLfloat deltaTime = 0.0f;
         GLfloat lastFrame = 0.0f;
-        GLfloat lastPosX = renderWidth / 2;
-        GLfloat lastPosY = renderHeight / 2;
+        GLfloat lastPosX = progressiveWidth / 2;
+        GLfloat lastPosY = progressiveHeight / 2;
 
         GLFWwindow* window;
 
