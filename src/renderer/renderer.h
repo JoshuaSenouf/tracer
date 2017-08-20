@@ -31,7 +31,7 @@ class Renderer
         ~Renderer();
 
         void initRender(int renderWidth, int renderHeight);
-        void renderTracer(int renderWidth, int renderHeight, int renderSamples, int renderBounces);
+        void renderTracer(int renderWidth, int renderHeight, int renderSamples, int renderBounces, int frameCounter);
         void initQuadRender();
         void cleanQuadRender();
         void initScene();
@@ -43,7 +43,6 @@ class Renderer
         inline int hdrToSRGB(float x);
 
     private:
-        int frameCounter = 0;
         int sphereCount;
 
         GLuint quadVAO;

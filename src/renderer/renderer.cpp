@@ -27,7 +27,7 @@ void Renderer::initRender(int renderWidth, int renderHeight)
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, this->renderTextureID);
 
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, renderWidth, renderHeight, 0, GL_RGB, GL_UNSIGNED_BYTE, accumulationBuffer);
+    glTexStorage2D(GL_TEXTURE_2D, 1, GL_RGB32F, renderWidth, renderHeight);
 
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
@@ -40,7 +40,7 @@ void Renderer::initRender(int renderWidth, int renderHeight)
 }
 
 
-void Renderer::renderTracer(int renderWidth, int renderHeight, int renderSamples, int renderBounces)
+void Renderer::renderTracer(int renderWidth, int renderHeight, int renderSamples, int renderBounces, int frameCounter)
 {
     std::uniform_real_distribution<float> randURF(0, 1);
 
@@ -49,19 +49,20 @@ void Renderer::renderTracer(int renderWidth, int renderHeight, int renderSamples
     {
         for (int x = 0; x < renderWidth; x++)
         {
+            int pixelIndex = x + y * renderWidth;
             Vector3 radianceColor;
 
             for (int s = 0; s < renderSamples; s++)
             {
-                radianceColor += Vector3(randURF(randSeed), randURF(randSeed), randURF(randSeed)) * (1.0 / renderSamples);
+                radianceColor += (accumulationBuffer[pixelIndex] * (frameCounter - 1) + Vector3(randURF(randSeed), randURF(randSeed), randURF(randSeed))) / frameCounter;
             }
 
-            accumulationBuffer[x + y * renderWidth] += radianceColor;
+            accumulationBuffer[pixelIndex] = radianceColor;
         }
     }
 
     glBindTexture(GL_TEXTURE_2D, this->renderTextureID);
-    glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, renderWidth, renderHeight, GL_RGB, GL_UNSIGNED_BYTE, accumulationBuffer);
+    glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, renderWidth, renderHeight, GL_RGB, GL_FLOAT, accumulationBuffer);
 
     quadRenderShader.useShader();
 

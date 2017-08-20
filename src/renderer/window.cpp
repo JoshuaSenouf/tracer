@@ -62,7 +62,7 @@ int Window::renderWindow()
 
         frameCounter++;
 
-        tracerRenderer.renderTracer(renderWidth, renderHeight, renderSamples, renderBounces); // Progressive rendering
+        tracerRenderer.renderTracer(renderWidth, renderHeight, renderSamples, renderBounces, frameCounter); // Progressive rendering
         tracerRenderer.displayGLBuffer();
 
         //----------------
