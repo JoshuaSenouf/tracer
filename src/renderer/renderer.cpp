@@ -54,7 +54,7 @@ void Renderer::renderTracer(int progressiveWidth, int progressiveHeight, int pro
             {
                 radianceColor += (accumulationBuffer[pixelIndex] * (frameCounter - 1) + Vector3(convertToSRGB(randEngine.getRandomFloat()),
                                                                                                 convertToSRGB(randEngine.getRandomFloat()),
-                                                                                                convertToSRGB(randEngine.getRandomFloat()))) / frameCounter;
+                                                                                                convertToSRGB(randEngine.getRandomFloat()))) / frameCounter  * (1.0f / progressiveSamples);
             }
 
             accumulationBuffer[pixelIndex] = radianceColor;

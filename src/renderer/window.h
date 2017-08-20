@@ -48,7 +48,7 @@ class Window
         int progressiveBounces = 4;
         int ppmWidth = 800;
         int ppmHeight = 600;
-        int ppmSamples = 16;
+        int ppmSamples = 128;
         int ppmBounces = 4;
 
         GLfloat deltaTime = 0.0f;
