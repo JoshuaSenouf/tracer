@@ -87,7 +87,7 @@ int Window::renderWindow()
 void Window::resetRenderer()
 {
     frameCounter = 0;
-    // RESET CODE
+    tracerRenderer.cleanAccumulationBuffer(progressiveWidth, progressiveHeight);
 
     renderReset = false;
 }

@@ -4,10 +4,9 @@
 #include <iostream>
 #include <fstream>
 #include <vector>
-#include <random>
+#include <iterator>
 
 #include <glad/glad.h>
-#include <GLFW/glfw3.h>
 #include "stb_image.h"
 
 #include "scene.h"
@@ -33,6 +32,8 @@ class Renderer
 
         void initRender(int progressiveWidth, int progressiveHeight);
         void renderTracer(int progressiveWidth, int progressiveHeight, int progressiveSamples, int progressiveBounces, int frameCounter);
+        void cleanAccumulationBuffer(int progressiveWidth, int progressiveHeight);
+        void cleanPPMBuffer();
         void initQuadRender();
         void cleanQuadRender();
         void initScene();
@@ -54,10 +55,9 @@ class Renderer
 
         Shader quadRenderShader;
 
-        SphereObject* spheresList;
-
-        Vector3* accumulationBuffer;
-        Vector3* ppmBuffer;
+        std::vector<SphereObject> spheresList;
+        std::vector<Vector3> accumulationBuffer;
+        std::vector<Vector3> ppmBuffer;
 
         Randomizer randEngine;
 };

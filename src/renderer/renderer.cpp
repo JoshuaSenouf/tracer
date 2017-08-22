@@ -9,8 +9,7 @@ Renderer::Renderer()
 
 Renderer::~Renderer()
 {
-    delete accumulationBuffer;
-    cleanScene();
+
 }
 
 
@@ -21,7 +20,7 @@ void Renderer::initRender(int progressiveWidth, int progressiveHeight)
     initQuadRender();
     initScene();
 
-    accumulationBuffer = new Vector3[progressiveWidth * progressiveHeight];
+    accumulationBuffer.resize(progressiveWidth * progressiveHeight);
 
     glGenTextures(1, &this->renderTextureID);
     glActiveTexture(GL_TEXTURE0);
@@ -43,18 +42,18 @@ void Renderer::initRender(int progressiveWidth, int progressiveHeight)
 void Renderer::renderTracer(int progressiveWidth, int progressiveHeight, int progressiveSamples, int progressiveBounces, int frameCounter)
 {
     #pragma omp parallel for schedule(dynamic, 1)
-    for (int y = 0; y < progressiveHeight; y++)
+    for (int pixelY = 0; pixelY < progressiveHeight; ++pixelY)
     {
-        for (int x = 0; x < progressiveWidth; x++)
+        for (int pixelX = 0; pixelX < progressiveWidth; ++pixelX)
         {
-            int pixelIndex = x + y * progressiveWidth;
+            int pixelIndex = pixelX + pixelY * progressiveWidth;
             Vector3 radianceColor;
 
-            for (int s = 0; s < progressiveSamples; s++)
+            for (int sample = 0; sample < progressiveSamples; ++sample)
             {
                 radianceColor += (accumulationBuffer[pixelIndex] * (frameCounter - 1) + Vector3(convertToSRGB(randEngine.getRandomFloat()),
                                                                                                 convertToSRGB(randEngine.getRandomFloat()),
-                                                                                                convertToSRGB(randEngine.getRandomFloat()))) / frameCounter  * (1.0f / progressiveSamples);
+                                                                                                convertToSRGB(randEngine.getRandomFloat()))) / frameCounter * (1.0f / progressiveSamples);
             }
 
             accumulationBuffer[pixelIndex] = radianceColor;
@@ -62,12 +61,27 @@ void Renderer::renderTracer(int progressiveWidth, int progressiveHeight, int pro
     }
 
     glBindTexture(GL_TEXTURE_2D, this->renderTextureID);
-    glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, progressiveWidth, progressiveHeight, GL_RGB, GL_FLOAT, accumulationBuffer);
+    glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, progressiveWidth, progressiveHeight, GL_RGB, GL_FLOAT, accumulationBuffer.data());
 
     quadRenderShader.useShader();
 
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, this->renderTextureID);
+}
+
+
+void Renderer::cleanAccumulationBuffer(int progressiveWidth, int progressiveHeight)
+{
+    accumulationBuffer.clear();
+    accumulationBuffer.shrink_to_fit();
+    accumulationBuffer.resize(progressiveWidth * progressiveHeight);
+}
+
+
+void Renderer::cleanPPMBuffer()
+{
+    ppmBuffer.clear();
+    ppmBuffer.shrink_to_fit();
 }
 
 
@@ -104,11 +118,11 @@ void Renderer::initScene()
     Scene testScene;
     testScene.loadScene("res/scenes/testScene.txt");
 
-    sphereCount = testScene.getSphereCount();
     spheresList = testScene.getSceneSpheresList();
+    sphereCount = spheresList.size();
 
 //    std::cout << "SPHERECOUNT : " << sphereCount << std::endl;
-//    for(int i = 0; i < sphereCount; i++)
+//    for(int i = 0; i < sphereCount; ++i)
 //    {
 //        std::cout << "RADIUS : " << spheresList[i].radius << std::endl;
 //        std::cout << "POS X : " << spheresList[i].position.x << " POS Y : " << spheresList[i].position.y << " POS Z : " << spheresList[i].position.z << std::endl;
@@ -122,7 +136,9 @@ void Renderer::initScene()
 void Renderer::cleanScene()
 {
     sphereCount = 0;
-    delete[] spheresList;
+
+    spheresList.clear();
+    spheresList.shrink_to_fit();
 }
 
 
@@ -138,35 +154,37 @@ void Renderer::displayGLBuffer()
 
 void Renderer::renderToPPM(int ppmWidth, int ppmHeight, int ppmSamples, int ppmBounces)
 {
-    ppmBuffer = new Vector3[ppmWidth * ppmHeight];
+    ppmBuffer.resize(ppmWidth * ppmHeight);
 
     #pragma omp parallel for schedule(dynamic, 1)
-    for (int y = 0; y < ppmHeight; y++)
+    for (int pixelY = 0; pixelY < ppmHeight; ++pixelY)
     {
-        for (int x = 0; x < ppmWidth; x++)
+        for (int pixelX = 0; pixelX < ppmWidth; ++pixelX)
         {
+            int pixelIndex = pixelX + pixelY * ppmWidth;
             Vector3 radianceColor;
 
-            for (int s = 0; s < ppmSamples; s++)
+            for (int sample = 0; sample < ppmSamples; ++sample)
             {
                 radianceColor += Vector3(randEngine.getRandomFloat(), randEngine.getRandomFloat(), randEngine.getRandomFloat()) * (1.0f / ppmSamples);
             }
 
-            ppmBuffer[(ppmHeight - y - 1) * ppmWidth + x] += radianceColor;
+            ppmBuffer[pixelIndex] += radianceColor;
         }
     }
 
-    FILE *f = fopen("tracerRender.ppm", "w");
-    fprintf(f, "P3\n%d %d\n%d\n", ppmWidth, ppmHeight, 255);
+    FILE *ppmFile = fopen("tracerRender.ppm", "w");
+    fprintf(ppmFile, "P3\n%d %d\n%d\n", ppmWidth, ppmHeight, 255);
 
-    for (int i = 0; i < ppmWidth * ppmHeight; i++)
+    for (int pixelIndex = 0; pixelIndex < ppmWidth * ppmHeight; ++pixelIndex)
     {
-        fprintf(f, "%d %d %d ", convertToRGB(ppmBuffer[i].x), convertToRGB(ppmBuffer[i].y), convertToRGB(ppmBuffer[i].z));
+        // A lot faster than using std::ofstream or std::ostream_iterator/std::copy actually
+        fprintf(ppmFile, "%d %d %d ", convertToRGB(ppmBuffer[pixelIndex].x), convertToRGB(ppmBuffer[pixelIndex].y), convertToRGB(ppmBuffer[pixelIndex].z));
     }
 
-    fclose(f);
+    fclose(ppmFile);
 
-    delete ppmBuffer;
+    cleanPPMBuffer();
 }
 
 
@@ -190,4 +208,3 @@ inline int Renderer::convertToRGB(float x)
 {
     return int(convertToSRGB(clamp(x)) * 255);
 }
-

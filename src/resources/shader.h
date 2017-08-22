@@ -1,10 +1,10 @@
 #ifndef SHADER_H
 #define SHADER_H
 
-#include <string>
 #include <fstream>
 #include <sstream>
 #include <iostream>
+#include <string>
 
 #include <glad/glad.h>
 
@@ -16,7 +16,7 @@ class Shader
 
         Shader();
         ~Shader();
-        void setShader(const GLchar* vertexPath, const GLchar* fragmentPath);
+        void setShader(std::string vertexPath, std::string fragmentPath);
         void useShader();
 };
 

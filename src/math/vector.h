@@ -1,9 +1,6 @@
 #ifndef VECTOR_H
 #define VECTOR_H
 
-#include <string>
-#include <fstream>
-#include <sstream>
 #include <iostream>
 #include <cmath>
 
@@ -36,5 +33,8 @@ class Vector3
         bool operator==(const Vector3 &tempVec3) const;
         bool operator!=(const Vector3 &tempVec3) const;
 };
+
+std::ostream& operator<<(std::ostream &os, const Vector3 &tempVec3);
+
 
 #endif // VECTOR_H

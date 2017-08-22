@@ -7,9 +7,6 @@
 
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
-#include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtc/type_ptr.hpp>
 #include <imgui.h>
 #include <imgui_impl_glfw_gl3.h>
 
@@ -48,7 +45,7 @@ class Window
         int progressiveBounces = 4;
         int ppmWidth = 800;
         int ppmHeight = 600;
-        int ppmSamples = 128;
+        int ppmSamples = 32;
         int ppmBounces = 4;
 
         GLfloat deltaTime = 0.0f;

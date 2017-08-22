@@ -1,13 +1,8 @@
 #ifndef CAMERA_H
 #define CAMERA_H
 
-#include <string>
-#include <vector>
-
 #include <glad/glad.h>
-#include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
 
 #include "math_helper.h"
 
@@ -79,7 +74,6 @@ class Camera
 
     private:
         void updateCameraVectors();
-
         CameraInfo cameraInfo;
 
 };

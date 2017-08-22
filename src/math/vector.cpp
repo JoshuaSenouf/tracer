@@ -1,11 +1,9 @@
 #include "vector.h"
 
 
-Vector3::Vector3()
+Vector3::Vector3() : x(0.0f), y(0.0f), z(0.0f)
 {
-    this->x = 0.0f;
-    this->y = 0.0f;
-    this->z = 0.0f;
+
 }
 
 Vector3::Vector3(float tempX, float tempY, float tempZ)
@@ -138,4 +136,12 @@ bool Vector3::operator==(const Vector3 &tempVec3) const
 bool Vector3::operator!=(const Vector3 &tempVec3) const
 {
     return !(*this == tempVec3);
+}
+
+
+std::ostream& operator<<(std::ostream &os, const Vector3 &tempVec3)
+{
+    os << tempVec3.x << " " << tempVec3.y << " " << tempVec3.z;
+
+    return os;
 }

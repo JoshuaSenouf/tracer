@@ -4,7 +4,7 @@
 #include "window.h"
 
 
-int main(int argc, char *argv[])
+int main()
 {
     Window mainWindow;
     mainWindow.renderWindow();
