@@ -4,6 +4,7 @@
 #include <iostream>
 #include <fstream>
 #include <vector>
+#include <memory>
 
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
@@ -24,11 +25,11 @@ class Window
         void renderGUI();
         void stopGUI();
 
-        void aboutWindow(bool* guiOpen);
-        void renderConfigWindow(bool* guiOpen);
+        void aboutWindow(bool &guiOpen);
+        void renderConfigWindow(bool &guiOpen);
 
-        void keyboardCallback(ImGuiIO* guiIO);
-        void mouseCallback(ImGuiIO* guiIO, float mousePosX, float mousePosY);
+        void keyboardCallback(ImGuiIO &guiIO);
+        void mouseCallback(ImGuiIO &guiIO, float mousePosX, float mousePosY);
 
     private:
         bool firstMouse = true;
@@ -50,13 +51,13 @@ class Window
 
         GLfloat deltaTime = 0.0f;
         GLfloat lastFrame = 0.0f;
-        GLfloat lastPosX = progressiveWidth / 2;
-        GLfloat lastPosY = progressiveHeight / 2;
+        GLfloat lastPosX = progressiveWidth / 2.0f;
+        GLfloat lastPosY = progressiveHeight / 2.0f;
 
         GLFWwindow* window;
 
         Camera renderCamera;
-        CameraInfo* renderCameraInfo;
+        CameraInfo renderCameraInfo;
 
         Renderer tracerRenderer;
 };

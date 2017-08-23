@@ -55,7 +55,7 @@ class Camera
         void setCameraApertureRadius(float tempAperture);
         void setCameraFocalDistance(float tempFocal);
 
-        CameraInfo* getCameraInfo();
+        CameraInfo getCameraInfo();
         glm::vec2 getCameraResolution();
         glm::vec3 getCameraPosition();
         glm::vec3 getCameraFront();
@@ -74,8 +74,8 @@ class Camera
 
     private:
         void updateCameraVectors();
-        CameraInfo cameraInfo;
 
+        CameraInfo cameraInfo;
 };
 
 #endif // CAMERA_H

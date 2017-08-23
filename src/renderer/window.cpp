@@ -45,14 +45,14 @@ int Window::renderWindow()
         // GUI setting & callbacks
         //--------------
         setupGUI();
+        ImGuiIO guiIO = ImGui::GetIO();
 
-        ImGuiIO& io = ImGui::GetIO();
+        keyboardCallback(guiIO);
+
         ImVec2 currentMousePos = ImGui::GetMousePos();
 
-        keyboardCallback(&io);
-
-        if (lastPosX !=  currentMousePos.x || lastPosY != currentMousePos.y)
-            mouseCallback(&io, currentMousePos.x, currentMousePos.y);
+        if (lastPosX != currentMousePos.x || lastPosY != currentMousePos.y)
+            mouseCallback(guiIO, currentMousePos.x, currentMousePos.y);
 
         //--------------
         // CPU Rendering
@@ -93,9 +93,9 @@ void Window::resetRenderer()
 }
 
 
-void Window::aboutWindow(bool* guiOpen)
+void Window::aboutWindow(bool& guiOpen)
 {
-    ImGui::Begin("About", guiOpen);
+    ImGui::Begin("About", &guiOpen);
 
     ImGui::Text("Tracer by Joshua Senouf\n\nEmail: joshua.senouf@gmail.com\nTwitter: @JoshuaSenouf");
 
@@ -103,9 +103,9 @@ void Window::aboutWindow(bool* guiOpen)
 }
 
 
-void Window::renderConfigWindow(bool* guiOpen)
+void Window::renderConfigWindow(bool& guiOpen)
 {
-    ImGui::Begin("Render Config", guiOpen);
+    ImGui::Begin("Render Config", &guiOpen);
 
     ImGui::Text("Progressive configuration");
     ImGui::InputInt("Width", &progressiveWidth);
@@ -127,13 +127,20 @@ void Window::setupGUI()
 {
     ImGui_ImplGlfwGL3_NewFrame();
 
-    if (aboutBool) aboutWindow(&aboutBool);
-    if (renderBool) renderConfigWindow(&renderBool);
+    if (aboutBool) aboutWindow(aboutBool);
+    if (renderBool) renderConfigWindow(renderBool);
 
     if (ImGui::BeginMainMenuBar())
     {
         if (ImGui::BeginMenu("Rendering"))
         {
+            if (ImGui::MenuItem("Export to PPM"))
+            {
+                tracerRenderer.exportToPPM(ppmWidth, ppmHeight);
+            }
+
+            ImGui::Separator();
+
             if (ImGui::MenuItem("Render to PPM"))
             {
                 tracerRenderer.renderToPPM(ppmWidth, ppmHeight, ppmSamples, ppmBounces);
@@ -170,38 +177,38 @@ void Window::stopGUI()
 }
 
 
-void Window::keyboardCallback(ImGuiIO* guiIO)
+void Window::keyboardCallback(ImGuiIO& guiIO)
 {
-    if (guiIO->KeysDown[GLFW_KEY_ESCAPE])
+    if (guiIO.KeysDown[GLFW_KEY_ESCAPE])
         glfwSetWindowShouldClose(window, GL_TRUE);
 
-    if (guiIO->KeysDown[GLFW_KEY_W])
+    if (guiIO.KeysDown[GLFW_KEY_W])
     {
         renderCamera.keyboardCall(FORWARD, deltaTime);
         renderReset = true;
     }
 
-    if (guiIO->KeysDown[GLFW_KEY_S])
+    if (guiIO.KeysDown[GLFW_KEY_S])
     {
         renderCamera.keyboardCall(BACKWARD, deltaTime);
         renderReset = true;
     }
 
-    if (guiIO->KeysDown[GLFW_KEY_A])
+    if (guiIO.KeysDown[GLFW_KEY_A])
     {
         renderCamera.keyboardCall(LEFT, deltaTime);
         renderReset = true;
     }
 
-    if (guiIO->KeysDown[GLFW_KEY_D])
+    if (guiIO.KeysDown[GLFW_KEY_D])
     {
         renderCamera.keyboardCall(RIGHT, deltaTime);
         renderReset = true;
     }
 
-    if (guiIO->KeysDown[GLFW_KEY_KP_ADD])
+    if (guiIO.KeysDown[GLFW_KEY_KP_ADD])
     {
-        if (guiIO->KeysDown[GLFW_KEY_LEFT_CONTROL])
+        if (guiIO.KeysDown[GLFW_KEY_LEFT_CONTROL])
             renderCamera.setCameraFocalDistance(renderCamera.getCameraFocalDistance() + 0.1f);
         else
             renderCamera.setCameraApertureRadius(renderCamera.getCameraApertureRadius() + 0.005f);
@@ -209,9 +216,9 @@ void Window::keyboardCallback(ImGuiIO* guiIO)
         renderReset = true;
     }
 
-    if (guiIO->KeysDown[GLFW_KEY_KP_SUBTRACT])
+    if (guiIO.KeysDown[GLFW_KEY_KP_SUBTRACT])
     {
-        if (guiIO->KeysDown[GLFW_KEY_LEFT_CONTROL])
+        if (guiIO.KeysDown[GLFW_KEY_LEFT_CONTROL])
             renderCamera.setCameraFocalDistance(renderCamera.getCameraFocalDistance() - 0.1f);
         else
             renderCamera.setCameraApertureRadius(renderCamera.getCameraApertureRadius() - 0.005f);
@@ -221,7 +228,7 @@ void Window::keyboardCallback(ImGuiIO* guiIO)
 }
 
 
-void Window::mouseCallback(ImGuiIO* guiIO, float mousePosX, float mousePosY)
+void Window::mouseCallback(ImGuiIO& guiIO, float mousePosX, float mousePosY)
 {
     if (firstMouse)
     {
@@ -236,7 +243,7 @@ void Window::mouseCallback(ImGuiIO* guiIO, float mousePosX, float mousePosY)
     lastPosX = mousePosX;
     lastPosY = mousePosY;
 
-    if (guiIO->MouseDown[GLFW_MOUSE_BUTTON_RIGHT])
+    if (guiIO.MouseDown[GLFW_MOUSE_BUTTON_RIGHT])
     {
         if (offsetX != 0 || offsetY != 0)
         {

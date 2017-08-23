@@ -104,9 +104,9 @@ void Camera::setCameraFocalDistance(float tempFocal)
 }
 
 
-CameraInfo* Camera::getCameraInfo()
+CameraInfo Camera::getCameraInfo()
 {
-    return &cameraInfo;
+    return cameraInfo;
 }
 
 

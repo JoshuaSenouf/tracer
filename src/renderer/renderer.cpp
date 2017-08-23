@@ -44,6 +44,8 @@ void Renderer::renderTracer(int progressiveWidth, int progressiveHeight, int pro
     #pragma omp parallel for schedule(dynamic, 1)
     for (int pixelY = 0; pixelY < progressiveHeight; ++pixelY)
     {
+        Randomizer randEngine;
+
         for (int pixelX = 0; pixelX < progressiveWidth; ++pixelX)
         {
             int pixelIndex = pixelX + pixelY * progressiveWidth;
@@ -152,6 +154,23 @@ void Renderer::displayGLBuffer()
 }
 
 
+void Renderer::exportToPPM(int ppmWidth, int ppmHeight)
+{
+    FILE *ppmFile = fopen("tracerExport.ppm", "w");
+    fprintf(ppmFile, "P3\n%d %d\n%d\n", ppmWidth, ppmHeight, 255);
+
+    for (int pixelIndex = 0; pixelIndex < ppmWidth * ppmHeight; ++pixelIndex)
+    {
+        // A lot faster than using std::ofstream or std::ostream_iterator/std::copy actually
+        fprintf(ppmFile, "%d %d %d ",   convertToRGB(accumulationBuffer[pixelIndex].x),
+                                        convertToRGB(accumulationBuffer[pixelIndex].y),
+                                        convertToRGB(accumulationBuffer[pixelIndex].z));
+    }
+
+    fclose(ppmFile);
+}
+
+
 void Renderer::renderToPPM(int ppmWidth, int ppmHeight, int ppmSamples, int ppmBounces)
 {
     ppmBuffer.resize(ppmWidth * ppmHeight);
@@ -159,6 +178,8 @@ void Renderer::renderToPPM(int ppmWidth, int ppmHeight, int ppmSamples, int ppmB
     #pragma omp parallel for schedule(dynamic, 1)
     for (int pixelY = 0; pixelY < ppmHeight; ++pixelY)
     {
+        Randomizer randEngine;
+
         for (int pixelX = 0; pixelX < ppmWidth; ++pixelX)
         {
             int pixelIndex = pixelX + pixelY * ppmWidth;
@@ -166,7 +187,9 @@ void Renderer::renderToPPM(int ppmWidth, int ppmHeight, int ppmSamples, int ppmB
 
             for (int sample = 0; sample < ppmSamples; ++sample)
             {
-                radianceColor += Vector3(randEngine.getRandomFloat(), randEngine.getRandomFloat(), randEngine.getRandomFloat()) * (1.0f / ppmSamples);
+                radianceColor += Vector3(convertToSRGB(randEngine.getRandomFloat()),
+                                         convertToSRGB(randEngine.getRandomFloat()),
+                                         convertToSRGB(randEngine.getRandomFloat())) * (1.0f / ppmSamples);
             }
 
             ppmBuffer[pixelIndex] += radianceColor;
@@ -178,33 +201,12 @@ void Renderer::renderToPPM(int ppmWidth, int ppmHeight, int ppmSamples, int ppmB
 
     for (int pixelIndex = 0; pixelIndex < ppmWidth * ppmHeight; ++pixelIndex)
     {
-        // A lot faster than using std::ofstream or std::ostream_iterator/std::copy actually
-        fprintf(ppmFile, "%d %d %d ", convertToRGB(ppmBuffer[pixelIndex].x), convertToRGB(ppmBuffer[pixelIndex].y), convertToRGB(ppmBuffer[pixelIndex].z));
+        fprintf(ppmFile, "%d %d %d ",   convertToRGB(ppmBuffer[pixelIndex].x),
+                                        convertToRGB(ppmBuffer[pixelIndex].y),
+                                        convertToRGB(ppmBuffer[pixelIndex].z));
     }
 
     fclose(ppmFile);
 
     cleanPPMBuffer();
-}
-
-
-inline float Renderer::clamp(float x)
-{
-    return x < 0.0f ? 0.0f : x > 1.0f ? 1.0f : x;
-}
-
-
-inline float Renderer::convertToSRGB(float x)
-{
-    return pow(x, 1.0f / 2.2f);
-}
-
-inline float Renderer::convertToLinear(float x)
-{
-    return pow(x, 2.2f);
-}
-
-inline int Renderer::convertToRGB(float x)
-{
-    return int(convertToSRGB(clamp(x)) * 255);
 }

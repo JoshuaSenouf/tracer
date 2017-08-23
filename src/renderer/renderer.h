@@ -13,6 +13,7 @@
 #include "shader.h"
 #include "vector.h"
 #include "randomizer.h"
+#include "math_helper.h"
 
 
 static GLfloat quadVertices[] =
@@ -39,12 +40,8 @@ class Renderer
         void initScene();
         void cleanScene();
         void displayGLBuffer();
+        void exportToPPM(int ppmWidth, int ppmHeight);
         void renderToPPM(int ppmWidth, int ppmHeight, int ppmSamples, int ppmBounces);
-
-        inline float clamp(float x);
-        inline float convertToSRGB(float x);
-        inline float convertToLinear(float x);
-        inline int convertToRGB(float x);
 
     private:
         int sphereCount;
@@ -58,8 +55,6 @@ class Renderer
         std::vector<SphereObject> spheresList;
         std::vector<Vector3> accumulationBuffer;
         std::vector<Vector3> ppmBuffer;
-
-        Randomizer randEngine;
 };
 
 
