@@ -20,7 +20,8 @@ void Renderer::initRender(int progressiveWidth, int progressiveHeight)
     initQuadRender();
     initScene();
 
-    accumulationBuffer.resize(progressiveWidth * progressiveHeight);
+    frontBuffer.resize(progressiveWidth * progressiveHeight);
+    backBuffer.resize(progressiveWidth * progressiveHeight);
 
     glGenTextures(1, &this->renderTextureID);
     glActiveTexture(GL_TEXTURE0);
@@ -53,17 +54,23 @@ void Renderer::renderTracer(int progressiveWidth, int progressiveHeight, int pro
 
             for (int sample = 0; sample < progressiveSamples; ++sample)
             {
-                radianceColor += (accumulationBuffer[pixelIndex] * (frameCounter - 1) + Vector3(convertToSRGB(randEngine.getRandomFloat()),
+                radianceColor += (frontBuffer[pixelIndex] * (frameCounter - 1) + Vector3(convertToSRGB(randEngine.getRandomFloat()),
                                                                                                 convertToSRGB(randEngine.getRandomFloat()),
                                                                                                 convertToSRGB(randEngine.getRandomFloat()))) / frameCounter * (1.0f / progressiveSamples);
             }
 
-            accumulationBuffer[pixelIndex] = radianceColor;
+            frontBuffer[pixelIndex] = radianceColor;
         }
     }
 
+    renderToTexture(progressiveWidth, progressiveHeight);
+}
+
+
+void Renderer::renderToTexture(int progressiveWidth, int progressiveHeight)
+{
     glBindTexture(GL_TEXTURE_2D, this->renderTextureID);
-    glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, progressiveWidth, progressiveHeight, GL_RGB, GL_FLOAT, accumulationBuffer.data());
+    glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, progressiveWidth, progressiveHeight, GL_RGB, GL_FLOAT, frontBuffer.data());
 
     quadRenderShader.useShader();
 
@@ -72,11 +79,11 @@ void Renderer::renderTracer(int progressiveWidth, int progressiveHeight, int pro
 }
 
 
-void Renderer::cleanAccumulationBuffer(int progressiveWidth, int progressiveHeight)
+void Renderer::cleanFrontBuffer(int progressiveWidth, int progressiveHeight)
 {
-    accumulationBuffer.clear();
-    accumulationBuffer.shrink_to_fit();
-    accumulationBuffer.resize(progressiveWidth * progressiveHeight);
+    frontBuffer.clear();
+    frontBuffer.shrink_to_fit();
+    frontBuffer.resize(progressiveWidth * progressiveHeight);
 }
 
 
@@ -162,9 +169,9 @@ void Renderer::exportToPPM(int ppmWidth, int ppmHeight)
     for (int pixelIndex = 0; pixelIndex < ppmWidth * ppmHeight; ++pixelIndex)
     {
         // A lot faster than using std::ofstream or std::ostream_iterator/std::copy actually
-        fprintf(ppmFile, "%d %d %d ",   convertToRGB(accumulationBuffer[pixelIndex].x),
-                                        convertToRGB(accumulationBuffer[pixelIndex].y),
-                                        convertToRGB(accumulationBuffer[pixelIndex].z));
+        fprintf(ppmFile, "%d %d %d ",   convertToRGB(frontBuffer[pixelIndex].x),
+                                        convertToRGB(frontBuffer[pixelIndex].y),
+                                        convertToRGB(frontBuffer[pixelIndex].z));
     }
 
     fclose(ppmFile);
@@ -209,4 +216,21 @@ void Renderer::renderToPPM(int ppmWidth, int ppmHeight, int ppmSamples, int ppmB
     fclose(ppmFile);
 
     cleanPPMBuffer();
+}
+
+
+void Renderer::saveToBackBuffer(int progressiveWidth, int progressiveHeight)
+{
+    backBuffer.clear();
+    backBuffer.shrink_to_fit();
+    backBuffer.resize(progressiveWidth * progressiveHeight);
+
+    backBuffer = frontBuffer;
+}
+
+
+void Renderer::swapBuffer(int progressiveWidth, int progressiveHeight)
+{
+    frontBuffer.swap(backBuffer);
+    renderToTexture(progressiveWidth, progressiveHeight);
 }

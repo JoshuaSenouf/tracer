@@ -37,6 +37,8 @@ class Window
         bool renderReset = false;
         bool aboutBool = false;
         bool renderBool = false;
+        bool pauseBool = false;
+        bool swapBool = false;
 
         int frameCounter = 0;
 

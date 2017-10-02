@@ -12,7 +12,7 @@ int Window::renderWindow()
     glfwInit();
 
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
     glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
 
@@ -57,12 +57,16 @@ int Window::renderWindow()
         //--------------
         // CPU Rendering
         //--------------
-        if (renderReset) // If anything in camera or scene data has changed, we flush the data and reinit them again
-            resetRenderer();
+        if (!pauseBool)
+        {
+            if (renderReset) // If anything in camera or scene data has changed, we flush the data and reinit them again
+                resetRenderer();
 
-        frameCounter++;
+            frameCounter++;
 
-        tracerRenderer.renderTracer(progressiveWidth, progressiveHeight, progressiveSamples, progressiveBounces, frameCounter); // Progressive rendering
+            tracerRenderer.renderTracer(progressiveWidth, progressiveHeight, progressiveSamples, progressiveBounces, frameCounter); // Progressive rendering
+        }
+
         tracerRenderer.displayGLBuffer();
 
         //----------------
@@ -87,7 +91,7 @@ int Window::renderWindow()
 void Window::resetRenderer()
 {
     frameCounter = 0;
-    tracerRenderer.cleanAccumulationBuffer(progressiveWidth, progressiveHeight);
+    tracerRenderer.cleanFrontBuffer(progressiveWidth, progressiveHeight);
 
     renderReset = false;
 }
@@ -112,7 +116,28 @@ void Window::renderConfigWindow(bool& guiOpen)
     ImGui::InputInt("Height", &progressiveHeight);
     ImGui::InputInt("Samples", &progressiveSamples);
     ImGui::InputInt("Bounces", &progressiveBounces);
+
+    if (!swapBool)
+    {
+        if (ImGui::Button("Save To Back Buffer"))
+        {
+            tracerRenderer.saveToBackBuffer(progressiveWidth, progressiveHeight);
+        }
+    }
+
+    if (ImGui::Button("Swap Buffers"))
+    {
+        tracerRenderer.swapBuffer(progressiveWidth, progressiveHeight);
+        swapBool = !swapBool;
+
+        if (swapBool)
+            pauseBool = true;
+        else
+            pauseBool = false;
+    }
+
     ImGui::Separator();
+
     ImGui::Text("PPM configuration");
     ImGui::InputInt("PPM Width", &ppmWidth);
     ImGui::InputInt("PPM Height", &ppmHeight);
@@ -139,14 +164,22 @@ void Window::setupGUI()
                 tracerRenderer.exportToPPM(ppmWidth, ppmHeight);
             }
 
-            ImGui::Separator();
-
             if (ImGui::MenuItem("Render to PPM"))
             {
                 tracerRenderer.renderToPPM(ppmWidth, ppmHeight, ppmSamples, ppmBounces);
             }
 
             ImGui::Separator();
+
+            if (!swapBool)
+            {
+                if (pauseBool)
+                    ImGui::Checkbox("Pause Render", &pauseBool);
+                else
+                    ImGui::Checkbox("Pause Render", &pauseBool);
+
+                ImGui::Separator();
+            }
 
             ImGui::MenuItem("Config", NULL, &renderBool);
 

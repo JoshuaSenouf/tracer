@@ -33,7 +33,8 @@ class Renderer
 
         void initRender(int progressiveWidth, int progressiveHeight);
         void renderTracer(int progressiveWidth, int progressiveHeight, int progressiveSamples, int progressiveBounces, int frameCounter);
-        void cleanAccumulationBuffer(int progressiveWidth, int progressiveHeight);
+        void renderToTexture(int progressiveWidth, int progressiveHeight);
+        void cleanFrontBuffer(int progressiveWidth, int progressiveHeight);
         void cleanPPMBuffer();
         void initQuadRender();
         void cleanQuadRender();
@@ -42,6 +43,8 @@ class Renderer
         void displayGLBuffer();
         void exportToPPM(int ppmWidth, int ppmHeight);
         void renderToPPM(int ppmWidth, int ppmHeight, int ppmSamples, int ppmBounces);
+        void saveToBackBuffer(int progressiveWidth, int progressiveHeight);
+        void swapBuffer(int progressiveWidth, int progressiveHeight);
 
     private:
         int sphereCount;
@@ -53,7 +56,8 @@ class Renderer
         Shader quadRenderShader;
 
         std::vector<SphereObject> spheresList;
-        std::vector<Vector3> accumulationBuffer;
+        std::vector<Vector3> frontBuffer;
+        std::vector<Vector3> backBuffer;
         std::vector<Vector3> ppmBuffer;
 };
 
