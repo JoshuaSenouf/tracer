@@ -64,8 +64,6 @@ class Window
         CameraInfo renderCameraInfo;
 
         Renderer tracerRenderer;
-
-        std::vector<Vector3> tempBuffer;
 };
 
 

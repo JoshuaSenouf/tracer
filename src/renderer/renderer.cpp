@@ -79,19 +79,8 @@ void Renderer::initScene()
 }
 
 
-std::vector<Vector3> Renderer::traceLoop(int progressiveWidth, int progressiveHeight, int progressiveSamples, int progressiveBounces, int frameCounter, std::vector<Vector3> renderBuffer)
+void Renderer::traceLoop(int progressiveWidth, int progressiveHeight, int progressiveSamples, int progressiveBounces, int frameCounter, std::vector<Vector3>& renderBuffer)
 {
-    if (renderBuffer.empty() || renderBuffer == frontBuffer)
-    {
-        frontUsed = true;
-
-        if (renderBuffer.empty())
-            renderBuffer = getFrontBuffer();
-    }
-
-    else
-        frontUsed = false;
-
 #pragma omp parallel for schedule(dynamic, 1)
     for (int pixelY = 0; pixelY < progressiveHeight; ++pixelY)
     {
@@ -112,17 +101,10 @@ std::vector<Vector3> Renderer::traceLoop(int progressiveWidth, int progressiveHe
             renderBuffer[pixelIndex] = radianceColor;
         }
     }
-
-    if (frontUsed)
-    {
-        setFrontBuffer(renderBuffer);
-    }
-
-    return renderBuffer;
 }
 
 
-void Renderer::renderToTexture(int textureWidth, int textureHeight, std::vector<Vector3> renderBuffer)
+void Renderer::renderToTexture(int textureWidth, int textureHeight, const std::vector<Vector3>& renderBuffer)
 {
     glBindTexture(GL_TEXTURE_2D, this->renderTextureID);
     glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, textureWidth, textureHeight, GL_RGB, GL_FLOAT, renderBuffer.data());
@@ -152,7 +134,7 @@ void Renderer::cleanScene()
 }
 
 
-void Renderer::cleanBuffer(int bufferWidth, int bufferHeight, std::vector<Vector3> &buffer)
+void Renderer::cleanBuffer(int bufferWidth, int bufferHeight, std::vector<Vector3>& buffer)
 {
     buffer.clear();
     buffer.shrink_to_fit();
@@ -170,13 +152,8 @@ void Renderer::displayGLBuffer()
 }
 
 
-void Renderer::exportToPPM(int ppmWidth, int ppmHeight, std::vector<Vector3> exportBuffer)
+void Renderer::exportToPPM(int ppmWidth, int ppmHeight, const std::vector<Vector3> &exportBuffer)
 {
-    if (exportBuffer.empty())
-    {
-        exportBuffer = getFrontBuffer();
-    }
-
     FILE *ppmFile = fopen("tracerRender.ppm", "w");
     fprintf(ppmFile, "P3\n%d %d\n%d\n", ppmWidth, ppmHeight, 255);
 
@@ -189,19 +166,12 @@ void Renderer::exportToPPM(int ppmWidth, int ppmHeight, std::vector<Vector3> exp
     }
 
     fclose(ppmFile);
-
-    cleanBuffer(ppmWidth, ppmHeight, ppmBuffer);
 }
 
 
 // Based on TinyEXR way of saving scanline EXR file
-void Renderer::exportToEXR(int exrWidth, int exrHeight, std::vector<Vector3> exportBuffer)
+void Renderer::exportToEXR(int exrWidth, int exrHeight, const std::vector<Vector3>& exportBuffer)
 {
-    if (exportBuffer.empty())
-    {
-        exportBuffer = getFrontBuffer();
-    }
-
     EXRHeader exrHeader;
     EXRImage exrImage;
 
@@ -261,15 +231,15 @@ void Renderer::exportToEXR(int exrWidth, int exrHeight, std::vector<Vector3> exp
     free(exrHeader.channels);
     free(exrHeader.pixel_types);
     free(exrHeader.requested_pixel_types);
-
-    cleanBuffer(exrWidth, exrHeight, exrBuffer);
 }
 
 
 void Renderer::renderToPPM(int ppmWidth, int ppmHeight, int ppmSamples, int ppmBounces)
 {
+    std::vector<Vector3> ppmBuffer;
+
     ppmBuffer.resize(ppmWidth * ppmHeight);
-    ppmBuffer = traceLoop(ppmWidth, ppmHeight, ppmSamples, ppmBounces, 1);
+    traceLoop(ppmWidth, ppmHeight, ppmSamples, ppmBounces, 1, ppmBuffer);
 
     exportToPPM(ppmWidth, ppmHeight, ppmBuffer);
 }
@@ -277,8 +247,10 @@ void Renderer::renderToPPM(int ppmWidth, int ppmHeight, int ppmSamples, int ppmB
 
 void Renderer::renderToEXR(int exrWidth, int exrHeight, int exrSamples, int exrBounces)
 {
+    std::vector<Vector3> exrBuffer;
+
     exrBuffer.resize(exrWidth * exrHeight);
-    exrBuffer = traceLoop(exrWidth, exrHeight, exrSamples, exrBounces, 1);
+    traceLoop(exrWidth, exrHeight, exrSamples, exrBounces, 1, exrBuffer);
 
     exportToEXR(exrWidth, exrHeight, exrBuffer);
 }
@@ -300,13 +272,13 @@ void Renderer::swapBuffer(int progressiveWidth, int progressiveHeight)
 }
 
 
-std::vector<Vector3> Renderer::getFrontBuffer()
+std::vector<Vector3>& Renderer::getFrontBuffer()
 {
     return frontBuffer;
 }
 
 
-void Renderer::setFrontBuffer(std::vector<Vector3> buffer)
+void Renderer::setFrontBuffer(const std::vector<Vector3>& buffer)
 {
     frontBuffer = buffer;
 }

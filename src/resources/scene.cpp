@@ -51,7 +51,7 @@ std::string Scene::purgeString(std::string bloatedString)
 
     for (unsigned int i = 0; i < badChars.length(); ++i)
     {
-       bloatedString.erase(std::remove(bloatedString.begin(), bloatedString.end(), badChars[i]), bloatedString.end());
+        bloatedString.erase(std::remove(bloatedString.begin(), bloatedString.end(), badChars[i]), bloatedString.end());
     }
 
     return bloatedString;

@@ -18,19 +18,19 @@ enum cameraMovement
 
 struct CameraInfo
 {
-    glm::vec2 cameraResolution;
-    glm::vec3 cameraPosition;
-    glm::vec3 cameraFront;
-    glm::vec3 cameraUp;
-    glm::vec3 cameraRight;
-    glm::vec2 cameraFOV;
+        glm::vec2 cameraResolution;
+        glm::vec3 cameraPosition;
+        glm::vec3 cameraFront;
+        glm::vec3 cameraUp;
+        glm::vec3 cameraRight;
+        glm::vec2 cameraFOV;
 
-    float cameraYaw;
-    float cameraPitch;
-    float cameraSpeed;
-    float cameraSensitivity;
-    float cameraApertureRadius;
-    float cameraFocalDistance;
+        float cameraYaw;
+        float cameraPitch;
+        float cameraSpeed;
+        float cameraSensitivity;
+        float cameraApertureRadius;
+        float cameraFocalDistance;
 };
 
 
