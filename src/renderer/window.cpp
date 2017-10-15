@@ -64,7 +64,8 @@ int Window::renderWindow()
 
             frameCounter++;
 
-            tracerRenderer.renderTracer(progressiveWidth, progressiveHeight, progressiveSamples, progressiveBounces, frameCounter); // Progressive rendering
+            tempBuffer = tracerRenderer.traceLoop(progressiveWidth, progressiveHeight, progressiveSamples, progressiveBounces, frameCounter); // Progressive rendering
+            tracerRenderer.renderToTexture(progressiveWidth, progressiveHeight, tempBuffer);
         }
 
         tracerRenderer.displayGLBuffer();
@@ -91,9 +92,21 @@ int Window::renderWindow()
 void Window::resetRenderer()
 {
     frameCounter = 0;
-    tracerRenderer.cleanFrontBuffer(progressiveWidth, progressiveHeight);
+    tracerRenderer.cleanBuffer(progressiveWidth, progressiveHeight, tracerRenderer.getFrontBuffer());
 
     renderReset = false;
+}
+
+
+void Window::fpsWindow(bool& guiOpen)
+{
+    ImGui::SetNextWindowPos(ImVec2(ImGui::GetIO().DisplaySize.x - 160, 30), 1);
+
+    ImGui::Begin("FPS Counter", &guiOpen, ImGuiWindowFlags_NoTitleBar|ImGuiWindowFlags_NoResize|ImGuiWindowFlags_AlwaysAutoResize|ImGuiWindowFlags_NoMove|ImGuiWindowFlags_NoSavedSettings);
+
+    ImGui::Text("Framerate %.2f FPS", ImGui::GetIO().Framerate, 1000.0f / ImGui::GetIO().Framerate);
+
+    ImGui::End();
 }
 
 
@@ -112,10 +125,10 @@ void Window::renderConfigWindow(bool& guiOpen)
     ImGui::Begin("Render Config", &guiOpen);
 
     ImGui::Text("Progressive configuration");
-    ImGui::InputInt("Width", &progressiveWidth);
-    ImGui::InputInt("Height", &progressiveHeight);
-    ImGui::InputInt("Samples", &progressiveSamples);
-    ImGui::InputInt("Bounces", &progressiveBounces);
+    ImGui::InputInt("Progressive Width", &progressiveWidth);
+    ImGui::InputInt("Progressive Height", &progressiveHeight);
+    ImGui::InputInt("Progressive Samples", &progressiveSamples);
+    ImGui::InputInt("Progressive Bounces", &progressiveBounces);
 
     if (!swapBool)
     {
@@ -138,11 +151,11 @@ void Window::renderConfigWindow(bool& guiOpen)
 
     ImGui::Separator();
 
-    ImGui::Text("PPM configuration");
-    ImGui::InputInt("PPM Width", &ppmWidth);
-    ImGui::InputInt("PPM Height", &ppmHeight);
-    ImGui::InputInt("PPM Samples", &ppmSamples);
-    ImGui::InputInt("PPM Bounces", &ppmBounces);
+    ImGui::Text("Output configuration");
+    ImGui::InputInt("Output Width", &outputWidth);
+    ImGui::InputInt("Output Height", &outputHeight);
+    ImGui::InputInt("Output Samples", &outputSamples);
+    ImGui::InputInt("Output Bounces", &outputBounces);
 
     ImGui::End();
 }
@@ -152,42 +165,67 @@ void Window::setupGUI()
 {
     ImGui_ImplGlfwGL3_NewFrame();
 
-    if (aboutBool) aboutWindow(aboutBool);
-    if (renderBool) renderConfigWindow(renderBool);
+    if (fpsBool)
+        fpsWindow(fpsBool);
+    if (aboutBool)
+        aboutWindow(aboutBool);
+    if (renderConfigBool)
+        renderConfigWindow(renderConfigBool);
 
     if (ImGui::BeginMainMenuBar())
     {
         if (ImGui::BeginMenu("Rendering"))
         {
-            if (ImGui::MenuItem("Export to PPM"))
+            if (ImGui::BeginMenu("Render to"))
             {
-                tracerRenderer.exportToPPM(ppmWidth, ppmHeight);
+                if (ImGui::MenuItem("PPM"))
+                {
+                    tracerRenderer.renderToPPM(outputWidth, outputHeight, outputSamples, outputBounces);
+                }
+
+                if (ImGui::MenuItem("EXR"))
+                {
+                    tracerRenderer.renderToEXR(outputWidth, outputHeight, outputSamples, outputBounces);
+                }
+
+                ImGui::EndMenu();
             }
 
-            if (ImGui::MenuItem("Render to PPM"))
+            if (ImGui::BeginMenu("Export to"))
             {
-                tracerRenderer.renderToPPM(ppmWidth, ppmHeight, ppmSamples, ppmBounces);
+                if (ImGui::MenuItem("PPM"))
+                {
+                    tracerRenderer.exportToPPM(outputWidth, outputHeight);
+                }
+
+                if (ImGui::MenuItem("EXR"))
+                {
+                    tracerRenderer.exportToEXR(outputWidth, outputHeight);
+                }
+
+                ImGui::EndMenu();
             }
 
             ImGui::Separator();
 
             if (!swapBool)
             {
-                if (pauseBool)
-                    ImGui::Checkbox("Pause Render", &pauseBool);
-                else
-                    ImGui::Checkbox("Pause Render", &pauseBool);
+                ImGui::Checkbox("Pause Render", &pauseBool);
 
                 ImGui::Separator();
             }
 
-            ImGui::MenuItem("Config", NULL, &renderBool);
+            ImGui::MenuItem("Config", NULL, &renderConfigBool);
 
             ImGui::EndMenu();
         }
 
         if (ImGui::BeginMenu("Help"))
         {
+            ImGui::MenuItem("Profiling", NULL, &fpsBool);
+
+            ImGui::Separator();
+
             ImGui::MenuItem("About", NULL, &aboutBool);
 
             ImGui::EndMenu();

@@ -26,7 +26,8 @@ include_directories(src/camera/
                     api/stb/
                     api/imgui/
                     api/tinyobjloader/
-                    api/tinyxml2)
+                    api/tinyxml2/
+                    api/tinyexr)
 
 file(GLOB API_SOURCES api/glad/src/glad.c
                         api/imgui/*.cpp)

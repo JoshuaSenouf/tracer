@@ -14,6 +14,7 @@
 #include "vector.h"
 #include "randomizer.h"
 #include "math_helper.h"
+#include "tinyexr.h"
 
 
 static GLfloat quadVertices[] =
@@ -32,21 +33,28 @@ class Renderer
         ~Renderer();
 
         void initRender(int progressiveWidth, int progressiveHeight);
-        void renderTracer(int progressiveWidth, int progressiveHeight, int progressiveSamples, int progressiveBounces, int frameCounter);
-        void renderToTexture(int progressiveWidth, int progressiveHeight);
-        void cleanFrontBuffer(int progressiveWidth, int progressiveHeight);
-        void cleanPPMBuffer();
         void initQuadRender();
-        void cleanQuadRender();
         void initScene();
+        std::vector<Vector3> traceLoop(int progressiveWidth, int progressiveHeight, int progressiveSamples, int progressiveBounces, int frameCounter, std::vector<Vector3> renderBuffer = {});
+        void renderToTexture(int textureWidth, int textureHeight, std::vector<Vector3> renderBuffer);
+        void cleanQuadRender();
         void cleanScene();
+        void cleanBuffer(int bufferWidth, int bufferHeight, std::vector<Vector3> &buffer);
+        void cleanFrontBuffer(int progressiveWidth, int progressiveHeight);
         void displayGLBuffer();
-        void exportToPPM(int ppmWidth, int ppmHeight);
+        void exportToPPM(int ppmWidth, int ppmHeight, std::vector<Vector3> exportBuffer = {});
+        void exportToEXR(int exrWidth, int exrHeight, std::vector<Vector3> exportBuffer = {});
         void renderToPPM(int ppmWidth, int ppmHeight, int ppmSamples, int ppmBounces);
+        void renderToEXR(int exrWidth, int exrHeight, int exrSamples, int exrBounces);
         void saveToBackBuffer(int progressiveWidth, int progressiveHeight);
         void swapBuffer(int progressiveWidth, int progressiveHeight);
 
+        std::vector<Vector3> getFrontBuffer();
+        void setFrontBuffer(std::vector<Vector3> buffer);
+
     private:
+        bool frontUsed;
+
         int sphereCount;
 
         GLuint quadVAO;
@@ -59,6 +67,7 @@ class Renderer
         std::vector<Vector3> frontBuffer;
         std::vector<Vector3> backBuffer;
         std::vector<Vector3> ppmBuffer;
+        std::vector<Vector3> exrBuffer;
 };
 
 
