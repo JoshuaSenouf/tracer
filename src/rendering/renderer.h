@@ -14,7 +14,6 @@
 #include "vector.h"
 #include "randomizer.h"
 #include "math_helper.h"
-#include "tinyexr.h"
 
 
 static GLfloat quadVertices[] =
@@ -39,21 +38,9 @@ class Renderer
         void renderToTexture(int textureWidth, int textureHeight, const std::vector<Vector3>& renderBuffer);
         void cleanQuadRender();
         void cleanScene();
-        void cleanBuffer(int bufferWidth, int bufferHeight, std::vector<Vector3> &buffer);
         void displayGLBuffer();
-        void exportToPPM(int ppmWidth, int ppmHeight, const std::vector<Vector3> &exportBuffer);
-        void exportToEXR(int exrWidth, int exrHeight, const std::vector<Vector3> &exportBuffer);
-        void renderToPPM(int ppmWidth, int ppmHeight, int ppmSamples, int ppmBounces);
-        void renderToEXR(int exrWidth, int exrHeight, int exrSamples, int exrBounces);
-        void saveToBackBuffer(int progressiveWidth, int progressiveHeight);
-        void swapBuffer(int progressiveWidth, int progressiveHeight);
-
-        std::vector<Vector3>& getFrontBuffer();
-        void setFrontBuffer(const std::vector<Vector3>& buffer);
 
     private:
-        bool frontUsed;
-
         int sphereCount;
 
         GLuint quadVAO;
@@ -62,9 +49,7 @@ class Renderer
 
         Shader quadRenderShader;
 
-        std::vector<SphereObject> spheresList;
-        std::vector<Vector3> frontBuffer;
-        std::vector<Vector3> backBuffer;
+        std::vector<Sphere> spheresList;
 };
 
 

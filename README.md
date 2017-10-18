@@ -26,7 +26,8 @@ Features
 
 * Acceleration structure :
 	* **TODO :** BVH
- 
+ 	* **TODO :** KD-Tree
+
 * Utility :
     * GUI using ImGui
     * Pause/resume render

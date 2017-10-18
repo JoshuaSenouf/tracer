@@ -13,12 +13,14 @@
 
 #include "renderer.h"
 #include "camera.h"
+#include "buffer.h"
 
 
 class Window
 {
     public:
         Window();
+
         int renderWindow();
         void resetRenderer();
         void setupGUI();
@@ -64,6 +66,9 @@ class Window
         CameraInfo renderCameraInfo;
 
         Renderer tracerRenderer;
+
+        Buffer frontBuffer;
+        Buffer backBuffer;
 };
 
 

@@ -2,6 +2,7 @@
 
 #define STB_IMAGE_IMPLEMENTATION
 #define TINYEXR_IMPLEMENTATION
+
 #include "window.h"
 
 

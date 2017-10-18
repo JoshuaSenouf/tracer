@@ -16,6 +16,7 @@ class Shader
 
         Shader();
         ~Shader();
+
         void setShader(std::string vertexPath, std::string fragmentPath);
         void useShader();
 };

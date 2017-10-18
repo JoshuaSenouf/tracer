@@ -9,7 +9,7 @@ Scene::Scene()
 
 void Scene::loadScene(std::string scenePath)
 {
-    SphereObject tempSphere;
+    Sphere tempSphere;
 
     std::ifstream sceneReader(scenePath);
     std::string currentLine, objType, tempString;
@@ -77,7 +77,7 @@ Vector3 Scene::stringToFloat3(std::string vecString)
 }
 
 
-std::vector<SphereObject> Scene::getSceneSpheresList()
+std::vector<Sphere> Scene::getSceneSpheresList()
 {
     return sceneSpheresList;
 }

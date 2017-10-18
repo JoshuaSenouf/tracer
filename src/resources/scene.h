@@ -8,7 +8,7 @@
 #include <algorithm>
 #include <vector>
 
-#include "object.h"
+#include "sphere.h"
 #include "vector.h"
 
 
@@ -21,10 +21,10 @@ class Scene
         std::string purgeString(std::string bloatedString);
         Vector3 stringToFloat3(std::string vecString);
 
-        std::vector<SphereObject> getSceneSpheresList();
+        std::vector<Sphere> getSceneSpheresList();
 
     private:
-        std::vector<SphereObject> sceneSpheresList;
+        std::vector<Sphere> sceneSpheresList;
 };
 
 #endif // SCENEPARSER_H

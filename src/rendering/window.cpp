@@ -29,6 +29,9 @@ int Window::renderWindow()
     tracerRenderer.initRender(progressiveWidth, progressiveHeight);
     renderCamera.setCamera(glm::vec2(progressiveWidth, progressiveHeight));
 
+    frontBuffer.initBuffer(progressiveWidth, progressiveHeight);
+    backBuffer.initBuffer(progressiveWidth, progressiveHeight);
+
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 
     while (!glfwWindowShouldClose(window))
@@ -64,8 +67,8 @@ int Window::renderWindow()
 
             frameCounter++;
 
-            tracerRenderer.traceLoop(progressiveWidth, progressiveHeight, progressiveSamples, progressiveBounces, frameCounter, tracerRenderer.getFrontBuffer()); // Progressive rendering
-            tracerRenderer.renderToTexture(progressiveWidth, progressiveHeight, tracerRenderer.getFrontBuffer());
+            tracerRenderer.traceLoop(progressiveWidth, progressiveHeight, progressiveSamples, progressiveBounces, frameCounter, frontBuffer.getBufferData()); // Progressive rendering
+            tracerRenderer.renderToTexture(progressiveWidth, progressiveHeight, frontBuffer.getBufferData());
         }
 
         tracerRenderer.displayGLBuffer();
@@ -92,7 +95,7 @@ int Window::renderWindow()
 void Window::resetRenderer()
 {
     frameCounter = 0;
-    tracerRenderer.cleanBuffer(progressiveWidth, progressiveHeight, tracerRenderer.getFrontBuffer());
+    frontBuffer.cleanBufferData(progressiveWidth, progressiveHeight);
 
     renderReset = false;
 }
@@ -134,13 +137,16 @@ void Window::renderConfigWindow(bool& guiOpen)
     {
         if (ImGui::Button("Save To Back Buffer"))
         {
-            tracerRenderer.saveToBackBuffer(progressiveWidth, progressiveHeight);
+            backBuffer.cleanBufferData(progressiveWidth, progressiveHeight);
+            backBuffer.setBufferData(frontBuffer.getBufferData());
         }
     }
 
     if (ImGui::Button("Swap Buffers"))
     {
-        tracerRenderer.swapBuffer(progressiveWidth, progressiveHeight);
+        frontBuffer.swapBufferData(backBuffer.getBufferData());
+        tracerRenderer.renderToTexture(progressiveWidth, progressiveHeight, frontBuffer.getBufferData());
+
         swapBool = !swapBool;
 
         if (swapBool)
@@ -180,12 +186,22 @@ void Window::setupGUI()
             {
                 if (ImGui::MenuItem("PPM"))
                 {
-                    tracerRenderer.renderToPPM(outputWidth, outputHeight, outputSamples, outputBounces);
+                    std::vector<Vector3> ppmBuffer;
+
+                    ppmBuffer.resize(outputWidth * outputHeight);
+                    tracerRenderer.traceLoop(outputWidth, outputHeight, outputSamples, outputBounces, 1, ppmBuffer);
+
+                    exportToPPM(outputWidth, outputHeight, ppmBuffer);
                 }
 
                 if (ImGui::MenuItem("EXR"))
                 {
-                    tracerRenderer.renderToEXR(outputWidth, outputHeight, outputSamples, outputBounces);
+                    std::vector<Vector3> exrBuffer;
+
+                    exrBuffer.resize(outputWidth * outputHeight);
+                    tracerRenderer.traceLoop(outputWidth, outputHeight, outputSamples, outputBounces, 1, exrBuffer);
+
+                    exportToEXR(outputWidth, outputHeight, exrBuffer);
                 }
 
                 ImGui::EndMenu();
@@ -195,12 +211,12 @@ void Window::setupGUI()
             {
                 if (ImGui::MenuItem("PPM"))
                 {
-                    tracerRenderer.exportToPPM(outputWidth, outputHeight, tracerRenderer.getFrontBuffer());
+                    exportToPPM(outputWidth, outputHeight, frontBuffer.getBufferData());
                 }
 
                 if (ImGui::MenuItem("EXR"))
                 {
-                    tracerRenderer.exportToEXR(outputWidth, outputHeight, tracerRenderer.getFrontBuffer());
+                    exportToEXR(outputWidth, outputHeight, frontBuffer.getBufferData());
                 }
 
                 ImGui::EndMenu();

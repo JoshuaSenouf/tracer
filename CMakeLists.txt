@@ -16,7 +16,7 @@ else()
 endif()
 
 include_directories(src/camera/
-                    src/renderer/
+                    src/rendering/
                     src/resources/
                     src/geometry/
                     src/math/
@@ -33,13 +33,13 @@ file(GLOB API_SOURCES api/glad/src/glad.c
                         api/imgui/*.cpp)
 
 file(GLOB PROJECT_HEADERS src/camera/*.h
-                          src/renderer/*.h
+                          src/rendering/*.h
                           src/resources/*.h
                           src/geometry/*.h
                           src/math/*.h)
 
 file(GLOB PROJECT_SOURCES src/camera/*.cpp
-                          src/renderer/*.cpp
+                          src/rendering/*.cpp
                           src/resources/*.cpp
                           src/geometry/*.cpp
                           src/math/*.cpp
