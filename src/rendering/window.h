@@ -14,6 +14,7 @@
 #include "renderer.h"
 #include "camera.h"
 #include "buffer.h"
+#include "scene.h"
 
 
 class Window
@@ -69,6 +70,8 @@ class Window
 
         Buffer frontBuffer;
         Buffer backBuffer;
+
+        Scene renderScene;
 };
 
 

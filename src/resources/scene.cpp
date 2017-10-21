@@ -3,81 +3,178 @@
 
 Scene::Scene()
 {
-    //std::locale::global(std::locale("en_US.UTF-8")); // So that the "." character is used by std::stof as the separator instead of "," if you are using a french style input for example
+
 }
 
 
-void Scene::loadScene(std::string scenePath)
+Scene::Scene(const std::string& scenePath)
 {
-    Sphere tempSphere;
+    loadSceneFile(scenePath);
+}
 
-    std::ifstream sceneReader(scenePath);
-    std::string currentLine, objType, tempString;
 
-    while(getline(sceneReader, currentLine))
+int Scene::loadSceneFile(const std::string& scenePath)
+{
+    cleanScene();
+
+    tinyxml2::XMLError errorOutput = sceneFile.LoadFile(scenePath.c_str());
+
+    if (errorOutput != tinyxml2::XML_SUCCESS)
     {
-        if(!currentLine.empty() && !(currentLine[0] == '#'))
+        std::cout << "ERROR - Failed to open the following scene file : " << scenePath << std::endl;
+
+        return 0;
+    }
+
+    loadSpheres();
+}
+
+
+void Scene::loadSpheres()
+{
+    tinyxml2::XMLElement* sphereLevel = sceneFile.FirstChildElement("scene")->FirstChildElement("geometry")->FirstChildElement("spheres");
+
+    for (tinyxml2::XMLElement *sphereElement = sphereLevel->FirstChildElement(); sphereElement; sphereElement = sphereElement->NextSiblingElement())
+    {
+        Sphere tempSphere;
+        tempSphere.name = sphereElement->Attribute("name");
+
+        for (tinyxml2::XMLNode *sphereParameter = sphereElement->FirstChild(); sphereParameter; sphereParameter = sphereParameter->NextSibling())
         {
-            std::stringstream iss(currentLine);
+            if (sphereParameter->Value() == std::string("radius"))
+            {
+                float sphereRadius;
 
-            getline(iss, objType, ';');
+                sphereParameter->ToElement()->QueryFloatAttribute("value", &sphereRadius);
 
-            getline(iss, tempString, ';');
-            tempSphere.radius = std::stof(tempString);
+                tempSphere.radius = sphereRadius;
+            }
 
-            getline(iss, tempString, ';');
-            tempSphere.position = stringToFloat3(purgeString(tempString));
+            if (sphereParameter->Value() == std::string("position"))
+            {
+                Vector3 spherePosition;
 
-            getline(iss, tempString, ';');
-            tempSphere.color = stringToFloat3(purgeString(tempString));
+                sphereParameter->ToElement()->QueryFloatAttribute("x", &spherePosition.x);
+                sphereParameter->ToElement()->QueryFloatAttribute("y", &spherePosition.y);
+                sphereParameter->ToElement()->QueryFloatAttribute("z", &spherePosition.z);
 
-            getline(iss, tempString, ';');
-            tempSphere.emissiveColor = stringToFloat3(purgeString(tempString));
+                tempSphere.position = spherePosition;
+            }
 
-            getline(iss, tempString, ';');
-            tempSphere.material = static_cast<materialType>(std::stoi(tempString));
+            else if (sphereParameter->Value() == std::string("color"))
+            {
+                Vector3 sphereColor;
 
-            sceneSpheresList.push_back(tempSphere);
+                sphereParameter->ToElement()->QueryFloatAttribute("r", &sphereColor.x);
+                sphereParameter->ToElement()->QueryFloatAttribute("g", &sphereColor.y);
+                sphereParameter->ToElement()->QueryFloatAttribute("b", &sphereColor.z);
+
+                tempSphere.color = sphereColor;
+            }
+
+            else if (sphereParameter->Value() == std::string("emissiveColor"))
+            {
+                Vector3 sphereEmissive;
+
+                sphereParameter->ToElement()->QueryFloatAttribute("r", &sphereEmissive.x);
+                sphereParameter->ToElement()->QueryFloatAttribute("g", &sphereEmissive.y);
+                sphereParameter->ToElement()->QueryFloatAttribute("b", &sphereEmissive.z);
+
+                tempSphere.emissiveColor = sphereEmissive;
+            }
+
+            if (sphereParameter->Value() == std::string("material"))
+            {
+                float sphereMaterial;
+
+                sphereParameter->ToElement()->QueryFloatAttribute("value", &sphereMaterial);
+
+                tempSphere.materialID = sphereMaterial;
+            }
         }
-    }
 
-    sceneReader.close();
+        spheresList.push_back(tempSphere);
+    }
 }
 
 
-std::string Scene::purgeString(std::string bloatedString)
+void Scene::loadMeshes()
 {
-    std::string badChars = "()";
 
-    for (unsigned int i = 0; i < badChars.length(); ++i)
+}
+
+
+void Scene::loadMaterials()
+{
+
+}
+
+
+void Scene::loadCamera()
+{
+
+}
+
+
+void Scene::loadConfiguration()
+{
+
+}
+
+
+void Scene::printSpheresData()
+{
+    std::cout << "\n///////////////\n" << std::endl;
+    std::cout << "SPHERECOUNT : " << spheresList.size() << "\n" << std::endl;
+
+    for(int i = 0; i < spheresList.size(); ++i)
     {
-        bloatedString.erase(std::remove(bloatedString.begin(), bloatedString.end(), badChars[i]), bloatedString.end());
+        std::cout << "NAME : " << spheresList[i].name << std::endl;
+        std::cout << "RADIUS : " << spheresList[i].radius << std::endl;
+        std::cout << "POS X : " << spheresList[i].position.x << " POS Y : " << spheresList[i].position.y << " POS Z : " << spheresList[i].position.z << std::endl;
+        std::cout << "COL R : " << spheresList[i].color.x << " COL G : " << spheresList[i].color.y << " COL B: " << spheresList[i].color.z << std::endl;
+        std::cout << "EMI R : " << spheresList[i].emissiveColor.x << " EMI G : " << spheresList[i].emissiveColor.y << " EMI B : " << spheresList[i].emissiveColor.z << std::endl;
+        std::cout << "MATERIALID : " << spheresList[i].materialID << std::endl;
+        std::cout << "\n///////////////\n" << std::endl;
     }
-
-    return bloatedString;
 }
 
 
-Vector3 Scene::stringToFloat3(std::string vecString)
+void Scene::cleanScene()
 {
-    int componentCount = 0;
-    std::vector<float> vecComponents(3);
-
-    std::string currentValue;
-    std::stringstream stream;
-    stream.str(vecString);
-
-    while(getline(stream, currentValue, ','))
-    {
-        vecComponents[componentCount] = std::stof(currentValue);
-        componentCount++;
-    }
-
-    return Vector3(vecComponents[0], vecComponents[1], vecComponents[2]);
+    cleanSpheresList();
+    cleanMeshesList();
+    cleanMaterialsList();
 }
 
 
-std::vector<Sphere> Scene::getSceneSpheresList()
+void Scene::cleanSpheresList()
 {
-    return sceneSpheresList;
+    spheresList.clear();
+    spheresList.shrink_to_fit();
+}
+
+
+void Scene::cleanMeshesList()
+{
+    meshesList.clear();
+    meshesList.shrink_to_fit();
+}
+
+
+void Scene::cleanMaterialsList()
+{
+
+}
+
+
+const std::vector<Sphere>& Scene::getSpheresList()
+{
+    return spheresList;
+}
+
+
+const std::vector<Mesh>& Scene::getMeshesList()
+{
+    return meshesList;
 }

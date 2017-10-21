@@ -18,7 +18,6 @@ void Renderer::initRender(int progressiveWidth, int progressiveHeight)
     quadRenderShader.setShader("res/shaders/quadRender.vert", "res/shaders/quadRender.frag");
 
     initQuadRender();
-    initScene();
 
     glGenTextures(1, &this->renderTextureID);
     glActiveTexture(GL_TEXTURE0);
@@ -53,26 +52,6 @@ void Renderer::initQuadRender()
     glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (GLvoid*)(3 * sizeof(GLfloat)));
 
     glBindVertexArray(0);
-}
-
-
-void Renderer::initScene()
-{
-//    Scene testScene;
-//    testScene.loadScene("res/scenes/testScene.txt");
-
-//    spheresList = testScene.getSceneSpheresList();
-//    sphereCount = spheresList.size();
-
-//    std::cout << "SPHERECOUNT : " << sphereCount << std::endl;
-//    for(int i = 0; i < sphereCount; ++i)
-//    {
-//        std::cout << "RADIUS : " << spheresList[i].radius << std::endl;
-//        std::cout << "POS X : " << spheresList[i].position.x << " POS Y : " << spheresList[i].position.y << " POS Z : " << spheresList[i].position.z << std::endl;
-//        std::cout << "COL R : " << spheresList[i].color.x << " COL G : " << spheresList[i].color.y << " COL B: " << spheresList[i].color.z << std::endl;
-//        std::cout << "EMI R : " << spheresList[i].emissiveColor.x << " EMI G : " << spheresList[i].emissiveColor.y << " EMI B : " << spheresList[i].emissiveColor.z << std::endl;
-//        std::cout << "///////////////" << std::endl;
-//    }
 }
 
 
@@ -119,15 +98,6 @@ void Renderer::cleanQuadRender()
     glDeleteBuffers(1, &quadVBO);
 
     quadVBO = 0;
-}
-
-
-void Renderer::cleanScene()
-{
-    sphereCount = 0;
-
-    spheresList.clear();
-    spheresList.shrink_to_fit();
 }
 
 

@@ -6,49 +6,58 @@
 				<position x = "0.0" y = "-1000.4" z = "0.0"/>
 				<color r = "0.5" g = "0.5" b = "0.5"/>
 				<emissiveColor r = "0.0" g = "0.0" b = "0.0"/>
-				<materialType value = "1"/>
+				<material value = "1"/>
 			</sphere>
+
 			<sphere name = "diffuseSphere">
 				<radius value = "1.0"/>
 				<position x = "-1.5" y = "0.6" z = "0.0"/>
 				<color r = "0.8" g = "0.15" b = "0.15"/>
 				<emissiveColor r = "0.0" g = "0.0" b = "0.0"/>
-				<materialType value = "1"/>
+				<material value = "1"/>
 			</sphere>
+
 			<sphere name = "specularSphere">
 				<radius value = "1.0"/>
 				<position x = "-4.5" y = "0.6" z = "0.0"/>
 				<color r = "0.75" g = "0.75" b = "0.75"/>
 				<emissiveColor r = "0.0" g = "0.0" b = "0.0"/>
-				<materialType value = "2"/>
+				<material value = "2"/>
 			</sphere>
+
 			<sphere name = "metalSphere">
 				<radius value = "1.0"/>
 				<position x = "1.5" y = "0.6" z = "0.0"/>
 				<color r = "1.0" g = "1.0" b = "1.0"/>
 				<emissiveColor r = "0.0" g = "0.0" b = "0.0"/>
-				<materialType value = "4"/>
+				<material value = "4"/>
 			</sphere>
+
 			<sphere name = "glossySphere">
 				<radius value = "1.0"/>
 				<position x = "4.5" y = "0.6" z = "0.0"/>
 				<color r = "1.0" g = "0.4" b = "0.0"/>
 				<emissiveColor r = "0.0" g = "0.0" b = "0.0"/>
-				<materialType value = "5"/>
+				<material value = "5"/>
 			</sphere>
+
 			<sphere name = "lightSource">
 				<radius value = "1.0"/>
 				<position x = "0.0" y = "4.0" z = "-7.0"/>
 				<color r = "0.0" g = "0.0" b = "0.0"/>
 				<emissiveColor r = "4.0" g = "3.6" b = "3.2"/>
-				<materialType value = "1"/>
+				<material value = "1"/>
 			</sphere>
 		</spheres>
+
 		<models>
 		</models>
+
 	</geometry>
+
 	<materials>
 	</materials>
+
 </scene>
 
 <camera>

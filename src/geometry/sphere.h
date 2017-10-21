@@ -2,20 +2,20 @@
 #define SPHERE_H
 
 #include "vector.h"
-#include "material.h"
 
 
 class Sphere
 {
     public:
+        std::string name;
         float radius;
         Vector3 position;
         Vector3 color;
         Vector3 emissiveColor;
-        materialType material;
+        float materialID;
 
         Sphere();
-        Sphere(float tempRadius, Vector3 tempPosition, Vector3 tempColor, Vector3 tempEmissiveColor, materialType tempMaterial);
+        Sphere(float tempRadius, Vector3 tempPosition, Vector3 tempColor, Vector3 tempEmissiveColor, float tempMaterial);
 
     private:
 };

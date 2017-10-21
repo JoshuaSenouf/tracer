@@ -8,23 +8,39 @@
 #include <algorithm>
 #include <vector>
 
-#include "sphere.h"
+#include "tinyxml2.h"
+
 #include "vector.h"
+#include "sphere.h"
+#include "mesh.h"
 
 
 class Scene
 {
     public:
         Scene();
+        Scene(const std::string& scenePath);
 
-        void loadScene(std::string scenePath);
-        std::string purgeString(std::string bloatedString);
-        Vector3 stringToFloat3(std::string vecString);
+        int loadSceneFile(const std::string& scenePath);
+        void loadSpheres();
+        void loadMeshes();
+        void loadMaterials();
+        void loadCamera();
+        void loadConfiguration();
+        void cleanScene();
+        void cleanSpheresList();
+        void cleanMeshesList();
+        void cleanMaterialsList();
+        void printSpheresData();
 
-        std::vector<Sphere> getSceneSpheresList();
+        const std::vector<Sphere>& getSpheresList();
+        const std::vector<Mesh>& getMeshesList();
 
     private:
-        std::vector<Sphere> sceneSpheresList;
+        tinyxml2::XMLDocument sceneFile;
+
+        std::vector<Sphere> spheresList;
+        std::vector<Mesh> meshesList;
 };
 
 #endif // SCENEPARSER_H
