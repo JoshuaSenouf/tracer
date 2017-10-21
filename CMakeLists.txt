@@ -30,7 +30,8 @@ include_directories(src/camera/
                     api/tinyexr)
 
 file(GLOB API_SOURCES api/glad/src/glad.c
-                        api/imgui/*.cpp)
+                      api/imgui/*.cpp
+                      api/tinyxml2/*.cpp)
 
 file(GLOB PROJECT_HEADERS src/camera/*.h
                           src/rendering/*.h

@@ -58,11 +58,11 @@ void Renderer::initQuadRender()
 
 void Renderer::initScene()
 {
-    Scene testScene;
-    testScene.loadScene("res/scenes/testScene.txt");
+//    Scene testScene;
+//    testScene.loadScene("res/scenes/testScene.txt");
 
-    spheresList = testScene.getSceneSpheresList();
-    sphereCount = spheresList.size();
+//    spheresList = testScene.getSceneSpheresList();
+//    sphereCount = spheresList.size();
 
 //    std::cout << "SPHERECOUNT : " << sphereCount << std::endl;
 //    for(int i = 0; i < sphereCount; ++i)
