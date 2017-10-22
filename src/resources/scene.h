@@ -35,6 +35,8 @@ class Scene
 
         const std::vector<Sphere>& getSpheresList();
         const std::vector<Mesh>& getMeshesList();
+        float getFloatAttribute(const tinyxml2::XMLNode& objectParameter, std::string floatAttr);
+        const Vector3& getVectorAttribute(const tinyxml2::XMLNode& objectParameter, const std::vector<std::string>& vectorAttrList);
 
     private:
         tinyxml2::XMLDocument sceneFile;

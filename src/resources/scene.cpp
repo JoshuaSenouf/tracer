@@ -43,53 +43,27 @@ void Scene::loadSpheres()
         {
             if (sphereParameter->Value() == std::string("radius"))
             {
-                float sphereRadius;
-
-                sphereParameter->ToElement()->QueryFloatAttribute("value", &sphereRadius);
-
-                tempSphere.radius = sphereRadius;
+                tempSphere.radius = getFloatAttribute(*sphereParameter, "value");
             }
 
             if (sphereParameter->Value() == std::string("position"))
             {
-                Vector3 spherePosition;
-
-                sphereParameter->ToElement()->QueryFloatAttribute("x", &spherePosition.x);
-                sphereParameter->ToElement()->QueryFloatAttribute("y", &spherePosition.y);
-                sphereParameter->ToElement()->QueryFloatAttribute("z", &spherePosition.z);
-
-                tempSphere.position = spherePosition;
+                tempSphere.position = getVectorAttribute(*sphereParameter, std::vector<std::string> {"x", "y", "z"});
             }
 
             else if (sphereParameter->Value() == std::string("color"))
             {
-                Vector3 sphereColor;
-
-                sphereParameter->ToElement()->QueryFloatAttribute("r", &sphereColor.x);
-                sphereParameter->ToElement()->QueryFloatAttribute("g", &sphereColor.y);
-                sphereParameter->ToElement()->QueryFloatAttribute("b", &sphereColor.z);
-
-                tempSphere.color = sphereColor;
+                tempSphere.color = getVectorAttribute(*sphereParameter, std::vector<std::string> {"r", "g", "b"});
             }
 
             else if (sphereParameter->Value() == std::string("emissiveColor"))
             {
-                Vector3 sphereEmissive;
-
-                sphereParameter->ToElement()->QueryFloatAttribute("r", &sphereEmissive.x);
-                sphereParameter->ToElement()->QueryFloatAttribute("g", &sphereEmissive.y);
-                sphereParameter->ToElement()->QueryFloatAttribute("b", &sphereEmissive.z);
-
-                tempSphere.emissiveColor = sphereEmissive;
+                tempSphere.emissiveColor = getVectorAttribute(*sphereParameter, std::vector<std::string> {"r", "g", "b"});
             }
 
             if (sphereParameter->Value() == std::string("material"))
             {
-                float sphereMaterial;
-
-                sphereParameter->ToElement()->QueryFloatAttribute("value", &sphereMaterial);
-
-                tempSphere.materialID = sphereMaterial;
+                tempSphere.materialID = getFloatAttribute(*sphereParameter, "value");
             }
         }
 
@@ -177,4 +151,26 @@ const std::vector<Sphere>& Scene::getSpheresList()
 const std::vector<Mesh>& Scene::getMeshesList()
 {
     return meshesList;
+}
+
+
+float Scene::getFloatAttribute(const tinyxml2::XMLNode& objectParameter, std::string floatAttr)
+{
+    float tempFloat;
+
+    objectParameter.ToElement()->QueryFloatAttribute(floatAttr.c_str(), &tempFloat);
+
+    return tempFloat;
+}
+
+
+const Vector3& Scene::getVectorAttribute(const tinyxml2::XMLNode& objectParameter, const std::vector<std::string>& vectorAttrList)
+{
+    Vector3 tempVector;
+
+    objectParameter.ToElement()->QueryFloatAttribute(vectorAttrList.at(0).c_str(), &tempVector.x);
+    objectParameter.ToElement()->QueryFloatAttribute(vectorAttrList.at(1).c_str(), &tempVector.y);
+    objectParameter.ToElement()->QueryFloatAttribute(vectorAttrList.at(2).c_str(), &tempVector.z);
+
+    return tempVector;
 }

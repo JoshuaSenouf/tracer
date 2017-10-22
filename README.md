@@ -8,9 +8,9 @@ Features
 ------
 
 * Rendering :
-	* Progressive rendering
-	* Render/export to PPM
-	* Render/export to EXR
+    * Progressive rendering
+    * Render/export to PPM
+    * Render/export to EXR
 
 * Camera :
     * Movements
@@ -25,8 +25,16 @@ Features
     * **TODO :** Triangles
 
 * Acceleration structure :
-	* **TODO :** BVH
- 	* **TODO :** KD-Tree
+    * **TODO :** BVH
+    * **TODO :** KD-Tree
+
+* Scene :
+    * XML scene format, with associated parser
+    * Spheres loading
+    * **TODO :** Meshes loading
+    * **TODO :** Material loading
+    * **TODO :** Camera loading
+    * **TODO :** Configuration loading
 
 * Utility :
     * GUI using ImGui

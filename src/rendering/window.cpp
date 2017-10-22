@@ -185,7 +185,7 @@ void Window::setupGUI()
     {
         if (ImGui::BeginMenu("Rendering"))
         {
-            if (ImGui::BeginMenu("Render to"))
+            if (ImGui::BeginMenu("Render to..."))
             {
                 if (ImGui::MenuItem("PPM"))
                 {
@@ -210,7 +210,7 @@ void Window::setupGUI()
                 ImGui::EndMenu();
             }
 
-            if (ImGui::BeginMenu("Export to"))
+            if (ImGui::BeginMenu("Export to..."))
             {
                 if (ImGui::MenuItem("PPM"))
                 {
@@ -235,6 +235,28 @@ void Window::setupGUI()
             }
 
             ImGui::MenuItem("Config", NULL, &renderConfigBool);
+
+            ImGui::EndMenu();
+        }
+
+        if (ImGui::BeginMenu("Scene"))
+        {
+            if (ImGui::BeginMenu("Load..."))
+            {
+                if (ImGui::MenuItem("Cornell Box"))
+                {
+                    renderScene.loadSceneFile("res/scenes/cornell.xml");
+                    renderReset = true;
+                }
+
+                if (ImGui::MenuItem("Material Test"))
+                {
+                    renderScene.loadSceneFile("res/scenes/materialTest.xml");
+                    renderReset = true;
+                }
+
+                ImGui::EndMenu();
+            }
 
             ImGui::EndMenu();
         }
