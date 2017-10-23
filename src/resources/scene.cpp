@@ -164,7 +164,7 @@ float Scene::getFloatAttribute(const tinyxml2::XMLNode& objectParameter, std::st
 }
 
 
-const Vector3& Scene::getVectorAttribute(const tinyxml2::XMLNode& objectParameter, const std::vector<std::string>& vectorAttrList)
+const Vector3 Scene::getVectorAttribute(const tinyxml2::XMLNode& objectParameter, const std::vector<std::string>& vectorAttrList)
 {
     Vector3 tempVector;
 

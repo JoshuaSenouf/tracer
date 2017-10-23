@@ -7,7 +7,7 @@ Camera::Camera()
 }
 
 
-void Camera::setCamera(glm::vec2 tempResolution)
+void Camera::setCamera(Vector2 tempResolution)
 {
     initCameraInfo();
     setCameraResolution(tempResolution);
@@ -16,8 +16,8 @@ void Camera::setCamera(glm::vec2 tempResolution)
 
 void Camera::initCameraInfo()
 {
-    cameraInfo.cameraPosition = glm::vec3(0.0f, 4.0f, 15.0f); // (0.0f, 4.0f, 15.0f) Test, (0.0f, 2.9f, 17.0f) Cornell
-    cameraInfo.cameraUp = normalize(glm::vec3(0.0f, 1.0f, 0.0f));
+    cameraInfo.cameraPosition = Vector3(0.0f, 4.0f, 15.0f); // (0.0f, 4.0f, 15.0f) Test, (0.0f, 2.9f, 17.0f) Cornell
+    cameraInfo.cameraUp = Vector3(0.0f, 1.0f, 0.0f).normalize();
     cameraInfo.cameraYaw = 90.0f;
     cameraInfo.cameraPitch = 6.0f; // 6.0f Test, 2.0f Cornell
     cameraInfo.cameraFOV.x = 45.0f;
@@ -30,32 +30,32 @@ void Camera::initCameraInfo()
 }
 
 
-void Camera::setCameraResolution(glm::vec2 tempResolution)
+void Camera::setCameraResolution(Vector2 tempResolution)
 {
     cameraInfo.cameraResolution = tempResolution;
     setCameraFOV(cameraInfo.cameraFOV.x);
 }
 
 
-void Camera::setCameraPosition(glm::vec3 tempPosition)
+void Camera::setCameraPosition(Vector3 tempPosition)
 {
     cameraInfo.cameraPosition = tempPosition;
 }
 
 
-void Camera::setCameraFront(glm::vec3 tempForward)
+void Camera::setCameraFront(Vector3 tempForward)
 {
     cameraInfo.cameraFront = tempForward;
 }
 
 
-void Camera::setCameraUp(glm::vec3 tempUp)
+void Camera::setCameraUp(Vector3 tempUp)
 {
     cameraInfo.cameraUp = tempUp;
 }
 
 
-void Camera::setCameraRight(glm::vec3 tempRight)
+void Camera::setCameraRight(Vector3 tempRight)
 {
     cameraInfo.cameraRight = tempRight;
 }
@@ -110,37 +110,37 @@ CameraInfo Camera::getCameraInfo()
 }
 
 
-glm::vec2 Camera::getCameraResolution()
+Vector2 Camera::getCameraResolution()
 {
     return cameraInfo.cameraResolution;
 }
 
 
-glm::vec3 Camera::getCameraPosition()
+Vector3 Camera::getCameraPosition()
 {
     return cameraInfo.cameraPosition;
 }
 
 
-glm::vec3 Camera::getCameraFront()
+Vector3 Camera::getCameraFront()
 {
     return cameraInfo.cameraFront;
 }
 
 
-glm::vec3 Camera::getCameraUp()
+Vector3 Camera::getCameraUp()
 {
     return cameraInfo.cameraUp;
 }
 
 
-glm::vec3 Camera::getCameraRight()
+Vector3 Camera::getCameraRight()
 {
     return cameraInfo.cameraRight;
 }
 
 
-glm::vec2 Camera::getCameraFOV()
+Vector2 Camera::getCameraFOV()
 {
     return cameraInfo.cameraFOV;
 }
@@ -218,12 +218,13 @@ void Camera::mouseCall(GLfloat xoffset, GLfloat yoffset, GLboolean constrainPitc
 
 void Camera::updateCameraVectors()
 {
-    glm::vec3 tempFront;
-    tempFront.x = cos(glm::radians(cameraInfo.cameraYaw)) * cos(glm::radians(cameraInfo.cameraPitch));
-    tempFront.y = sin(glm::radians(cameraInfo.cameraPitch));
-    tempFront.z = sin(glm::radians(cameraInfo.cameraYaw)) * cos(glm::radians(cameraInfo.cameraPitch));
+    Vector3 tempFront;
+
+    tempFront.x = cos(degreesToRadians(cameraInfo.cameraYaw)) * cos(degreesToRadians(cameraInfo.cameraPitch));
+    tempFront.y = sin(degreesToRadians(cameraInfo.cameraPitch));
+    tempFront.z = sin(degreesToRadians(cameraInfo.cameraYaw)) * cos(degreesToRadians(cameraInfo.cameraPitch));
     tempFront *= -1.0f;
 
-    cameraInfo.cameraFront = normalize(tempFront);
-    cameraInfo.cameraRight = normalize(cross(cameraInfo.cameraFront, cameraInfo.cameraUp));
+    cameraInfo.cameraFront = tempFront.normalize();
+    cameraInfo.cameraRight = cameraInfo.cameraFront.cross(cameraInfo.cameraUp).normalize();
 }

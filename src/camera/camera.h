@@ -2,8 +2,8 @@
 #define CAMERA_H
 
 #include <glad/glad.h>
-#include <glm/glm.hpp>
 
+#include "vector.h"
 #include "math_helper.h"
 
 
@@ -18,12 +18,12 @@ enum cameraMovement
 
 struct CameraInfo
 {
-        glm::vec2 cameraResolution;
-        glm::vec3 cameraPosition;
-        glm::vec3 cameraFront;
-        glm::vec3 cameraUp;
-        glm::vec3 cameraRight;
-        glm::vec2 cameraFOV;
+        Vector2 cameraResolution;
+        Vector3 cameraPosition;
+        Vector3 cameraFront;
+        Vector3 cameraUp;
+        Vector3 cameraRight;
+        Vector2 cameraFOV;
 
         float cameraYaw;
         float cameraPitch;
@@ -39,14 +39,14 @@ class Camera
     public:
         Camera();
 
-        void setCamera(glm::vec2 tempResolution);
+        void setCamera(Vector2 tempResolution);
         void initCameraInfo();
 
-        void setCameraResolution(glm::vec2 tempResolution);
-        void setCameraPosition(glm::vec3 tempPosition);
-        void setCameraFront(glm::vec3 tempForward);
-        void setCameraUp(glm::vec3 tempUp);
-        void setCameraRight(glm::vec3 tempRight);
+        void setCameraResolution(Vector2 tempResolution);
+        void setCameraPosition(Vector3 tempPosition);
+        void setCameraFront(Vector3 tempForward);
+        void setCameraUp(Vector3 tempUp);
+        void setCameraRight(Vector3 tempRight);
         void setCameraFOV(float tempFOV);
         void setCameraYaw(float tempYaw);
         void setCameraPitch(float tempPitch);
@@ -56,12 +56,12 @@ class Camera
         void setCameraFocalDistance(float tempFocal);
 
         CameraInfo getCameraInfo();
-        glm::vec2 getCameraResolution();
-        glm::vec3 getCameraPosition();
-        glm::vec3 getCameraFront();
-        glm::vec3 getCameraUp();
-        glm::vec3 getCameraRight();
-        glm::vec2 getCameraFOV();
+        Vector2 getCameraResolution();
+        Vector3 getCameraPosition();
+        Vector3 getCameraFront();
+        Vector3 getCameraUp();
+        Vector3 getCameraRight();
+        Vector2 getCameraFOV();
         float getCameraYaw();
         float getCameraPitch();
         float getCameraSpeed();

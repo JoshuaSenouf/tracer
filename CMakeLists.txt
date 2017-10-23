@@ -22,7 +22,6 @@ include_directories(src/camera/
                     src/math/
                     api/glad/include/
                     api/glfw/include/
-                    api/glm/
                     api/stb/
                     api/imgui/
                     api/tinyobjloader/

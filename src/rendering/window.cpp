@@ -27,10 +27,9 @@ int Window::renderWindow()
     ImGui_ImplGlfwGL3_Init(window, true);
 
     renderScene.loadSceneFile("res/scenes/materialTest.xml");
-    renderScene.printSpheresData();
 
     tracerRenderer.initRender(progressiveWidth, progressiveHeight);
-    renderCamera.setCamera(glm::vec2(progressiveWidth, progressiveHeight));
+    renderCamera.setCamera(Vector2(progressiveWidth, progressiveHeight));
 
     frontBuffer.initBuffer(progressiveWidth, progressiveHeight);
     backBuffer.initBuffer(progressiveWidth, progressiveHeight);

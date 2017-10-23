@@ -93,12 +93,12 @@ void exportToEXR(int exrWidth, int exrHeight, const std::vector<Vector3>& export
     exrHeader.num_channels = 3;
     exrHeader.channels = (EXRChannelInfo *)malloc(sizeof(EXRChannelInfo) * exrHeader.num_channels);
 
-    strncpy(exrHeader.channels[0].name, "B", 255);
-    strncpy(exrHeader.channels[1].name, "G", 255);
-    strncpy(exrHeader.channels[2].name, "R", 255);
-    exrHeader.channels[0].name[strlen("B")] = '\0';
-    exrHeader.channels[1].name[strlen("G")] = '\0';
-    exrHeader.channels[2].name[strlen("R")] = '\0';
+    std::strncpy(exrHeader.channels[0].name, "B", 255);
+    std::strncpy(exrHeader.channels[1].name, "G", 255);
+    std::strncpy(exrHeader.channels[2].name, "R", 255);
+    exrHeader.channels[0].name[std::strlen("B")] = '\0';
+    exrHeader.channels[1].name[std::strlen("G")] = '\0';
+    exrHeader.channels[2].name[std::strlen("R")] = '\0';
 
     exrHeader.pixel_types = (int *)malloc(sizeof(int) * exrHeader.num_channels);
     exrHeader.requested_pixel_types = (int *)malloc(sizeof(int) * exrHeader.num_channels);

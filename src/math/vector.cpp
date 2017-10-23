@@ -139,9 +139,152 @@ bool Vector3::operator!=(const Vector3 &tempVec3) const
 }
 
 
+/////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////
+
+
+Vector2::Vector2() : x(0.0f), y(0.0f)
+{
+
+}
+
+Vector2::Vector2(float tempX, float tempY)
+{
+    this->x = tempX;
+    this->y = tempY;
+}
+
+
+float Vector2::length() const
+{
+    return std::sqrt(this->x * this->x + this->y * this->y);
+}
+
+
+Vector2 Vector2::normalize() const
+{
+    float vecLength = length();
+
+    return Vector2(this->x / vecLength, this->y / vecLength);
+}
+
+
+float Vector2::dot(const Vector2 &tempVec2) const
+{
+    return (this->x * tempVec2.x + this->y * tempVec2.y);
+}
+
+
+void Vector2::print()
+{
+    std::cout << "X : " << this->x << "\nY : " << this->y << std::endl;
+}
+
+
+Vector2& Vector2::operator+=(const Vector2 &tempVec2)
+{
+    this->x += tempVec2.x;
+    this->y += tempVec2.y;
+
+    return *this;
+}
+
+
+Vector2& Vector2::operator-=(const Vector2 &tempVec2)
+{
+    this->x -= tempVec2.x;
+    this->y -= tempVec2.y;
+
+    return *this;
+}
+
+
+Vector2& Vector2::operator*=(float multFactor)
+{
+    this->x *= multFactor;
+    this->y *= multFactor;
+
+    return *this;
+}
+
+
+Vector2& Vector2::operator/=(float divFactor)
+{
+    this->x /= divFactor;
+    this->y /= divFactor;
+
+    return *this;
+}
+
+
+Vector2 Vector2::operator+(const Vector2 &tempVec2) const
+{
+    return Vector2(this->x + tempVec2.x, this->y + tempVec2.y);
+}
+
+
+Vector2 Vector2::operator-(const Vector2 &tempVec2) const
+{
+    return Vector2(this->x - tempVec2.x, this->y - tempVec2.y);
+}
+
+
+Vector2 Vector2::operator-() const
+{
+    return Vector2(-(this->x), -(this->y));
+}
+
+
+Vector2 Vector2::operator*(const Vector2 &tempVec2) const
+{
+    return Vector2(this->x * tempVec2.x, this->y * tempVec2.y);
+}
+
+Vector2 Vector2::operator*(float multFactor) const
+{
+    return Vector2(this->x * multFactor, this->y * multFactor);
+}
+
+
+Vector2 Vector2::operator/(const Vector2 &tempVec2) const
+{
+    return Vector2(this->x / tempVec2.x, this->y / tempVec2.y);
+}
+
+
+Vector2 Vector2::operator/(float divFactor) const
+{
+    return (*this * (1.0f / divFactor));
+}
+
+
+bool Vector2::operator==(const Vector2 &tempVec2) const
+{
+    return (this->x == tempVec2.x && this->y == tempVec2.y);
+}
+
+
+bool Vector2::operator!=(const Vector2 &tempVec2) const
+{
+    return !(*this == tempVec2);
+}
+
+
+/////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////
+
+
 std::ostream& operator<<(std::ostream &os, const Vector3 &tempVec3)
 {
     os << tempVec3.x << " " << tempVec3.y << " " << tempVec3.z;
+
+    return os;
+}
+
+
+std::ostream& operator<<(std::ostream &os, const Vector2 &tempVec2)
+{
+    os << tempVec2.x << " " << tempVec2.y;
 
     return os;
 }

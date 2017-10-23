@@ -4,6 +4,7 @@ Tracer
 Tracer is a C++ rendering engine that aimed to produce photorealistic images using Path Tracing techniques on CPU.
 
 
+
 Features
 ------
 
@@ -56,9 +57,8 @@ Dependencies (included, aside from OpenMP)
 - Window & Input system : GLFW
 - GUI system : dear imgui
 - OpenGL Function Loader : GLAD
-- OpenGL Mathematic Functions : GLM
-- Image loading : stb
-- Mesh Loading : tinyobjloader
-- EXR handling : tinyexr
-- XML handling : TinyXML2
 - Multithreading : OpenMP
+- XML handling : TinyXML2
+- EXR handling : tinyexr
+- Mesh Loading : tinyobjloader
+- Image loading : stb

@@ -5,6 +5,7 @@
 #include <fstream>
 #include <vector>
 #include <iterator>
+#include <cstring>
 
 #include "tinyexr.h"
 

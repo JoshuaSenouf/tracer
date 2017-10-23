@@ -34,7 +34,39 @@ class Vector3
         bool operator!=(const Vector3 &tempVec3) const;
 };
 
+
+class Vector2
+{
+    public:
+        float x, y;
+
+        Vector2();
+        Vector2(float tempX, float tempY);
+
+        float length() const;
+        Vector2 normalize() const;
+        float dot(const Vector2 &tempVec2) const;
+        void print();
+
+        Vector2& operator+=(const Vector2 &tempVec2);
+        Vector2& operator-=(const Vector2 &tempVec2);
+        Vector2& operator*=(float multFactor);
+        Vector2& operator/=(float divFactor);
+        Vector2 operator+(const Vector2 &tempVec2) const;
+        Vector2 operator-(const Vector2 &tempVec2) const;
+        Vector2 operator-() const;
+        Vector2 operator*(const Vector2 &tempVec2) const;
+        Vector2 operator*(float multFactor) const;
+        Vector2 operator/(const Vector2 &tempVec2) const;
+        Vector2 operator/(float divFactor) const;
+        bool operator==(const Vector2 &tempVec2) const;
+        bool operator!=(const Vector2 &tempVec2) const;
+};
+
+
 std::ostream& operator<<(std::ostream &os, const Vector3 &tempVec3);
+std::ostream& operator<<(std::ostream &os, const Vector2 &tempVec2);
+
 
 
 #endif // VECTOR_H
