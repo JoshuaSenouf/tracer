@@ -55,7 +55,7 @@ void Renderer::initQuadRender()
 }
 
 
-void Renderer::traceLoop(int progressiveWidth, int progressiveHeight, int progressiveSamples, int progressiveBounces, int frameCounter, std::vector<Vector3>& renderBuffer)
+void Renderer::traceLoop(int progressiveWidth, int progressiveHeight, int progressiveSamples, int progressiveBounces, int frameCounter, std::vector<Vector3>& renderBuffer, Camera& renderCamera)
 {
 #pragma omp parallel for schedule(dynamic, 1)
     for (int pixelY = 0; pixelY < progressiveHeight; ++pixelY)
@@ -69,6 +69,8 @@ void Renderer::traceLoop(int progressiveWidth, int progressiveHeight, int progre
 
             for (int sample = 0; sample < progressiveSamples; ++sample)
             {
+                Ray cameraRay = renderCamera.getCameraRay(pixelX, pixelY, randEngine);
+
                 radianceColor += (renderBuffer[pixelIndex] * (frameCounter - 1) + Vector3(convertToSRGB(randEngine.getRandomFloat()),
                                                                                           convertToSRGB(randEngine.getRandomFloat()),
                                                                                           convertToSRGB(randEngine.getRandomFloat()))) / frameCounter * (1.0f / progressiveSamples);

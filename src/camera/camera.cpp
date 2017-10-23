@@ -16,15 +16,15 @@ void Camera::setCamera(Vector2 tempResolution)
 
 void Camera::initCameraInfo()
 {
-    cameraInfo.cameraPosition = Vector3(0.0f, 4.0f, 15.0f); // (0.0f, 4.0f, 15.0f) Test, (0.0f, 2.9f, 17.0f) Cornell
-    cameraInfo.cameraUp = Vector3(0.0f, 1.0f, 0.0f).normalize();
-    cameraInfo.cameraYaw = 90.0f;
-    cameraInfo.cameraPitch = 6.0f; // 6.0f Test, 2.0f Cornell
-    cameraInfo.cameraFOV.x = 45.0f;
-    cameraInfo.cameraApertureRadius = 0.0f;
-    cameraInfo.cameraFocalDistance = 4.0f;
-    cameraInfo.cameraSpeed = 10.0f;
-    cameraInfo.cameraSensitivity = 0.10f;
+    cameraPosition = Vector3(0.0f, 4.0f, 15.0f); // (0.0f, 4.0f, 15.0f) Test, (0.0f, 2.9f, 17.0f) Cornell
+    cameraUp = Vector3(0.0f, 1.0f, 0.0f).normalize();
+    cameraYaw = 90.0f;
+    cameraPitch = 6.0f; // 6.0f Test, 2.0f Cornell
+    cameraFOV.x = 45.0f;
+    cameraApertureRadius = 0.0f;
+    cameraFocalDistance = 4.0f;
+    cameraSpeed = 10.0f;
+    cameraSensitivity = 0.10f;
 
     updateCameraVectors();
 }
@@ -32,184 +32,178 @@ void Camera::initCameraInfo()
 
 void Camera::setCameraResolution(Vector2 tempResolution)
 {
-    cameraInfo.cameraResolution = tempResolution;
-    setCameraFOV(cameraInfo.cameraFOV.x);
+    cameraResolution = tempResolution;
+    setCameraFOV(cameraFOV.x);
 }
 
 
 void Camera::setCameraPosition(Vector3 tempPosition)
 {
-    cameraInfo.cameraPosition = tempPosition;
+    cameraPosition = tempPosition;
 }
 
 
 void Camera::setCameraFront(Vector3 tempForward)
 {
-    cameraInfo.cameraFront = tempForward;
+    cameraFront = tempForward;
 }
 
 
 void Camera::setCameraUp(Vector3 tempUp)
 {
-    cameraInfo.cameraUp = tempUp;
+    cameraUp = tempUp;
 }
 
 
 void Camera::setCameraRight(Vector3 tempRight)
 {
-    cameraInfo.cameraRight = tempRight;
+    cameraRight = tempRight;
 }
 
 
 void Camera::setCameraFOV(float tempFOV)
 {
-    cameraInfo.cameraFOV.x = tempFOV;
-    cameraInfo.cameraFOV.y = (atan(tan(tempFOV * M_PI * M_1_180 * 0.5f) * ((float)cameraInfo.cameraResolution.y / (float)cameraInfo.cameraResolution.x)) * 2.0f) * 180.0f * M_1_PI;
+    cameraFOV.x = tempFOV;
+    cameraFOV.y = (atan(tan(tempFOV * M_PI * M_1_180 * 0.5f) * ((float)cameraResolution.y / (float)cameraResolution.x)) * 2.0f) * 180.0f * M_1_PI;
 }
 
 
 void Camera::Camera::setCameraYaw(float tempYaw)
 {
-    cameraInfo.cameraYaw = fmax(tempYaw, 0.0f);
+    cameraYaw = fmax(tempYaw, 0.0f);
 }
 
 
 void Camera::Camera::setCameraPitch(float tempPitch)
 {
-    cameraInfo.cameraPitch = fmax(tempPitch, 0.0f);
+    cameraPitch = fmax(tempPitch, 0.0f);
 }
 
 
 void Camera::Camera::setCameraSpeed(float tempSpeed)
 {
-    cameraInfo.cameraSpeed = fmax(tempSpeed, 0.0f);
+    cameraSpeed = fmax(tempSpeed, 0.0f);
 }
 
 
 void Camera::Camera::setCameraSensitivity(float tempSensitivity)
 {
-    cameraInfo.cameraSensitivity = fmax(tempSensitivity, 0.0f);
+    cameraSensitivity = fmax(tempSensitivity, 0.0f);
 }
 
 
 void Camera::Camera::setCameraApertureRadius(float tempAperture)
 {
-    cameraInfo.cameraApertureRadius = fmax(tempAperture, 0.0f);
+    cameraApertureRadius = fmax(tempAperture, 0.0f);
 }
 
 
 void Camera::setCameraFocalDistance(float tempFocal)
 {
-    cameraInfo.cameraFocalDistance = fmax(tempFocal, 0.01f);
-}
-
-
-CameraInfo Camera::getCameraInfo()
-{
-    return cameraInfo;
+    cameraFocalDistance = fmax(tempFocal, 0.01f);
 }
 
 
 Vector2 Camera::getCameraResolution()
 {
-    return cameraInfo.cameraResolution;
+    return cameraResolution;
 }
 
 
 Vector3 Camera::getCameraPosition()
 {
-    return cameraInfo.cameraPosition;
+    return cameraPosition;
 }
 
 
 Vector3 Camera::getCameraFront()
 {
-    return cameraInfo.cameraFront;
+    return cameraFront;
 }
 
 
 Vector3 Camera::getCameraUp()
 {
-    return cameraInfo.cameraUp;
+    return cameraUp;
 }
 
 
 Vector3 Camera::getCameraRight()
 {
-    return cameraInfo.cameraRight;
+    return cameraRight;
 }
 
 
 Vector2 Camera::getCameraFOV()
 {
-    return cameraInfo.cameraFOV;
+    return cameraFOV;
 }
 
 
 float Camera::getCameraYaw()
 {
-    return cameraInfo.cameraYaw;
+    return cameraYaw;
 }
 
 
 float Camera::getCameraPitch()
 {
-    return cameraInfo.cameraPitch;
+    return cameraPitch;
 }
 
 
 float Camera::getCameraSpeed()
 {
-    return cameraInfo.cameraSpeed;
+    return cameraSpeed;
 }
 
 
 float Camera::getCameraSensitivity()
 {
-    return cameraInfo.cameraSensitivity;
+    return cameraSensitivity;
 }
 
 
 float Camera::getCameraApertureRadius()
 {
-    return cameraInfo.cameraApertureRadius;
+    return cameraApertureRadius;
 }
 
 
 float Camera::getCameraFocalDistance()
 {
-    return cameraInfo.cameraFocalDistance;
+    return cameraFocalDistance;
 }
 
 
 void Camera::keyboardCall(cameraMovement direction, GLfloat deltaTime)
 {
-    GLfloat cameraVelocity = cameraInfo.cameraSpeed * deltaTime;
+    GLfloat cameraVelocity = cameraSpeed * deltaTime;
 
     if (direction == FORWARD)
-        cameraInfo.cameraPosition += cameraInfo.cameraFront * cameraVelocity;
+        cameraPosition += cameraFront * cameraVelocity;
     if (direction == BACKWARD)
-        cameraInfo.cameraPosition -= cameraInfo.cameraFront * cameraVelocity;
+        cameraPosition -= cameraFront * cameraVelocity;
     if (direction == LEFT)
-        cameraInfo.cameraPosition -= cameraInfo.cameraRight * cameraVelocity;
+        cameraPosition -= cameraRight * cameraVelocity;
     if (direction == RIGHT)
-        cameraInfo.cameraPosition += cameraInfo.cameraRight * cameraVelocity;
+        cameraPosition += cameraRight * cameraVelocity;
 }
 
 
 void Camera::mouseCall(GLfloat xoffset, GLfloat yoffset, GLboolean constrainPitch)
 {
-    xoffset *= cameraInfo.cameraSensitivity;
-    yoffset *= cameraInfo.cameraSensitivity;
-    cameraInfo.cameraYaw += xoffset;
-    cameraInfo.cameraPitch += yoffset;
+    xoffset *= cameraSensitivity;
+    yoffset *= cameraSensitivity;
+    cameraYaw += xoffset;
+    cameraPitch += yoffset;
 
     if (constrainPitch)
     {
-        if (cameraInfo.cameraPitch > 89.0f)
-            cameraInfo.cameraPitch = 89.0f;
-        if (cameraInfo.cameraPitch < -89.0f)
-            cameraInfo.cameraPitch = -89.0f;
+        if (cameraPitch > 89.0f)
+            cameraPitch = 89.0f;
+        if (cameraPitch < -89.0f)
+            cameraPitch = -89.0f;
     }
 
     this->updateCameraVectors();
@@ -220,11 +214,53 @@ void Camera::updateCameraVectors()
 {
     Vector3 tempFront;
 
-    tempFront.x = cos(degreesToRadians(cameraInfo.cameraYaw)) * cos(degreesToRadians(cameraInfo.cameraPitch));
-    tempFront.y = sin(degreesToRadians(cameraInfo.cameraPitch));
-    tempFront.z = sin(degreesToRadians(cameraInfo.cameraYaw)) * cos(degreesToRadians(cameraInfo.cameraPitch));
+    tempFront.x = cos(degreesToRadians(cameraYaw)) * cos(degreesToRadians(cameraPitch));
+    tempFront.y = sin(degreesToRadians(cameraPitch));
+    tempFront.z = sin(degreesToRadians(cameraYaw)) * cos(degreesToRadians(cameraPitch));
     tempFront *= -1.0f;
 
-    cameraInfo.cameraFront = tempFront.normalize();
-    cameraInfo.cameraRight = cameraInfo.cameraFront.cross(cameraInfo.cameraUp).normalize();
+    cameraFront = tempFront.normalize();
+    cameraRight = cameraFront.cross(cameraUp).normalize();
 }
+
+
+Ray Camera::getCameraRay(int posX, int posY, Randomizer& randEngine)
+{
+    Vector3 horizontalAxis = cameraFront.cross(cameraUp).normalize();
+    Vector3 verticalAxis = horizontalAxis.cross(cameraFront).normalize();
+
+    Vector3 middle = cameraPosition + cameraFront;
+    Vector3 horizontal = horizontalAxis * std::tan(cameraFOV.x * 0.5f * (M_PI / 180));
+    Vector3 vertical = verticalAxis * std::tan(cameraFOV.y * -0.5f * (M_PI / 180));
+
+    float rayJitterX = ((randEngine.getRandomFloat() - 0.5f) + posX) / (cameraResolution.x - 1.0f);
+    float rayJitterY = ((randEngine.getRandomFloat() - 0.5f) + posY) / (cameraResolution.y - 1.0f);
+
+    Vector3 cameraPointOnPlane = cameraPosition
+                                + ((middle
+                                + (horizontal * ((2.0f * rayJitterX) - 1.0f))
+                                + (vertical * ((2.0f * rayJitterY) - 1.0f))
+                                - cameraPosition)
+                                * cameraFocalDistance);
+
+    Vector3 cameraAperturePoint = cameraPosition;
+
+    if (cameraApertureRadius > 0.0f)
+    {
+        float randomizedAngle = 2.0f * M_PI * randEngine.getRandomFloat();
+        float randomizedRadius = cameraApertureRadius * std::sqrt(randEngine.getRandomFloat());
+        float apertureX = std::cos(randomizedAngle) * randomizedRadius;
+        float apertureY = std::sin(randomizedAngle) * randomizedRadius;
+
+        cameraAperturePoint = cameraPosition + (horizontalAxis * apertureX) + (verticalAxis * apertureY);
+    }
+
+    Vector3 rayOrigin = cameraAperturePoint;
+    Vector3 rayDirection = cameraPointOnPlane - cameraAperturePoint;
+    rayDirection = rayDirection.normalize();
+
+    return Ray(rayOrigin, rayDirection);
+}
+
+
+

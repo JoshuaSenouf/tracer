@@ -69,7 +69,7 @@ int Window::renderWindow()
 
             frameCounter++;
 
-            tracerRenderer.traceLoop(progressiveWidth, progressiveHeight, progressiveSamples, progressiveBounces, frameCounter, frontBuffer.getBufferData()); // Progressive rendering
+            tracerRenderer.traceLoop(progressiveWidth, progressiveHeight, progressiveSamples, progressiveBounces, frameCounter, frontBuffer.getBufferData(), renderCamera); // Progressive rendering
             tracerRenderer.renderToTexture(progressiveWidth, progressiveHeight, frontBuffer.getBufferData());
         }
 
@@ -191,7 +191,7 @@ void Window::setupGUI()
                     std::vector<Vector3> ppmBuffer;
 
                     ppmBuffer.resize(outputWidth * outputHeight);
-                    tracerRenderer.traceLoop(outputWidth, outputHeight, outputSamples, outputBounces, 1, ppmBuffer);
+                    tracerRenderer.traceLoop(outputWidth, outputHeight, outputSamples, outputBounces, 1, ppmBuffer, renderCamera);
 
                     exportToPPM(outputWidth, outputHeight, ppmBuffer);
                 }
@@ -201,7 +201,7 @@ void Window::setupGUI()
                     std::vector<Vector3> exrBuffer;
 
                     exrBuffer.resize(outputWidth * outputHeight);
-                    tracerRenderer.traceLoop(outputWidth, outputHeight, outputSamples, outputBounces, 1, exrBuffer);
+                    tracerRenderer.traceLoop(outputWidth, outputHeight, outputSamples, outputBounces, 1, exrBuffer, renderCamera);
 
                     exportToEXR(outputWidth, outputHeight, exrBuffer);
                 }

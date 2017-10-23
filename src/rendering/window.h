@@ -64,7 +64,6 @@ class Window
         GLFWwindow* window;
 
         Camera renderCamera;
-        CameraInfo renderCameraInfo;
 
         Renderer tracerRenderer;
 

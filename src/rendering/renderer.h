@@ -12,6 +12,8 @@
 #include "shader.h"
 #include "vector.h"
 #include "randomizer.h"
+#include "camera.h"
+#include "ray.h"
 #include "math_helper.h"
 
 
@@ -32,7 +34,7 @@ class Renderer
 
         void initRender(int progressiveWidth, int progressiveHeight);
         void initQuadRender();
-        void traceLoop(int progressiveWidth, int progressiveHeight, int progressiveSamples, int progressiveBounces, int frameCounter, std::vector<Vector3>& renderBuffer);
+        void traceLoop(int progressiveWidth, int progressiveHeight, int progressiveSamples, int progressiveBounces, int frameCounter, std::vector<Vector3>& renderBuffer, Camera& renderCamera);
         void renderToTexture(int textureWidth, int textureHeight, const std::vector<Vector3>& renderBuffer);
         void cleanQuadRender();
         void displayGLBuffer();

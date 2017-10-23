@@ -4,6 +4,8 @@
 #include <glad/glad.h>
 
 #include "vector.h"
+#include "ray.h"
+#include "randomizer.h"
 #include "math_helper.h"
 
 
@@ -13,24 +15,6 @@ enum cameraMovement
     BACKWARD,
     LEFT,
     RIGHT
-};
-
-
-struct CameraInfo
-{
-        Vector2 cameraResolution;
-        Vector3 cameraPosition;
-        Vector3 cameraFront;
-        Vector3 cameraUp;
-        Vector3 cameraRight;
-        Vector2 cameraFOV;
-
-        float cameraYaw;
-        float cameraPitch;
-        float cameraSpeed;
-        float cameraSensitivity;
-        float cameraApertureRadius;
-        float cameraFocalDistance;
 };
 
 
@@ -55,7 +39,6 @@ class Camera
         void setCameraApertureRadius(float tempAperture);
         void setCameraFocalDistance(float tempFocal);
 
-        CameraInfo getCameraInfo();
         Vector2 getCameraResolution();
         Vector3 getCameraPosition();
         Vector3 getCameraFront();
@@ -72,10 +55,24 @@ class Camera
         void keyboardCall(cameraMovement direction, GLfloat deltaTime);
         void mouseCall(GLfloat xoffset, GLfloat yoffset, GLboolean constrainPitch);
 
+        Ray getCameraRay(int posX, int posY, Randomizer& randEngine);
+
     private:
         void updateCameraVectors();
 
-        CameraInfo cameraInfo;
+        Vector2 cameraResolution;
+        Vector3 cameraPosition;
+        Vector3 cameraFront;
+        Vector3 cameraUp;
+        Vector3 cameraRight;
+        Vector2 cameraFOV;
+
+        float cameraYaw;
+        float cameraPitch;
+        float cameraSpeed;
+        float cameraSensitivity;
+        float cameraApertureRadius;
+        float cameraFocalDistance;
 };
 
 #endif // CAMERA_H
