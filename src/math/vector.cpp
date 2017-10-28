@@ -92,9 +92,21 @@ Vector3 Vector3::operator+(const Vector3 &tempVec3) const
 }
 
 
+Vector3 Vector3::operator+(float addFactor) const
+{
+    return Vector3(this->x + addFactor, this->y + addFactor,  this->z + addFactor);
+}
+
+
 Vector3 Vector3::operator-(const Vector3 &tempVec3) const
 {
     return Vector3(this->x - tempVec3.x, this->y - tempVec3.y,  this->z - tempVec3.z);
+}
+
+
+Vector3 Vector3::operator-(float subFactor) const
+{
+    return Vector3(this->x - subFactor, this->y - subFactor,  this->z - subFactor);
 }
 
 
@@ -223,9 +235,21 @@ Vector2 Vector2::operator+(const Vector2 &tempVec2) const
 }
 
 
+Vector2 Vector2::operator+(float addFactor) const
+{
+    return Vector2(this->x + addFactor, this->y + addFactor);
+}
+
+
 Vector2 Vector2::operator-(const Vector2 &tempVec2) const
 {
     return Vector2(this->x - tempVec2.x, this->y - tempVec2.y);
+}
+
+
+Vector2 Vector2::operator-(float subFactor) const
+{
+    return Vector2(this->x - subFactor, this->y - subFactor);
 }
 
 

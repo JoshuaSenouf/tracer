@@ -2,6 +2,8 @@
 #define SPHERE_H
 
 #include "vector.h"
+#include "ray.h"
+#include "math_helper.h"
 
 
 class Sphere
@@ -16,6 +18,8 @@ class Sphere
 
         Sphere();
         Sphere(float tempRadius, Vector3 tempPosition, Vector3 tempColor, Vector3 tempEmissiveColor, float tempMaterial);
+
+        float computeIntersection(const Ray& ray);
 
     private:
 };

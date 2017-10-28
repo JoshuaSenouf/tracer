@@ -14,7 +14,10 @@
 #include "randomizer.h"
 #include "camera.h"
 #include "ray.h"
+#include "sphere.h"
+#include "scene.h"
 #include "math_helper.h"
+#include "integrator.h"
 
 
 static GLfloat quadVertices[] =
@@ -34,7 +37,7 @@ class Renderer
 
         void initRender(int progressiveWidth, int progressiveHeight);
         void initQuadRender();
-        void traceLoop(int progressiveWidth, int progressiveHeight, int progressiveSamples, int progressiveBounces, int frameCounter, std::vector<Vector3>& renderBuffer, Camera& renderCamera);
+        void traceLoop(int progressiveWidth, int progressiveHeight, int progressiveSamples, int progressiveBounces, int frameCounter, std::vector<Vector3>& renderBuffer, Camera& renderCamera, Scene& renderScene);
         void renderToTexture(int textureWidth, int textureHeight, const std::vector<Vector3>& renderBuffer);
         void cleanQuadRender();
         void displayGLBuffer();

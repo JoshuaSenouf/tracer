@@ -38,6 +38,8 @@ class Scene
         float getFloatAttribute(const tinyxml2::XMLNode& objectParameter, std::string floatAttr);
         const Vector3 getVectorAttribute(const tinyxml2::XMLNode& objectParameter, const std::vector<std::string>& vectorAttrList);
 
+        bool isIntersected(const Ray& ray, float& closestSphereDist, int& closestSphereID);
+
     private:
         tinyxml2::XMLDocument sceneFile;
 

@@ -256,11 +256,7 @@ Ray Camera::getCameraRay(int posX, int posY, Randomizer& randEngine)
     }
 
     Vector3 rayOrigin = cameraAperturePoint;
-    Vector3 rayDirection = cameraPointOnPlane - cameraAperturePoint;
-    rayDirection = rayDirection.normalize();
+    Vector3 rayDirection = (cameraPointOnPlane - cameraAperturePoint).normalize();
 
     return Ray(rayOrigin, rayDirection);
 }
-
-
-

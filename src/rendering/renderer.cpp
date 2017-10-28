@@ -55,7 +55,7 @@ void Renderer::initQuadRender()
 }
 
 
-void Renderer::traceLoop(int progressiveWidth, int progressiveHeight, int progressiveSamples, int progressiveBounces, int frameCounter, std::vector<Vector3>& renderBuffer, Camera& renderCamera)
+void Renderer::traceLoop(int progressiveWidth, int progressiveHeight, int progressiveSamples, int progressiveBounces, int frameCounter, std::vector<Vector3>& renderBuffer, Camera& renderCamera, Scene& renderScene)
 {
 #pragma omp parallel for schedule(dynamic, 1)
     for (int pixelY = 0; pixelY < progressiveHeight; ++pixelY)

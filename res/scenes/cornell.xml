@@ -35,7 +35,7 @@
 
             <sphere name = "floor">
                 <radius value = "1000.0"/>
-                <position x = "0.0" y = "1000.4" z = "0.0"/>
+                <position x = "0.0" y = "-1000.4" z = "0.0"/>
                 <color r = "0.7295" g = "0.7355" b = "0.729"/>
                 <emissiveColor r = "0.0" g = "0.0" b = "0.0"/>
                 <material value = "1"/>

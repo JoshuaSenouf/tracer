@@ -174,3 +174,21 @@ const Vector3 Scene::getVectorAttribute(const tinyxml2::XMLNode& objectParameter
 
     return tempVector;
 }
+
+
+bool Scene::isIntersected(const Ray& ray, float& closestSphereDist, int& closestSphereID)
+{
+    float distance;
+    float infiniteDistance = closestSphereDist = 1e20;
+
+    for(int i = 0; i < spheresList.size(); i++)
+    {
+        if((distance = spheresList[i].computeIntersection(ray)) && distance < closestSphereDist)
+        {
+            closestSphereDist = distance;
+            closestSphereID = i;
+        }
+    }
+
+    return closestSphereDist < infiniteDistance;
+}
