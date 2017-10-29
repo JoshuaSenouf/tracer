@@ -6,12 +6,12 @@ Tracer is a C++ rendering engine that aimed to produce photorealistic images usi
 Screenshots
 ------
 
-* Cornell :
+* Cornell Box, 800x600, 4 bounces, 1spp, after ~5 minutes on a i5-5200U :
 
 ![](https://image.ibb.co/gEqMBR/tracer_Render_cornell.png)
 
 
-* Low light :
+* Low light, 800x600, 4 bounces, 1spp, after ~5 minutes on a i5-5200U :
 
 ![](https://image.ibb.co/hzNq5m/tracer_Render_low_Light.png)
 
