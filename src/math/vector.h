@@ -21,7 +21,9 @@ class Vector3
 
         Vector3& operator+=(const Vector3 &tempVec3);
         Vector3& operator-=(const Vector3 &tempVec3);
+        Vector3& operator*=(const Vector3 &tempVec3);
         Vector3& operator*=(float multFactor);
+        Vector3& operator/=(const Vector3 &tempVec3);
         Vector3& operator/=(float divFactor);
         Vector3 operator+(const Vector3 &tempVec3) const;
         Vector3 operator+(float addFactor) const;
@@ -52,7 +54,9 @@ class Vector2
 
         Vector2& operator+=(const Vector2 &tempVec2);
         Vector2& operator-=(const Vector2 &tempVec2);
+        Vector2& operator*=(const Vector2 &tempVec2);
         Vector2& operator*=(float multFactor);
+        Vector2& operator/=(const Vector2 &tempVec2);
         Vector2& operator/=(float divFactor);
         Vector2 operator+(const Vector2 &tempVec2) const;
         Vector2 operator+(float addFactor) const;

@@ -69,7 +69,7 @@ int Window::renderWindow()
 
             frameCounter++;
 
-            tracerRenderer.traceLoop(progressiveWidth, progressiveHeight, progressiveSamples, progressiveBounces, frameCounter, frontBuffer.getBufferData(), renderCamera, renderScene); // Progressive rendering
+            tracerRenderer.traceLoop(progressiveWidth, progressiveHeight, progressiveSamples, progressiveDepth, frameCounter, frontBuffer.getBufferData(), renderCamera, renderScene); // Progressive rendering
             tracerRenderer.renderToTexture(progressiveWidth, progressiveHeight, frontBuffer.getBufferData());
         }
 
@@ -133,7 +133,7 @@ void Window::renderConfigWindow(bool& guiOpen)
     ImGui::InputInt("Progressive Width", &progressiveWidth);
     ImGui::InputInt("Progressive Height", &progressiveHeight);
     ImGui::InputInt("Progressive Samples", &progressiveSamples);
-    ImGui::InputInt("Progressive Bounces", &progressiveBounces);
+    ImGui::InputInt("Progressive Depth", &progressiveDepth);
 
     if (!swapBool)
     {
@@ -163,7 +163,7 @@ void Window::renderConfigWindow(bool& guiOpen)
     ImGui::InputInt("Output Width", &outputWidth);
     ImGui::InputInt("Output Height", &outputHeight);
     ImGui::InputInt("Output Samples", &outputSamples);
-    ImGui::InputInt("Output Bounces", &outputBounces);
+    ImGui::InputInt("Output Depth", &outputDepth);
 
     ImGui::End();
 }
@@ -191,7 +191,7 @@ void Window::setupGUI()
                     std::vector<Vector3> ppmBuffer;
 
                     ppmBuffer.resize(outputWidth * outputHeight);
-                    tracerRenderer.traceLoop(outputWidth, outputHeight, outputSamples, outputBounces, 1, ppmBuffer, renderCamera, renderScene);
+                    tracerRenderer.traceLoop(outputWidth, outputHeight, outputSamples, outputDepth, 1, ppmBuffer, renderCamera, renderScene);
 
                     exportToPPM(outputWidth, outputHeight, ppmBuffer);
                 }
@@ -201,7 +201,7 @@ void Window::setupGUI()
                     std::vector<Vector3> exrBuffer;
 
                     exrBuffer.resize(outputWidth * outputHeight);
-                    tracerRenderer.traceLoop(outputWidth, outputHeight, outputSamples, outputBounces, 1, exrBuffer, renderCamera, renderScene);
+                    tracerRenderer.traceLoop(outputWidth, outputHeight, outputSamples, outputDepth, 1, exrBuffer, renderCamera, renderScene);
 
                     exportToEXR(outputWidth, outputHeight, exrBuffer);
                 }

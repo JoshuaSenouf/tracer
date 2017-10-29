@@ -66,11 +66,31 @@ Vector3& Vector3::operator-=(const Vector3 &tempVec3)
 }
 
 
+Vector3& Vector3::operator*=(const Vector3 &tempVec3)
+{
+    this->x *= tempVec3.x;
+    this->y *= tempVec3.y;
+    this->z *= tempVec3.z;
+
+    return *this;
+}
+
+
 Vector3& Vector3::operator*=(float multFactor)
 {
     this->x *= multFactor;
     this->y *= multFactor;
     this->z *= multFactor;
+
+    return *this;
+}
+
+
+Vector3& Vector3::operator/=(const Vector3 &tempVec3)
+{
+    this->x /= tempVec3.x;
+    this->y /= tempVec3.y;
+    this->z /= tempVec3.z;
 
     return *this;
 }
@@ -211,10 +231,28 @@ Vector2& Vector2::operator-=(const Vector2 &tempVec2)
 }
 
 
+Vector2& Vector2::operator*=(const Vector2 &tempVec2)
+{
+    this->x *= tempVec2.x;
+    this->y *= tempVec2.y;
+
+    return *this;
+}
+
+
 Vector2& Vector2::operator*=(float multFactor)
 {
     this->x *= multFactor;
     this->y *= multFactor;
+
+    return *this;
+}
+
+
+Vector2& Vector2::operator/=(const Vector2 &tempVec2)
+{
+    this->x /= tempVec2.x;
+    this->y /= tempVec2.y;
 
     return *this;
 }

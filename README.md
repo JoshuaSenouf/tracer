@@ -3,6 +3,17 @@ Tracer
 
 Tracer is a C++ rendering engine that aimed to produce photorealistic images using Path Tracing techniques on CPU.
 
+Screenshots
+------
+
+* Cornell :
+
+![](https://image.ibb.co/gEqMBR/tracer_Render_cornell.png)
+
+
+* Low light :
+
+![](https://image.ibb.co/hzNq5m/tracer_Render_low_Light.png)
 
 
 Features
@@ -15,6 +26,15 @@ Features
 
 * Camera :
     * Movements
+        * Subpixel jitter antialiasing
+        * Depth of Field (using aperture radius and focal distance)
+
+* Material :
+        * Perfect diffuse (hardcoded)
+        * Perfect specular (hardcoded)
+        * Phong metal (hardcoded)
+        * Glossy/coat (hardcoded)
+        * **TODO :** Physically-based BSDF
 
 * Light sources :
     * Emissive spheres
@@ -50,13 +70,17 @@ Tracer was written using Linux, QtCreator as the IDE, CMake as the building tool
 
 Download the source, build the project structure using CMake 3.x, open the project using your favorite IDE (tested on QtCreator), build the project, and everything should be ready to use.
 
+* In Tracer :
+    * Hold the right mouse button to use the camera
+    * Use the "+" and "-" buttons on the keypad control the aperture radius
+    * Hold LeftCtrl and "+" or "-" to control the focal distance
 
 Dependencies (included, aside from OpenMP)
 ------
 
 - Window & Input system : GLFW
-- GUI system : dear imgui
 - OpenGL Function Loader : GLAD
+- GUI system : dear imgui
 - Multithreading : OpenMP
 - XML handling : TinyXML2
 - EXR handling : tinyexr

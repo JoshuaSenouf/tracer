@@ -5,6 +5,7 @@ build/*
 # Files
 
 *.ppm
+*.png
 *.exr
 imgui.ini
 CMakeLists.txt.user

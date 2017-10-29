@@ -37,7 +37,14 @@ class Renderer
 
         void initRender(int progressiveWidth, int progressiveHeight);
         void initQuadRender();
-        void traceLoop(int progressiveWidth, int progressiveHeight, int progressiveSamples, int progressiveBounces, int frameCounter, std::vector<Vector3>& renderBuffer, Camera& renderCamera, Scene& renderScene);
+        void traceLoop(int progressiveWidth,
+                       int progressiveHeight,
+                       int progressiveSamples,
+                       int progressiveDepth,
+                       int frameCounter,
+                       std::vector<Vector3>& renderBuffer,
+                       Camera& renderCamera,
+                       Scene& renderScene);
         void renderToTexture(int textureWidth, int textureHeight, const std::vector<Vector3>& renderBuffer);
         void cleanQuadRender();
         void displayGLBuffer();
@@ -48,6 +55,7 @@ class Renderer
         GLuint renderTextureID;
 
         Shader quadRenderShader;
+        PathTracer renderIntegrator;
 };
 
 

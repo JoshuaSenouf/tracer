@@ -47,9 +47,9 @@ void exportToPPM(int ppmWidth, int ppmHeight, const std::vector<Vector3>& export
     for (int pixelIndex = 0; pixelIndex < ppmWidth * ppmHeight; ++pixelIndex)
     {
         // A lot faster than using std::ofstream or std::ostream_iterator/std::copy actually
-        fprintf(ppmFile, "%d %d %d ", convertToRGB(exportBuffer[pixelIndex].x),
-                convertToRGB(exportBuffer[pixelIndex].y),
-                convertToRGB(exportBuffer[pixelIndex].z));
+        fprintf(ppmFile, "%d %d %d ", convertToRGB(convertToSRGB(exportBuffer[pixelIndex].x)),
+                convertToRGB(convertToSRGB(exportBuffer[pixelIndex].y)),
+                convertToRGB(convertToSRGB(exportBuffer[pixelIndex].z)));
     }
 
     fclose(ppmFile);

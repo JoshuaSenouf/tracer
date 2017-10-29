@@ -20,27 +20,27 @@ inline float clamp(float x)
 }
 
 
-inline float convertToSRGB(float x)
-{
-    return pow(x, 1.0f / 2.2f);
-}
-
-
-inline float convertToLinear(float x)
-{
-    return pow(x, 2.2f);
-}
-
-
 inline Vector3 clamp(const Vector3 &tempVector)
 {
     return Vector3(clamp(tempVector.x), clamp(tempVector.y), clamp(tempVector.z));
 }
 
 
+inline float convertToSRGB(float x)
+{
+    return std::pow(x, 1.0f / 2.2f);
+}
+
+
 inline Vector3 convertToSRGB(const Vector3 &tempVector)
 {
     return Vector3(convertToSRGB(tempVector.x), convertToSRGB(tempVector.y), convertToSRGB(tempVector.z));
+}
+
+
+inline float convertToLinear(float x)
+{
+    return std::pow(x, 2.2f);
 }
 
 

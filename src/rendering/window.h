@@ -50,11 +50,11 @@ class Window
         int progressiveWidth = 800;
         int progressiveHeight = 600;
         int progressiveSamples = 1;
-        int progressiveBounces = 4;
+        int progressiveDepth = 4;
         int outputWidth = 800;
         int outputHeight = 600;
         int outputSamples = 32;
-        int outputBounces = 4;
+        int outputDepth = 4;
 
         GLfloat deltaTime = 0.0f;
         GLfloat lastFrame = 0.0f;
