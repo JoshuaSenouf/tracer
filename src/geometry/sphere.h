@@ -3,6 +3,7 @@
 
 #include "vector.h"
 #include "ray.h"
+#include "material.h"
 #include "math_helper.h"
 
 
@@ -12,12 +13,10 @@ class Sphere
         std::string name;
         float radius;
         Vector3 position;
-        Vector3 color;
-        Vector3 emissiveColor;
-        float materialID;
+        BSDF material;
 
         Sphere();
-        Sphere(float tempRadius, Vector3 tempPosition, Vector3 tempColor, Vector3 tempEmissiveColor, float tempMaterial);
+        Sphere(const std::string& tempName, float tempRadius, const Vector3& tempPosition, const BSDF& tempMaterial);
 
         float computeIntersection(const Ray& ray);
 

@@ -7,8 +7,8 @@ Sphere::Sphere()
 }
 
 
-Sphere::Sphere(float tempRadius, Vector3 tempPosition, Vector3 tempColor, Vector3 tempEmissiveColor, float tempMaterial) :
-    radius(tempRadius), position(tempPosition), color(tempColor), emissiveColor(tempEmissiveColor), materialID(tempMaterial)
+Sphere::Sphere(const std::string& tempName, float tempRadius, const Vector3& tempPosition, const BSDF& tempMaterial) :
+    name(tempName), radius(tempRadius), position(tempPosition), material(tempMaterial)
 {
 
 }

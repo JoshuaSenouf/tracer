@@ -26,7 +26,7 @@ int Window::renderWindow()
 
     ImGui_ImplGlfwGL3_Init(window, true);
 
-    renderScene.loadSceneFile("res/scenes/materialTest.xml");
+    renderScene.loadSceneFile("res/scenes/monoSphere.xml");
 
     tracerRenderer.initRender(progressiveWidth, progressiveHeight);
     renderCamera.setCamera(Vector2(progressiveWidth, progressiveHeight));

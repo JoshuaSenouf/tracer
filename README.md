@@ -6,12 +6,12 @@ Tracer is a C++ rendering engine that aimed to produce photorealistic images usi
 Screenshots
 ------
 
-* Cornell Box (800x600, 4 bounces, 1spp, after ~5 minutes on a i5-5200U) :
+* Cornell Box (800x600, 4 bounces, 1spp, after ~5 minutes on an i5-5200U) :
 
 ![](https://image.ibb.co/gEqMBR/tracer_Render_cornell.png)
 
 
-* Low light (800x600, 4 bounces, 1spp, after ~5 minutes on a i5-5200U) :
+* Low light (800x600, 4 bounces, 1spp, after ~5 minutes on an i5-5200U) :
 
 ![](https://image.ibb.co/hzNq5m/tracer_Render_low_Light.png)
 
@@ -30,11 +30,7 @@ Features
         * Depth of Field (using aperture radius and focal distance)
 
 * Material :
-    * Perfect diffuse (hardcoded)
-    * Perfect specular (hardcoded)
-    * Phong metal (hardcoded)
-    * Glossy/coat (hardcoded)
-    * **TODO :** Physically-based BSDF
+    * **TODO :** Physically-based BSDF (Probably a simplified version of the Disney principled BSDF)
 
 * Light sources :
     * Emissive spheres
@@ -51,9 +47,9 @@ Features
 
 * Scene :
     * XML scene format, with associated parser
+    * Materials loading
     * Spheres loading
     * **TODO :** Meshes loading
-    * **TODO :** Material loading
     * **TODO :** Camera loading
     * **TODO :** Configuration loading
 

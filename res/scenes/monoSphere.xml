@@ -1,0 +1,50 @@
+<scene>
+	<geometry>
+		<spheres>
+			<sphere name = "testSphere">
+				<radius value = "1.0"/>
+				<position x = "0.0" y = "0.6" z = "0.0"/>
+				<material value = "redMat"/>
+			</sphere>
+
+			<sphere name = "lightSource">
+				<radius value = "1.0"/>
+				<position x = "0.0" y = "4.0" z = "-7.0"/>
+				<material value = "light"/>
+			</sphere>
+		</spheres>
+
+		<models>
+		</models>
+
+	</geometry>
+
+	<materials>
+        <material name = "redMat">
+            <color r = "0.9" g = "0.1" b = "0.1"/>
+            <emissiveColor r = "0.0" g = "0.0" b = "0.0"/>
+            <fresnel r = "0.04" g = "0.04" b = "0.04"/>
+            <roughness value = "0.4"/>
+            <metalness value = "0.0"/>
+            <transmittance value = "0.0"/>
+            <ior value = "1.0"/>
+        </material>
+
+        <material name = "light">
+            <color r = "0.0" g = "0.0" b = "0.0"/>
+            <emissiveColor r = "4.0" g = "3.6" b = "3.2"/>
+            <fresnel r = "0.04" g = "0.04" b = "0.04"/>
+            <roughness value = "0.4"/>
+            <metalness value = "0.0"/>
+            <transmittance value = "0.0"/>
+            <ior value = "1.0"/>
+        </material>
+	</materials>
+
+</scene>
+
+<camera>
+</camera>
+
+<settings>
+</settings>

@@ -13,6 +13,7 @@
 #include "vector.h"
 #include "sphere.h"
 #include "mesh.h"
+#include "material.h"
 
 
 class Scene
@@ -22,20 +23,23 @@ class Scene
         Scene(const std::string& scenePath);
 
         int loadSceneFile(const std::string& scenePath);
+        void loadMaterials();
         void loadSpheres();
         void loadMeshes();
-        void loadMaterials();
         void loadCamera();
         void loadConfiguration();
         void cleanScene();
+        void cleanMaterialsList();
         void cleanSpheresList();
         void cleanMeshesList();
-        void cleanMaterialsList();
+        void printMaterialsData();
         void printSpheresData();
 
+        const std::vector<BSDF>& getMaterialsList();
         const std::vector<Sphere>& getSpheresList();
         const std::vector<Mesh>& getMeshesList();
-        float getFloatAttribute(const tinyxml2::XMLNode& objectParameter, std::string floatAttr);
+        float getFloatAttribute(const tinyxml2::XMLNode& objectParameter, const std::string& floatAttr);
+        const std::string getStringAttribute(const tinyxml2::XMLNode& objectParameter, const std::string& stringAttr);
         const Vector3 getVectorAttribute(const tinyxml2::XMLNode& objectParameter, const std::vector<std::string>& vectorAttrList);
 
         bool isIntersected(const Ray& ray, float& closestSphereDist, int& closestSphereID);
@@ -43,6 +47,7 @@ class Scene
     private:
         tinyxml2::XMLDocument sceneFile;
 
+        std::vector<BSDF> materialsList;
         std::vector<Sphere> spheresList;
         std::vector<Mesh> meshesList;
 };
