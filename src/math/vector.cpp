@@ -6,6 +6,15 @@ Vector3::Vector3() : x(0.0f), y(0.0f), z(0.0f)
 
 }
 
+
+Vector3::Vector3(float tempXYZ)
+{
+    this->x = tempXYZ;
+    this->y = tempXYZ;
+    this->z = tempXYZ;
+}
+
+
 Vector3::Vector3(float tempX, float tempY, float tempZ)
 {
     this->x = tempX;
@@ -37,6 +46,12 @@ float Vector3::dot(const Vector3 &tempVec3) const
 Vector3 Vector3::cross(const Vector3 &tempVec3) const
 {
     return Vector3(this->y * tempVec3.z - this->z * tempVec3.y, this->z * tempVec3.x - this->x * tempVec3.z, this->x * tempVec3.y - this->y * tempVec3.x);
+}
+
+
+Vector3 Vector3::lerp(const Vector3& tempVec3, float weightFactor)
+{
+    return Vector3((*this) + (tempVec3 - (*this)) * weightFactor);
 }
 
 
@@ -170,6 +185,11 @@ bool Vector3::operator!=(const Vector3 &tempVec3) const
     return !(*this == tempVec3);
 }
 
+
+bool Vector3::operator<(const Vector3 &tempVec3) const
+{
+    return (this->x < tempVec3.x && this->y < tempVec3.y && this->z < tempVec3.z);
+}
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

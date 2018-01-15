@@ -16,6 +16,22 @@
 #include "material.h"
 
 
+struct cameraData
+{
+    Vector3 position;
+    float yaw;
+    float pitch;
+    float fov;
+    float apertureRadius;
+    float focalDistance;
+};
+
+struct settingsData
+{
+    Vector3 skyColor;
+};
+
+
 class Scene
 {
     public:
@@ -27,20 +43,27 @@ class Scene
         void loadSpheres();
         void loadMeshes();
         void loadCamera();
-        void loadConfiguration();
+        void loadSettings();
         void cleanScene();
         void cleanMaterialsList();
         void cleanSpheresList();
         void cleanMeshesList();
+        void cleanCamera();
+        void cleanSettings();
         void printMaterialsData();
         void printSpheresData();
+        void printCameraData();
+        void printSettingsData();
 
         const std::vector<BSDF>& getMaterialsList();
         const std::vector<Sphere>& getSpheresList();
         const std::vector<Mesh>& getMeshesList();
-        float getFloatAttribute(const tinyxml2::XMLNode& objectParameter, const std::string& floatAttr);
-        const std::string getStringAttribute(const tinyxml2::XMLNode& objectParameter, const std::string& stringAttr);
-        const Vector3 getVectorAttribute(const tinyxml2::XMLNode& objectParameter, const std::vector<std::string>& vectorAttrList);
+        const cameraData& getCamera();
+        const settingsData& getSettings();
+
+        void getFloatAttribute(float& floatAttr, const std::string& floatName, const tinyxml2::XMLNode& objectParameter);
+        void getStringAttribute(std::string& stringAttr, const std::string& stringName, const tinyxml2::XMLNode& objectParameter);
+        void getVectorAttribute(Vector3& vectorAttr, const std::vector<std::string>& vectorNameList, const tinyxml2::XMLNode& objectParameter);
 
         bool isIntersected(const Ray& ray, float& closestSphereDist, int& closestSphereID);
 
@@ -50,6 +73,8 @@ class Scene
         std::vector<BSDF> materialsList;
         std::vector<Sphere> spheresList;
         std::vector<Mesh> meshesList;
+        cameraData sceneCamera;
+        settingsData sceneSettings;
 };
 
 #endif // SCENEPARSER_H

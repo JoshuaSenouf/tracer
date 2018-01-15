@@ -6,7 +6,6 @@
 #include "ray.h"
 #include "sphere.h"
 #include "scene.h"
-#include "sampling.h"
 
 
 class PathTracer

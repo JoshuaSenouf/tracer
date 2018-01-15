@@ -2,6 +2,8 @@
 #define MATERIAL_H
 
 #include "vector.h"
+#include "randomizer.h"
+#include "math_helper.h"
 
 
 class BSDF
@@ -26,7 +28,10 @@ class BSDF
              float tempTransmittance,
              float tempIOR);
 
-        const Vector3& computeSampling(Vector3 hitNormal, Vector3 rayDirection, float objectDistance);
+        const Vector3 computeSampling(Vector3& rayDirection, const Vector3& hitNormal, Randomizer& randEngine);
+        const Vector3 hemisphereSampling(const Vector3& rayDirection, Randomizer& randEngine);
+        const Vector3 sphereRandomSampling(Randomizer& randEngine);
+        const Vector3 angleRandomSampling(float theta, float phi);
 
     private:
 

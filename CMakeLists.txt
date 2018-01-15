@@ -49,23 +49,27 @@ file(GLOB PROJECT_SHADERS res/shaders/*.glsl
                           res/shaders/*.frag
                           res/shaders/*.vert)
 
+file(GLOB PROJECT_SCENES res/scenes/*.xml)
+
 file(GLOB PROJECT_CONFIGS CMakeLists.txt
                           README.md
                          .gitattributes
                          .gitignore
                          .gitmodules)
 
-source_group("Headers" FILES ${PROJECT_HEADERS})
-source_group("Shaders" FILES ${PROJECT_SHADERS})
-source_group("Sources" FILES ${PROJECT_SOURCES})
 source_group("API" FILES ${API_SOURCES})
+source_group("Headers" FILES ${PROJECT_HEADERS})
+source_group("Sources" FILES ${PROJECT_SOURCES})
+source_group("Shaders" FILES ${PROJECT_SHADERS})
+source_group("Scenes" FILES ${PROJECT_SCENES})
+
 
 add_definitions(-DGLFW_INCLUDE_NONE
                 -DPROJECT_SOURCE_DIR=\"${PROJECT_SOURCE_DIR}\")
 
-add_executable(${PROJECT_NAME} ${PROJECT_SOURCES} ${PROJECT_HEADERS}
-                               ${PROJECT_SHADERS} ${PROJECT_CONFIGS}
-                               ${API_SOURCES})
+add_executable(${PROJECT_NAME} ${API_SOURCES} ${PROJECT_SOURCES}
+                               ${PROJECT_HEADERS} ${PROJECT_SHADERS}
+                               ${PROJECT_SCENES} ${PROJECT_CONFIGS})
 
 target_link_libraries(${PROJECT_NAME} glfw
                       ${GLFW_LIBRARIES} ${GLAD_LIBRARIES})

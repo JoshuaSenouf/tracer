@@ -27,12 +27,13 @@ int Window::renderWindow()
     ImGui_ImplGlfwGL3_Init(window, true);
 
     renderScene.loadSceneFile("res/scenes/monoSphere.xml");
-
-    tracerRenderer.initRender(progressiveWidth, progressiveHeight);
-    renderCamera.setCamera(Vector2(progressiveWidth, progressiveHeight));
+    renderCamera.setCameraResolution(Vector2(progressiveWidth, progressiveHeight));
+    renderCamera.initCameraData(renderScene.getCamera());
 
     frontBuffer.initBuffer(progressiveWidth, progressiveHeight);
     backBuffer.initBuffer(progressiveWidth, progressiveHeight);
+
+    tracerRenderer.initRender(progressiveWidth, progressiveHeight);
 
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 
@@ -245,12 +246,24 @@ void Window::setupGUI()
                 if (ImGui::MenuItem("Cornell Box"))
                 {
                     renderScene.loadSceneFile("res/scenes/cornell.xml");
+                    renderCamera.initCameraData(renderScene.getCamera());
+
                     renderReset = true;
                 }
 
                 if (ImGui::MenuItem("Material Test"))
                 {
                     renderScene.loadSceneFile("res/scenes/materialTest.xml");
+                    renderCamera.initCameraData(renderScene.getCamera());
+
+                    renderReset = true;
+                }
+
+                if (ImGui::MenuItem("Mono Sphere"))
+                {
+                    renderScene.loadSceneFile("res/scenes/monoSphere.xml");
+                    renderCamera.initCameraData(renderScene.getCamera());
+
                     renderReset = true;
                 }
 

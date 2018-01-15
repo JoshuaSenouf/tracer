@@ -9,6 +9,7 @@ PathTracer::PathTracer()
 
 Vector3 PathTracer::getRadiance(Ray& cameraRay, Scene& renderScene, Randomizer& randEngine, int rayDepth)
 {
+    Vector3 bsdfSampling;
     Vector3 colorAccumulation;
     Vector3 colorMask(1.0f, 1.0f, 1.0f);
 
@@ -18,22 +19,19 @@ Vector3 PathTracer::getRadiance(Ray& cameraRay, Scene& renderScene, Randomizer& 
         int closestSphereID = 0;
 
         if (!renderScene.isIntersected(cameraRay, closestSphereDist, closestSphereID))
-            return colorAccumulation += colorMask * Vector3(0.7f, 0.8f, 0.8f); // If we hit no object, we return the sky color
+            return colorAccumulation += colorMask * renderScene.getSettings().skyColor; // If we hit no object, we return the sky color
 
-        const Sphere &hitSphere = renderScene.getSpheresList()[closestSphereID];
-        Vector3 hitCoord = cameraRay.origin + cameraRay.direction * closestSphereDist;
-        Vector3 hitNormal = (hitCoord - hitSphere.position).normalize();
-        Vector3 hitOrientedNormal = hitNormal.dot(cameraRay.direction) < 0.0f ? hitNormal : hitNormal * -1.0f;
+        Sphere hitSphere = renderScene.getSpheresList()[closestSphereID];
 
-        colorAccumulation += colorMask * hitSphere.material.emissiveColor;
+        if (hitSphere.material.emissiveColor != Vector3())
+            return colorAccumulation += colorMask * hitSphere.material.emissiveColor; // If we hit a light source, how about stopping earlier ?
 
-        colorMask *= hitSphere.material.color;
+        cameraRay.origin += cameraRay.direction * closestSphereDist;
+        const Vector3 hitNormal = (cameraRay.origin - hitSphere.position).normalize();
 
-        Vector3 nextRayDir;
-        Vector3 bsdfSampling;
+        bsdfSampling = hitSphere.material.computeSampling(cameraRay.direction, hitNormal, randEngine);
 
-        cameraRay.direction = nextRayDir;
-        cameraRay.origin = hitCoord;
+        colorMask *= bsdfSampling;
     }
 
     return colorAccumulation;

@@ -6,6 +6,7 @@
 #include "vector.h"
 #include "ray.h"
 #include "randomizer.h"
+#include "scene.h"
 #include "math_helper.h"
 
 
@@ -23,8 +24,7 @@ class Camera
     public:
         Camera();
 
-        void setCamera(Vector2 tempResolution);
-        void initCameraInfo();
+        void initCameraData(const cameraData sceneCameraData);
 
         void setCameraResolution(Vector2 tempResolution);
         void setCameraPosition(Vector3 tempPosition);

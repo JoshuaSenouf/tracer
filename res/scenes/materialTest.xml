@@ -1,52 +1,40 @@
 <scene>
 	<geometry>
 		<spheres>
-			<sphere name = "ground">
-				<radius value = "1000.0"/>
-				<position x = "0.0" y = "-1000.4" z = "0.0"/>
-				<color r = "0.5" g = "0.5" b = "0.5"/>
-				<emissiveColor r = "0.0" g = "0.0" b = "0.0"/>
-				<material value = "1"/>
-			</sphere>
-
-			<sphere name = "diffuseSphere">
+			<sphere name = "plasticSphere">
 				<radius value = "1.0"/>
 				<position x = "-1.5" y = "0.6" z = "0.0"/>
-				<color r = "0.8" g = "0.15" b = "0.15"/>
-				<emissiveColor r = "0.0" g = "0.0" b = "0.0"/>
-				<material value = "1"/>
+				<material value = "redPlastic"/>
 			</sphere>
 
-			<sphere name = "specularSphere">
+			<sphere name = "mirrorSphere">
 				<radius value = "1.0"/>
 				<position x = "-4.5" y = "0.6" z = "0.0"/>
-				<color r = "0.75" g = "0.75" b = "0.75"/>
-				<emissiveColor r = "0.0" g = "0.0" b = "0.0"/>
-				<material value = "2"/>
+				<material value = "mirror"/>
 			</sphere>
 
 			<sphere name = "metalSphere">
 				<radius value = "1.0"/>
 				<position x = "1.5" y = "0.6" z = "0.0"/>
-				<color r = "1.0" g = "1.0" b = "1.0"/>
-				<emissiveColor r = "0.0" g = "0.0" b = "0.0"/>
-				<material value = "4"/>
+				<material value = "metal"/>
 			</sphere>
 
-			<sphere name = "glossySphere">
+			<sphere name = "paintSphere">
 				<radius value = "1.0"/>
 				<position x = "4.5" y = "0.6" z = "0.0"/>
-				<color r = "1.0" g = "0.4" b = "0.0"/>
-				<emissiveColor r = "0.0" g = "0.0" b = "0.0"/>
-				<material value = "5"/>
+				<material value = "bluePaint"/>
+			</sphere>
+
+			<sphere name = "ground">
+				<radius value = "1000.0"/>
+				<position x = "0.0" y = "-1000.4" z = "0.0"/>
+				<material value = "ground"/>
 			</sphere>
 
 			<sphere name = "lightSource">
 				<radius value = "1.0"/>
 				<position x = "0.0" y = "4.0" z = "-7.0"/>
-				<color r = "0.0" g = "0.0" b = "0.0"/>
-				<emissiveColor r = "4.0" g = "3.6" b = "3.2"/>
-				<material value = "1"/>
+				<material value = "light"/>
 			</sphere>
 		</spheres>
 
@@ -56,12 +44,78 @@
 	</geometry>
 
 	<materials>
+		<material name = "redPlastic">
+			<color r = "1.0" g = "0.1" b = "0.1"/>
+			<emissiveColor r = "0.0" g = "0.0" b = "0.0"/>
+			<fresnel r = "0.04" g = "0.04" b = "0.04"/>
+			<roughness value = "0.3"/>
+			<metalness value = "0.0"/>
+			<transmittance value = "0.0"/>
+			<ior value = "1.0"/>
+		</material>
+
+		<material name = "mirror">
+			<color r = "0.0" g = "0.0" b = "0.10"/>
+			<emissiveColor r = "0.0" g = "0.0" b = "0.0"/>
+			<fresnel r = "1.0" g = "0.9" b = "0.8"/>
+			<roughness value = "0.0"/>
+			<metalness value = "1.0"/>
+			<transmittance value = "0.0"/>
+			<ior value = "1.0"/>
+		</material>
+
+		<material name = "metal">
+			<color r = "0.0" g = "0.0" b = "0.0"/>
+			<emissiveColor r = "0.0" g = "0.0" b = "0.0"/>
+			<fresnel r = "0.9" g = "0.85" b = "0.8"/>
+			<roughness value = "0.3"/>
+			<metalness value = "1.0"/>
+			<transmittance value = "0.0"/>
+			<ior value = "1.0"/>
+		</material>
+
+		<material name = "bluePaint">
+			<color r = "0.1" g = "0.1" b = "1.0"/>
+			<emissiveColor r = "0.0" g = "0.0" b = "0.0"/>
+			<fresnel r = "0.04" g = "0.04" b = "0.04"/>
+			<roughness value = "0.6"/>
+			<metalness value = "0.0"/>
+			<transmittance value = "0.0"/>
+			<ior value = "1.0"/>
+		</material>
+
+		<material name = "ground">
+			<color r = "0.5" g = "0.5" b = "0.5"/>
+			<emissiveColor r = "0.0" g = "0.0" b = "0.0"/>
+			<fresnel r = "0.04" g = "0.04" b = "0.04"/>
+			<roughness value = "0.8"/>
+			<metalness value = "0.0"/>
+			<transmittance value = "0.0"/>
+			<ior value = "1.0"/>
+		</material>
+
+		<material name = "light">
+			<color r = "0.0" g = "0.0" b = "0.0"/>
+			<emissiveColor r = "4.0" g = "3.6" b = "3.2"/>
+			<fresnel r = "0.04" g = "0.04" b = "0.04"/>
+			<roughness value = "1.0"/>
+			<metalness value = "0.0"/>
+			<transmittance value = "0.0"/>
+			<ior value = "1.0"/>
+		</material>
 	</materials>
 
 </scene>
 
 <camera>
+    <position x = "0.0" y = "4.0" z = "15.0"/>
+    <yaw value = "90.0"/>
+    <pitch value = "6.0"/>
+    <fov value = "45.0"/>
+    <apertureRadius value = "0.0"/>
+    <focalDistance value = "4.0"/>
 </camera>
 
 <settings>
+    <skyColor r = "0.7" g = "0.8" b = "0.8"/>
 </settings>

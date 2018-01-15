@@ -28,6 +28,8 @@ int Scene::loadSceneFile(const std::string& scenePath)
 
     loadMaterials();
     loadSpheres();
+    loadCamera();
+    loadSettings();
 }
 
 
@@ -38,44 +40,31 @@ void Scene::loadMaterials()
     for (tinyxml2::XMLElement *materialElement = materialLevel->FirstChildElement(); materialElement; materialElement = materialElement->NextSiblingElement())
     {
         BSDF tempMaterial;
+
         tempMaterial.name = materialElement->Attribute("name");
 
         for (tinyxml2::XMLNode *materialParameter = materialElement->FirstChild(); materialParameter; materialParameter = materialParameter->NextSibling())
         {
             if (materialParameter->Value() == std::string("color"))
-            {
-                tempMaterial.color = getVectorAttribute(*materialParameter, std::vector<std::string> {"r", "g", "b"});
-            }
+                getVectorAttribute(tempMaterial.color, std::vector<std::string> {"r", "g", "b"}, *materialParameter);
 
             else if (materialParameter->Value() == std::string("emissiveColor"))
-            {
-                tempMaterial.emissiveColor = getVectorAttribute(*materialParameter, std::vector<std::string> {"r", "g", "b"});
-            }
+                getVectorAttribute(tempMaterial.emissiveColor, std::vector<std::string> {"r", "g", "b"}, *materialParameter);
 
             else if (materialParameter->Value() == std::string("fresnel"))
-            {
-                tempMaterial.fresnel = getVectorAttribute(*materialParameter, std::vector<std::string> {"r", "g", "b"});
-            }
+                getVectorAttribute(tempMaterial.fresnel, std::vector<std::string> {"r", "g", "b"}, *materialParameter);
 
             else if (materialParameter->Value() == std::string("roughness"))
-            {
-                tempMaterial.roughness = getFloatAttribute(*materialParameter, "value");
-            }
+                getFloatAttribute(tempMaterial.roughness, "value", *materialParameter);
 
             else if (materialParameter->Value() == std::string("metalness"))
-            {
-                tempMaterial.metalness = getFloatAttribute(*materialParameter, "value");
-            }
+                getFloatAttribute(tempMaterial.metalness, "value", *materialParameter);
 
             else if (materialParameter->Value() == std::string("transmittance"))
-            {
-                tempMaterial.transmittance = getFloatAttribute(*materialParameter, "value");
-            }
+                getFloatAttribute(tempMaterial.transmittance, "value", *materialParameter);
 
             else if (materialParameter->Value() == std::string("ior"))
-            {
-                tempMaterial.ior = getFloatAttribute(*materialParameter, "value");
-            }
+                getFloatAttribute(tempMaterial.ior, "value", *materialParameter);
         }
 
         materialsList.push_back(tempMaterial);
@@ -90,23 +79,22 @@ void Scene::loadSpheres()
     for (tinyxml2::XMLElement *sphereElement = sphereLevel->FirstChildElement(); sphereElement; sphereElement = sphereElement->NextSiblingElement())
     {
         Sphere tempSphere;
+
         tempSphere.name = sphereElement->Attribute("name");
 
         for (tinyxml2::XMLNode *sphereParameter = sphereElement->FirstChild(); sphereParameter; sphereParameter = sphereParameter->NextSibling())
         {
             if (sphereParameter->Value() == std::string("radius"))
-            {
-                tempSphere.radius = getFloatAttribute(*sphereParameter, "value");
-            }
+                getFloatAttribute(tempSphere.radius, "value", *sphereParameter);
 
             else if (sphereParameter->Value() == std::string("position"))
-            {
-                tempSphere.position = getVectorAttribute(*sphereParameter, std::vector<std::string> {"x", "y", "z"});
-            }
+                 getVectorAttribute(tempSphere.position, std::vector<std::string> {"x", "y", "z"}, *sphereParameter);
 
             else if (sphereParameter->Value() == std::string("material"))
             {
-                std::string tempMaterialName = getStringAttribute(*sphereParameter, "value");
+                std::string tempMaterialName;
+
+                getStringAttribute(tempMaterialName, "value", *sphereParameter);
 
                 for (const BSDF& currentMaterial : materialsList)
                 {
@@ -129,13 +117,42 @@ void Scene::loadMeshes()
 
 void Scene::loadCamera()
 {
+    tinyxml2::XMLElement* cameraLevel = sceneFile.FirstChildElement("camera");
 
+    for (tinyxml2::XMLNode *cameraParameter = cameraLevel->FirstChild(); cameraParameter; cameraParameter = cameraParameter->NextSibling())
+    {
+        if (cameraParameter->Value() == std::string("position"))
+            getVectorAttribute(sceneCamera.position, std::vector<std::string> {"x", "y", "z"}, *cameraParameter);
+
+        else if (cameraParameter->Value() == std::string("yaw"))
+            getFloatAttribute(sceneCamera.yaw, "value", *cameraParameter);
+
+        else if (cameraParameter->Value() == std::string("pitch"))
+            getFloatAttribute(sceneCamera.pitch, "value", *cameraParameter);
+
+        else if (cameraParameter->Value() == std::string("fov"))
+            getFloatAttribute(sceneCamera.fov, "value", *cameraParameter);
+
+        else if (cameraParameter->Value() == std::string("apertureRadius"))
+            getFloatAttribute(sceneCamera.apertureRadius, "value", *cameraParameter);
+
+        else if (cameraParameter->Value() == std::string("focalDistance"))
+            getFloatAttribute(sceneCamera.focalDistance, "value", *cameraParameter);
+    }
 }
 
 
-void Scene::loadConfiguration()
+void Scene::loadSettings()
 {
+    tinyxml2::XMLElement* settingsLevel = sceneFile.FirstChildElement("settings");
 
+    for (tinyxml2::XMLNode *settingsParameter = settingsLevel->FirstChild(); settingsParameter; settingsParameter = settingsParameter->NextSibling())
+    {
+        if (settingsParameter->Value() == std::string("skyColor"))
+        {
+            getVectorAttribute(sceneSettings.skyColor, std::vector<std::string> {"r", "g", "b"}, *settingsParameter);
+        }
+    }
 }
 
 
@@ -176,6 +193,27 @@ void Scene::printSpheresData()
 }
 
 
+void Scene::printCameraData()
+{
+    std::cout << "\n///////////////\n" << std::endl;
+    std::cout << "POS X : " << sceneCamera.position.x << " POS Y : " << sceneCamera.position.x << " POS Z : " << sceneCamera.position.x << std::endl;
+    std::cout << "YAW : " << sceneCamera.yaw << std::endl;
+    std::cout << "PITCH : " << sceneCamera.pitch << std::endl;
+    std::cout << "FOV : " << sceneCamera.fov << std::endl;
+    std::cout << "APERTURE RADIUS : " << sceneCamera.apertureRadius << std::endl;
+    std::cout << "FOCAL DISTANCE : " << sceneCamera.focalDistance << std::endl;
+    std::cout << "\n///////////////\n" << std::endl;
+}
+
+
+void Scene::printSettingsData()
+{
+    std::cout << "\n///////////////\n" << std::endl;
+    std::cout << "SKYCOL X : " << sceneSettings.skyColor.x << " SKYCOL Y : " << sceneSettings.skyColor.y << " SKYCOL Z : " << sceneSettings.skyColor.z << std::endl;
+    std::cout << "\n///////////////\n" << std::endl;
+}
+
+
 void Scene::cleanScene()
 {
     cleanMaterialsList();
@@ -205,6 +243,12 @@ void Scene::cleanMeshesList()
 }
 
 
+const std::vector<BSDF>& Scene::getMaterialsList()
+{
+    return materialsList;
+}
+
+
 const std::vector<Sphere>& Scene::getSpheresList()
 {
     return spheresList;
@@ -217,33 +261,35 @@ const std::vector<Mesh>& Scene::getMeshesList()
 }
 
 
-float Scene::getFloatAttribute(const tinyxml2::XMLNode& objectParameter, const std::string& floatAttr)
+const cameraData &Scene::getCamera()
 {
-    float tempFloat;
-
-    objectParameter.ToElement()->QueryFloatAttribute(floatAttr.c_str(), &tempFloat);
-
-    return tempFloat;
+    return sceneCamera;
 }
 
 
-const std::string Scene::getStringAttribute(const tinyxml2::XMLNode& objectParameter, const std::string& stringAttr)
+const settingsData &Scene::getSettings()
 {
-    std::string tempString = objectParameter.ToElement()->Attribute(stringAttr.c_str());
-
-    return tempString;
+    return sceneSettings;
 }
 
 
-const Vector3 Scene::getVectorAttribute(const tinyxml2::XMLNode& objectParameter, const std::vector<std::string>& vectorAttrList)
+void Scene::getFloatAttribute(float& floatAttr, const std::string& floatName, const tinyxml2::XMLNode& objectParameter)
 {
-    Vector3 tempVector;
+    objectParameter.ToElement()->QueryFloatAttribute(floatName.c_str(), &floatAttr);
+}
 
-    objectParameter.ToElement()->QueryFloatAttribute(vectorAttrList.at(0).c_str(), &tempVector.x);
-    objectParameter.ToElement()->QueryFloatAttribute(vectorAttrList.at(1).c_str(), &tempVector.y);
-    objectParameter.ToElement()->QueryFloatAttribute(vectorAttrList.at(2).c_str(), &tempVector.z);
 
-    return tempVector;
+void Scene::getStringAttribute(std::string& stringAttr, const std::string& stringName, const tinyxml2::XMLNode& objectParameter)
+{
+    stringAttr = objectParameter.ToElement()->Attribute(stringName.c_str());
+}
+
+
+void Scene::getVectorAttribute(Vector3& vectorAttr, const std::vector<std::string>& vectorNameList, const tinyxml2::XMLNode& objectParameter)
+{
+    objectParameter.ToElement()->QueryFloatAttribute(vectorNameList.at(0).c_str(), &vectorAttr.x);
+    objectParameter.ToElement()->QueryFloatAttribute(vectorNameList.at(1).c_str(), &vectorAttr.y);
+    objectParameter.ToElement()->QueryFloatAttribute(vectorNameList.at(2).c_str(), &vectorAttr.z);
 }
 
 

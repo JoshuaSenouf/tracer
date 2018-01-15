@@ -11,12 +11,14 @@ class Vector3
         float x, y, z;
 
         Vector3();
+        Vector3(float tempXYZ);
         Vector3(float tempX, float tempY, float tempZ);
 
         float length() const;
         Vector3 normalize() const;
         float dot(const Vector3 &tempVec3) const;
         Vector3 cross(const Vector3 &tempVec3) const;
+        Vector3 lerp(const Vector3& tempVec3, float weightFactor);
         void print();
 
         Vector3& operator+=(const Vector3 &tempVec3);
@@ -36,6 +38,7 @@ class Vector3
         Vector3 operator/(float divFactor) const;
         bool operator==(const Vector3 &tempVec3) const;
         bool operator!=(const Vector3 &tempVec3) const;
+        bool operator<(const Vector3 &tempVec3) const;
 };
 
 

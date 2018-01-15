@@ -7,25 +7,19 @@ Camera::Camera()
 }
 
 
-void Camera::setCamera(Vector2 tempResolution)
+void Camera::initCameraData(const cameraData sceneCamera)
 {
-    initCameraInfo();
-    setCameraResolution(tempResolution);
-}
-
-
-void Camera::initCameraInfo()
-{
-    cameraPosition = Vector3(0.0f, 4.0f, 15.0f); // (0.0f, 4.0f, 15.0f) Test, (0.0f, 2.9f, 17.0f) Cornell
+    cameraPosition = sceneCamera.position;
+    cameraYaw = sceneCamera.yaw;
+    cameraPitch = sceneCamera.pitch;
+    cameraFOV.x = sceneCamera.fov;
+    cameraApertureRadius = sceneCamera.apertureRadius;
+    cameraFocalDistance = sceneCamera.focalDistance;
     cameraUp = Vector3(0.0f, 1.0f, 0.0f).normalize();
-    cameraYaw = 90.0f;
-    cameraPitch = 6.0f; // 6.0f Test, 2.0f Cornell
-    cameraFOV.x = 45.0f;
-    cameraApertureRadius = 0.0f;
-    cameraFocalDistance = 4.0f;
     cameraSpeed = 10.0f;
     cameraSensitivity = 0.10f;
 
+    setCameraFOV(cameraFOV.x);
     updateCameraVectors();
 }
 
@@ -33,7 +27,6 @@ void Camera::initCameraInfo()
 void Camera::setCameraResolution(Vector2 tempResolution)
 {
     cameraResolution = tempResolution;
-    setCameraFOV(cameraFOV.x);
 }
 
 
