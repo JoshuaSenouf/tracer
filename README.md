@@ -20,8 +20,8 @@ Features
 
 * Camera :
     * Movements
-        * Subpixel jitter antialiasing
-        * Depth of Field (using aperture radius and focal distance)
+    * Subpixel jitter antialiasing
+    * Depth of Field (using aperture radius and focal distance)
 
 * Material :
     * Lambertian diffuse.
