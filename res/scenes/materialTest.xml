@@ -32,8 +32,8 @@
 			</sphere>
 
 			<sphere name = "lightSource">
-				<radius value = "1.0"/>
-				<position x = "0.0" y = "4.0" z = "-7.0"/>
+                <radius value = "1.0"/>
+                <position x = "0.0" y = "4.0" z = "-7.0"/>
 				<material value = "light"/>
 			</sphere>
 		</spheres>
@@ -88,7 +88,7 @@
 			<color r = "0.5" g = "0.5" b = "0.5"/>
 			<emissiveColor r = "0.0" g = "0.0" b = "0.0"/>
 			<fresnel r = "0.04" g = "0.04" b = "0.04"/>
-			<roughness value = "0.8"/>
+            <roughness value = "0.9"/>
 			<metalness value = "0.0"/>
 			<transmittance value = "0.0"/>
 			<ior value = "1.0"/>
@@ -96,7 +96,7 @@
 
 		<material name = "light">
 			<color r = "0.0" g = "0.0" b = "0.0"/>
-			<emissiveColor r = "4.0" g = "3.6" b = "3.2"/>
+            <emissiveColor r = "4.0" g = "3.6" b = "3.2"/>
 			<fresnel r = "0.04" g = "0.04" b = "0.04"/>
 			<roughness value = "1.0"/>
 			<metalness value = "0.0"/>
@@ -117,5 +117,5 @@
 </camera>
 
 <settings>
-    <skyColor r = "0.7" g = "0.8" b = "0.8"/>
+    <skyColor r = "0.7" g = "0.8" b = "0.9"/>
 </settings>

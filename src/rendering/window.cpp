@@ -243,9 +243,9 @@ void Window::setupGUI()
         {
             if (ImGui::BeginMenu("Load..."))
             {
-                if (ImGui::MenuItem("Cornell Box"))
+                if (ImGui::MenuItem("Mono Sphere"))
                 {
-                    renderScene.loadSceneFile("res/scenes/cornell.xml");
+                    renderScene.loadSceneFile("res/scenes/monoSphere.xml");
                     renderCamera.initCameraData(renderScene.getCamera());
 
                     renderReset = true;
@@ -259,9 +259,9 @@ void Window::setupGUI()
                     renderReset = true;
                 }
 
-                if (ImGui::MenuItem("Mono Sphere"))
+                if (ImGui::MenuItem("Cornell Box"))
                 {
-                    renderScene.loadSceneFile("res/scenes/monoSphere.xml");
+                    renderScene.loadSceneFile("res/scenes/cornell.xml");
                     renderCamera.initCameraData(renderScene.getCamera());
 
                     renderReset = true;

@@ -6,41 +6,52 @@ Tracer is a C++ rendering engine that aimed to produce photorealistic images usi
 Screenshots
 ------
 
-* Cornell Box (1280x720, 4 bounces, 1spp, after ~2 minutes on an i7-6700K) :
+* Glossy sphere and DoF (1280x720, 4 bounces, 1spp, after ~1.5 minutes on an i7-6700K) :
 
-![](https://image.ibb.co/kDCNGm/cornell720.png)
+![](https://image.ibb.co/bW14U6/mono_Sphere_Do_F_720p.png)
+
+* Low light material test (1280x720, 4 bounces, 1spp, after ~2 minutes on an i7-6700K) :
+
+![](https://image.ibb.co/cxF9wm/material_Test_720p.png)
+
+* Cornell Box (1280x720, 4 bounces, 1spp, after ~3 minutes on an i7-6700K) :
+
+![](https://image.ibb.co/nD0bbm/cornell_720p.png)
 
 Features
 ------
 
-* Rendering :
+* Rendering:
     * Progressive rendering
     * Render/export to PPM
     * Render/export to EXR
 
-* Camera :
+* Camera:
     * Movements
     * Subpixel jitter antialiasing
     * Depth of Field (using aperture radius and focal distance)
 
-* Material :
+* Material:
     * Lambertian diffuse.
+    * Specular component:
+        * Roughness/metalness workflow.
+        * Still an empirical WIP before a switch to Beckmann or GGX.
     * **TODO :** Physically-based BSDF (Probably a simplified version of the Disney principled BSDF)
 
-* Light sources :
+* Light sources:
     * Emissive spheres
     * Sky light
 
-* Shapes :
+* Shapes:
     * Spheres
     * **TODO :** Planes/boxes
     * **TODO :** Triangles
 
-* Acceleration structure :
+* Acceleration structure:
     * **TODO :** BVH
     * **TODO :** KD-Tree
 
-* Scene :
+* Scene:
     * XML scene format, with an associated parser
     * Materials loading
     * Spheres loading
@@ -48,7 +59,7 @@ Features
     * Camera loading
     * Settings loading
 
-* Utility :
+* Utility:
     * GUI using ImGui
     * Pause/resume render
     * Front/backbuffer swapping
