@@ -60,25 +60,18 @@ const Vector3 BSDF::hemisphereSampling(const Vector3& rayDirection, Randomizer& 
     const float x = r * std::cos(theta);
     const float y = r * std::sin(theta);
 
-    Vector3 u = rayDirection.cross(sphereRandomSampling(randEngine)).normalize();
+    Vector3 u = rayDirection.cross(sphereRandomSampling(randEngine.getRandomFloat() * M_PI * 2.0f, std::asin(randEngine.getRandomFloat() * 2.0f - 1.0f))).normalize();
     Vector3 v = rayDirection.cross(u);
 
     Vector3 newRayDir = rayDirection * (std::sqrt(1 - rand1));
-    newRayDir += (u * (r * std::cos(theta)));
-    newRayDir += (v * (r * std::sin(theta)));
+    newRayDir += (u * x);
+    newRayDir += (v * y);
 
     return newRayDir;
 }
 
 
-const Vector3 BSDF::sphereRandomSampling(Randomizer& randEngine)
-{
-    return angleRandomSampling(randEngine.getRandomFloat() * M_PI * 2.0f, std::asin(randEngine.getRandomFloat() * 2.0f - 1.0f));
-}
-
-
-
-const Vector3 BSDF::angleRandomSampling(float theta, float phi)
+const Vector3 BSDF::sphereRandomSampling(float theta, float phi)
 {
     return Vector3(std::cos(theta) * std::cos(phi), std::sin(phi), std::sin(theta) * std::cos(phi));
 }

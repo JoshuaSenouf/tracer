@@ -30,8 +30,7 @@ class BSDF
 
         const Vector3 computeSampling(Vector3& rayDirection, const Vector3& hitNormal, Randomizer& randEngine);
         const Vector3 hemisphereSampling(const Vector3& rayDirection, Randomizer& randEngine);
-        const Vector3 sphereRandomSampling(Randomizer& randEngine);
-        const Vector3 angleRandomSampling(float theta, float phi);
+        const Vector3 sphereRandomSampling(float theta, float phi);
 
     private:
 
