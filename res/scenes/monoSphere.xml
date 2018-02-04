@@ -29,7 +29,7 @@
         <material name = "ground">
             <color r = "0.5" g = "0.5" b = "0.5"/>
             <emissiveColor r = "0.0" g = "0.0" b = "0.0"/>
-            <fresnel r = "0.04" g = "0.04" b = "0.04"/>
+            <fresnelColor r = "0.04" g = "0.04" b = "0.04"/>
             <roughness value = "0.9"/>
             <metalness value = "0.0"/>
             <transmittance value = "0.0"/>
@@ -39,7 +39,7 @@
         <material name = "redMat">
             <color r = "0.9" g = "0.1" b = "0.1"/>
             <emissiveColor r = "0.0" g = "0.0" b = "0.0"/>
-            <fresnel r = "0.04" g = "0.04" b = "0.04"/>
+            <fresnelColor r = "0.04" g = "0.04" b = "0.04"/>
             <roughness value = "0.3"/>
             <metalness value = "0.0"/>
             <transmittance value = "0.0"/>
@@ -49,7 +49,7 @@
         <material name = "light">
             <color r = "0.0" g = "0.0" b = "0.0"/>
             <emissiveColor r = "4.0" g = "3.6" b = "3.2"/>
-            <fresnel r = "0.04" g = "0.04" b = "0.04"/>
+            <fresnelColor r = "0.04" g = "0.04" b = "0.04"/>
             <roughness value = "1.0"/>
             <metalness value = "0.0"/>
             <transmittance value = "0.0"/>

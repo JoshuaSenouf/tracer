@@ -19,6 +19,7 @@ include_directories(src/camera/
                     src/rendering/
                     src/resources/
                     src/geometry/
+                    src/gui/
                     src/math/
                     api/glad/include/
                     api/glfw/include/
@@ -36,12 +37,14 @@ file(GLOB PROJECT_HEADERS src/camera/*.h
                           src/rendering/*.h
                           src/resources/*.h
                           src/geometry/*.h
+                          src/gui/*.h
                           src/math/*.h)
 
 file(GLOB PROJECT_SOURCES src/camera/*.cpp
                           src/rendering/*.cpp
                           src/resources/*.cpp
                           src/geometry/*.cpp
+                          src/gui/*.cpp
                           src/math/*.cpp
                           src/*.cpp)
 

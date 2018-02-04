@@ -1,109 +1,109 @@
 <scene>
-	<geometry>
-		<spheres>
-			<sphere name = "plasticSphere">
-				<radius value = "1.0"/>
-				<position x = "-1.5" y = "0.6" z = "0.0"/>
-				<material value = "redPlastic"/>
-			</sphere>
+    <geometry>
+        <spheres>
+            <sphere name = "plasticSphere">
+                <radius value = "1.0"/>
+                <position x = "-1.5" y = "0.6" z = "0.0"/>
+                <material value = "redPlastic"/>
+            </sphere>
 
-			<sphere name = "mirrorSphere">
-				<radius value = "1.0"/>
-				<position x = "-4.5" y = "0.6" z = "0.0"/>
-				<material value = "mirror"/>
-			</sphere>
+            <sphere name = "mirrorSphere">
+                <radius value = "1.0"/>
+                <position x = "-4.5" y = "0.6" z = "0.0"/>
+                <material value = "mirror"/>
+            </sphere>
 
-			<sphere name = "metalSphere">
-				<radius value = "1.0"/>
-				<position x = "1.5" y = "0.6" z = "0.0"/>
-				<material value = "metal"/>
-			</sphere>
+            <sphere name = "metalSphere">
+                <radius value = "1.0"/>
+                <position x = "1.5" y = "0.6" z = "0.0"/>
+                <material value = "metal"/>
+            </sphere>
 
-			<sphere name = "paintSphere">
-				<radius value = "1.0"/>
-				<position x = "4.5" y = "0.6" z = "0.0"/>
-				<material value = "bluePaint"/>
-			</sphere>
+            <sphere name = "paintSphere">
+                <radius value = "1.0"/>
+                <position x = "4.5" y = "0.6" z = "0.0"/>
+                <material value = "bluePaint"/>
+            </sphere>
 
-			<sphere name = "ground">
-				<radius value = "1000.0"/>
-				<position x = "0.0" y = "-1000.4" z = "0.0"/>
-				<material value = "ground"/>
-			</sphere>
+            <sphere name = "ground">
+                <radius value = "1000.0"/>
+                <position x = "0.0" y = "-1000.4" z = "0.0"/>
+                <material value = "ground"/>
+            </sphere>
 
-			<sphere name = "lightSource">
+            <sphere name = "lightSource">
                 <radius value = "1.0"/>
                 <position x = "0.0" y = "4.0" z = "-7.0"/>
-				<material value = "light"/>
-			</sphere>
-		</spheres>
+                <material value = "light"/>
+            </sphere>
+        </spheres>
 
-		<models>
-		</models>
+        <models>
+        </models>
 
-	</geometry>
+    </geometry>
 
-	<materials>
-		<material name = "redPlastic">
-			<color r = "1.0" g = "0.1" b = "0.1"/>
-			<emissiveColor r = "0.0" g = "0.0" b = "0.0"/>
-			<fresnel r = "0.04" g = "0.04" b = "0.04"/>
-			<roughness value = "0.3"/>
-			<metalness value = "0.0"/>
-			<transmittance value = "0.0"/>
-			<ior value = "1.0"/>
-		</material>
+    <materials>
+        <material name = "redPlastic">
+            <color r = "1.0" g = "0.1" b = "0.1"/>
+            <emissiveColor r = "0.0" g = "0.0" b = "0.0"/>
+            <fresnelColor r = "0.04" g = "0.04" b = "0.04"/>
+            <roughness value = "0.3"/>
+            <metalness value = "0.0"/>
+            <transmittance value = "0.0"/>
+            <ior value = "1.0"/>
+        </material>
 
-		<material name = "mirror">
-			<color r = "0.0" g = "0.0" b = "0.10"/>
-			<emissiveColor r = "0.0" g = "0.0" b = "0.0"/>
-			<fresnel r = "1.0" g = "0.9" b = "0.8"/>
-			<roughness value = "0.0"/>
-			<metalness value = "1.0"/>
-			<transmittance value = "0.0"/>
-			<ior value = "1.0"/>
-		</material>
+        <material name = "mirror">
+            <color r = "0.0" g = "0.0" b = "0.0"/>
+            <emissiveColor r = "0.0" g = "0.0" b = "0.0"/>
+            <fresnelColor r = "1.0" g = "0.9" b = "0.8"/>
+            <roughness value = "0.0"/>
+            <metalness value = "1.0"/>
+            <transmittance value = "0.0"/>
+            <ior value = "1.0"/>
+        </material>
 
-		<material name = "metal">
-			<color r = "0.0" g = "0.0" b = "0.0"/>
-			<emissiveColor r = "0.0" g = "0.0" b = "0.0"/>
-			<fresnel r = "0.9" g = "0.85" b = "0.8"/>
-			<roughness value = "0.3"/>
-			<metalness value = "1.0"/>
-			<transmittance value = "0.0"/>
-			<ior value = "1.0"/>
-		</material>
+        <material name = "metal">
+            <color r = "0.0" g = "0.0" b = "0.0"/>
+            <emissiveColor r = "0.0" g = "0.0" b = "0.0"/>
+            <fresnelColor r = "0.9" g = "0.85" b = "0.8"/>
+            <roughness value = "0.3"/>
+            <metalness value = "1.0"/>
+            <transmittance value = "0.0"/>
+            <ior value = "1.0"/>
+        </material>
 
-		<material name = "bluePaint">
-			<color r = "0.1" g = "0.1" b = "1.0"/>
-			<emissiveColor r = "0.0" g = "0.0" b = "0.0"/>
-			<fresnel r = "0.04" g = "0.04" b = "0.04"/>
-			<roughness value = "0.6"/>
-			<metalness value = "0.0"/>
-			<transmittance value = "0.0"/>
-			<ior value = "1.0"/>
-		</material>
+        <material name = "bluePaint">
+            <color r = "0.1" g = "0.1" b = "1.0"/>
+            <emissiveColor r = "0.0" g = "0.0" b = "0.0"/>
+            <fresnelColor r = "0.04" g = "0.04" b = "0.04"/>
+            <roughness value = "0.6"/>
+            <metalness value = "0.0"/>
+            <transmittance value = "0.0"/>
+            <ior value = "1.0"/>
+        </material>
 
-		<material name = "ground">
-			<color r = "0.5" g = "0.5" b = "0.5"/>
-			<emissiveColor r = "0.0" g = "0.0" b = "0.0"/>
-			<fresnel r = "0.04" g = "0.04" b = "0.04"/>
+        <material name = "ground">
+            <color r = "0.5" g = "0.5" b = "0.5"/>
+            <emissiveColor r = "0.0" g = "0.0" b = "0.0"/>
+            <fresnelColor r = "0.04" g = "0.04" b = "0.04"/>
             <roughness value = "0.9"/>
-			<metalness value = "0.0"/>
-			<transmittance value = "0.0"/>
-			<ior value = "1.0"/>
-		</material>
+            <metalness value = "0.0"/>
+            <transmittance value = "0.0"/>
+            <ior value = "1.0"/>
+        </material>
 
-		<material name = "light">
-			<color r = "0.0" g = "0.0" b = "0.0"/>
+        <material name = "light">
+            <color r = "0.0" g = "0.0" b = "0.0"/>
             <emissiveColor r = "4.0" g = "3.6" b = "3.2"/>
-			<fresnel r = "0.04" g = "0.04" b = "0.04"/>
-			<roughness value = "1.0"/>
-			<metalness value = "0.0"/>
-			<transmittance value = "0.0"/>
-			<ior value = "1.0"/>
-		</material>
-	</materials>
+            <fresnelColor r = "0.04" g = "0.04" b = "0.04"/>
+            <roughness value = "1.0"/>
+            <metalness value = "0.0"/>
+            <transmittance value = "0.0"/>
+            <ior value = "1.0"/>
+        </material>
+    </materials>
 
 </scene>
 

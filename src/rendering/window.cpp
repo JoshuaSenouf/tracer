@@ -170,6 +170,12 @@ void Window::renderConfigWindow(bool& guiOpen)
 }
 
 
+void Window::shaderGraphWindow(bool& guiOpen)
+{
+    showShaderGraph(guiOpen);
+}
+
+
 void Window::setupGUI()
 {
     ImGui_ImplGlfwGL3_NewFrame();
@@ -180,6 +186,8 @@ void Window::setupGUI()
         aboutWindow(aboutBool);
     if (renderConfigBool)
         renderConfigWindow(renderConfigBool);
+    if (shaderGraphBool)
+        shaderGraphWindow(shaderGraphBool);
 
     if (ImGui::BeginMainMenuBar())
     {
@@ -214,12 +222,12 @@ void Window::setupGUI()
             {
                 if (ImGui::MenuItem("PPM"))
                 {
-                    exportToPPM(outputWidth, outputHeight, frontBuffer.getBufferData());
+                    exportToPPM(progressiveWidth, progressiveHeight, frontBuffer.getBufferData());
                 }
 
                 if (ImGui::MenuItem("EXR"))
                 {
-                    exportToEXR(outputWidth, outputHeight, frontBuffer.getBufferData());
+                    exportToEXR(progressiveWidth, progressiveHeight, frontBuffer.getBufferData());
                 }
 
                 ImGui::EndMenu();
@@ -234,6 +242,7 @@ void Window::setupGUI()
                 ImGui::Separator();
             }
 
+            ImGui::MenuItem("Shader Graph", NULL, &shaderGraphBool);
             ImGui::MenuItem("Config", NULL, &renderConfigBool);
 
             ImGui::EndMenu();

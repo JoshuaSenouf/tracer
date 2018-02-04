@@ -51,8 +51,8 @@ void Scene::loadMaterials()
             else if (materialParameter->Value() == std::string("emissiveColor"))
                 getVectorAttribute(tempMaterial.emissiveColor, std::vector<std::string> {"r", "g", "b"}, *materialParameter);
 
-            else if (materialParameter->Value() == std::string("fresnel"))
-                getVectorAttribute(tempMaterial.fresnel, std::vector<std::string> {"r", "g", "b"}, *materialParameter);
+            else if (materialParameter->Value() == std::string("fresnelColor"))
+                getVectorAttribute(tempMaterial.fresnelColor, std::vector<std::string> {"r", "g", "b"}, *materialParameter);
 
             else if (materialParameter->Value() == std::string("roughness"))
                 getFloatAttribute(tempMaterial.roughness, "value", *materialParameter);
@@ -66,6 +66,8 @@ void Scene::loadMaterials()
             else if (materialParameter->Value() == std::string("ior"))
                 getFloatAttribute(tempMaterial.ior, "value", *materialParameter);
         }
+
+        tempMaterial.materialSetup();
 
         materialsList.push_back(tempMaterial);
     }
@@ -166,7 +168,7 @@ void Scene::printMaterialsData()
         std::cout << "NAME : " << materialsList[i].name << std::endl;
         std::cout << "COL X : " << materialsList[i].color.x << " COL Y : " << materialsList[i].color.y << " COL Z : " << materialsList[i].color.z << std::endl;
         std::cout << "EMI X : " << materialsList[i].emissiveColor.x << " EMI Y : " << materialsList[i].emissiveColor.y << " EMI Z : " << materialsList[i].emissiveColor.z << std::endl;
-        std::cout << "FRESNEL X : " << materialsList[i].fresnel.x << " FRESNEL Y : " << materialsList[i].fresnel.y << " FRESNEL Z : " << materialsList[i].fresnel.z << std::endl;
+        std::cout << "FRESNEL X : " << materialsList[i].fresnelColor.x << " FRESNEL Y : " << materialsList[i].fresnelColor.y << " FRESNEL Z : " << materialsList[i].fresnelColor.z << std::endl;
         std::cout << "ROUGHNESS : " << materialsList[i].roughness << std::endl;
         std::cout << "METALNESS : " << materialsList[i].metalness << std::endl;
         std::cout << "TRANSMITTANCE : " << materialsList[i].transmittance << std::endl;
