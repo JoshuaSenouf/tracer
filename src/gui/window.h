@@ -14,7 +14,7 @@
 #include "renderer.h"
 #include "camera.h"
 #include "buffer.h"
-#include "scene.h"
+#include "scenemanager.h"
 #include "shadergraph.h"
 
 
@@ -74,7 +74,7 @@ class Window
         Buffer frontBuffer;
         Buffer backBuffer;
 
-        Scene renderScene;
+        SceneManager renderScene;
 };
 
 

@@ -1,17 +1,25 @@
-#ifndef MATH_HELPER_H
-#define MATH_HELPER_H
-
-#define M_PI 3.14159265358979323846f
-#define M_2PI 6.28318530717958647692f
-#define M_1_PI 0.318309886183790671538f
-#define M_1_180 0.005555555555555555556f
+#ifndef RENDER_HELPER_H
+#define RENDER_HELPER_H
 
 #define EPSILON 0.001f
-#define LIGHT_INTENSITY 2.0f
-#define METAL_EXPO 30.0f
-#define GLOSSY_LEVEL 0.1f
 
 #include "vector.h"
+
+
+struct cameraData
+{
+    Vector3 position;
+    float yaw;
+    float pitch;
+    float fov;
+    float apertureRadius;
+    float focalDistance;
+};
+
+struct settingsData
+{
+    Vector3 skyColor;
+};
 
 
 inline float clamp(float x)
@@ -56,15 +64,4 @@ inline int convertToRGB(float x)
 }
 
 
-inline float degreesToRadians(float degreesAngle)
-{
-    return degreesAngle * (M_PI / 180.0f);
-}
-
-
-inline float radiansToDegrees(float radiansAngle)
-{
-    return radiansAngle * (180.0f / M_PI);
-}
-
-#endif // MATH_HELPER_H
+#endif // RENDER_HELPER_H

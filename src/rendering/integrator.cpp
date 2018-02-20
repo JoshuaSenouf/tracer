@@ -7,7 +7,7 @@ PathTracer::PathTracer()
 }
 
 
-Vector3 PathTracer::getRadiance(Ray& cameraRay, Scene& renderScene, Randomizer& randEngine, int rayDepth)
+Vector3 PathTracer::getRadiance(Ray& cameraRay, SceneManager &renderScene, Randomizer& randEngine, int rayDepth)
 {
     Vector3 bsdfSampling;
     Vector3 colorAccumulation;

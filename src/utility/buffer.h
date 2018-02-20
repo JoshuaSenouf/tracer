@@ -10,7 +10,6 @@
 #include "tinyexr.h"
 
 #include "vector.h"
-#include "math_helper.h"
 
 
 class Buffer

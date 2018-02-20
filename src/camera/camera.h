@@ -6,8 +6,7 @@
 #include "vector.h"
 #include "ray.h"
 #include "randomizer.h"
-#include "scene.h"
-#include "math_helper.h"
+#include "render_helper.h"
 
 
 enum cameraMovement

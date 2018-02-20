@@ -39,22 +39,25 @@ Features
     * **TODO :** Physically-based BSDF (Probably a simplified version of the Disney principled BSDF)
 
 * Light sources:
-    * Emissive spheres
+    * Mesh/primitive lights
     * Sky light
 
-* Shapes:
-    * Spheres
-    * **TODO :** Planes/boxes
-    * **TODO :** Triangles
+* Primitives:
+    * Sphere
+    * **TODO :** Plane
+    * **TODO :** Box
+    * **TODO :** Triangle
 
 * Acceleration structure:
     * **TODO :** BVH
     * **TODO :** KD-Tree
 
 * Scene:
-    * XML scene format, with an associated parser
+    * Formats:
+        * Pixar USD, using a mix of native and custom schemas in the scene files.
+        * XML
     * Materials loading
-    * Spheres loading
+    * Sphere primitives loading
     * **TODO :** Meshes loading
     * Camera loading
     * Settings loading
@@ -77,7 +80,7 @@ Download the source, build the project structure using CMake 3.x, open the proje
     * Use the "+" and "-" buttons on the keypad control the aperture radius
     * Hold LeftCtrl and "+" or "-" to control the focal distance
 
-Dependencies (included, aside from OpenMP)
+Dependencies (included, aside from OpenMP, as well as Pixar USD and its own dependencies)
 ------
 
 - Window & Input system : GLFW
@@ -88,3 +91,4 @@ Dependencies (included, aside from OpenMP)
 - EXR handling : tinyexr
 - Mesh Loading : tinyobjloader
 - Image loading : stb
+- Scene loading : Pixar USD

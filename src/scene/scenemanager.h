@@ -1,5 +1,5 @@
-#ifndef SCENEPARSER_H
-#define SCENEPARSER_H
+#ifndef SCENEMANAGER_H
+#define SCENEMANAGER_H
 
 #include <iostream>
 #include <fstream>
@@ -8,48 +8,30 @@
 #include <algorithm>
 #include <vector>
 
-#include "tinyxml2.h"
-
 #include "vector.h"
 #include "sphere.h"
 #include "mesh.h"
 #include "material.h"
+#include "render_helper.h"
+#include "xmlscene.h"
+#include "usdscene.h"
 
 
-struct cameraData
-{
-    Vector3 position;
-    float yaw;
-    float pitch;
-    float fov;
-    float apertureRadius;
-    float focalDistance;
-};
-
-struct settingsData
-{
-    Vector3 skyColor;
-};
-
-
-class Scene
+class SceneManager
 {
     public:
-        Scene();
-        Scene(const std::string& scenePath);
+        SceneManager();
+        SceneManager(const std::string& scenePath);
 
-        int loadSceneFile(const std::string& scenePath);
-        void loadMaterials();
-        void loadSpheres();
-        void loadMeshes();
-        void loadCamera();
-        void loadSettings();
+        int loadScene(const std::string& scenePath);
+
         void cleanScene();
         void cleanMaterialsList();
         void cleanSpheresList();
         void cleanMeshesList();
         void cleanCamera();
         void cleanSettings();
+
         void printMaterialsData();
         void printSpheresData();
         void printCameraData();
@@ -61,14 +43,14 @@ class Scene
         const cameraData& getCamera();
         const settingsData& getSettings();
 
-        void getFloatAttribute(float& floatAttr, const std::string& floatName, const tinyxml2::XMLNode& objectParameter);
-        void getStringAttribute(std::string& stringAttr, const std::string& stringName, const tinyxml2::XMLNode& objectParameter);
-        void getVectorAttribute(Vector3& vectorAttr, const std::vector<std::string>& vectorNameList, const tinyxml2::XMLNode& objectParameter);
+        const XMLScene& getXMLScene();
+        const USDScene& getUSDScene();
 
         bool isIntersected(const Ray& ray, float& closestSphereDist, int& closestSphereID);
 
     private:
-        tinyxml2::XMLDocument sceneFile;
+        XMLScene xmlScene;
+        USDScene usdScene;
 
         std::vector<BSDF> materialsList;
         std::vector<Sphere> spheresList;
@@ -77,4 +59,4 @@ class Scene
         settingsData sceneSettings;
 };
 
-#endif // SCENEPARSER_H
+#endif // SCENEMANAGER_H

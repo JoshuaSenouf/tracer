@@ -3,7 +3,6 @@
 
 #include "vector.h"
 #include "randomizer.h"
-#include "math_helper.h"
 
 
 class BSDF

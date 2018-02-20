@@ -1,3 +1,5 @@
+#include "render_helper.h"
+
 #include "sphere.h"
 
 
@@ -7,7 +9,7 @@ Sphere::Sphere()
 }
 
 
-Sphere::Sphere(const std::string& tempName, float tempRadius, const Vector3& tempPosition, const BSDF& tempMaterial) :
+Sphere::Sphere(const std::string& tempName, double tempRadius, const Vector3& tempPosition, const BSDF& tempMaterial) :
     name(tempName), radius(tempRadius), position(tempPosition), material(tempMaterial)
 {
 

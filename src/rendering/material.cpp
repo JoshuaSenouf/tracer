@@ -1,3 +1,5 @@
+#include "math_helper.h"
+
 #include "material.h"
 
 
@@ -114,7 +116,7 @@ const Vector3 BSDF::computeSchlick(const Vector3& rayDirection, const Vector3& h
     float LdotH = -hitNormal.dot(rayDirection);
 
     return fresnelColor + ((std::max(Vector3(1.0f - roughness), fresnelColor) - fresnelColor) * std::pow(1.0f - LdotH, 5.0f));
-    //return fresnel + ((Vector3(1.0f) - fresnel) * std::pow(1.0f - LdotH, 5.0f));
+    //return fresnelColor + ((Vector3(1.0f) - fresnelColor) * std::pow(1.0f - LdotH, 5.0f));
 }
 
 

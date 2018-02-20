@@ -11,12 +11,8 @@
 
 #include "shader.h"
 #include "vector.h"
-#include "randomizer.h"
 #include "camera.h"
-#include "ray.h"
-#include "sphere.h"
-#include "scene.h"
-#include "math_helper.h"
+#include "scenemanager.h"
 #include "integrator.h"
 
 
@@ -44,7 +40,7 @@ class Renderer
                        int frameCounter,
                        std::vector<Vector3>& renderBuffer,
                        Camera& renderCamera,
-                       Scene& renderScene);
+                       SceneManager& renderScene);
         void renderToTexture(int textureWidth, int textureHeight, const std::vector<Vector3>& renderBuffer);
         void cleanQuadRender();
         void displayGLBuffer();

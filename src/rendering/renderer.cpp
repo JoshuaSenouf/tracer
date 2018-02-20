@@ -1,3 +1,7 @@
+#include "randomizer.h"
+#include "ray.h"
+#include "math_helper.h"
+
 #include "renderer.h"
 
 
@@ -55,7 +59,7 @@ void Renderer::initQuadRender()
 }
 
 
-void Renderer::traceLoop(int progressiveWidth, int progressiveHeight, int progressiveSamples, int progressiveDepth, int frameCounter, std::vector<Vector3>& renderBuffer, Camera& renderCamera, Scene& renderScene)
+void Renderer::traceLoop(int progressiveWidth, int progressiveHeight, int progressiveSamples, int progressiveDepth, int frameCounter, std::vector<Vector3>& renderBuffer, Camera& renderCamera, SceneManager &renderScene)
 {
 #pragma omp parallel for schedule(dynamic, 1)
     for (int pixelY = 0; pixelY < progressiveHeight; ++pixelY)

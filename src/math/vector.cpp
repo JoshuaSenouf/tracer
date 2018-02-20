@@ -23,6 +23,14 @@ Vector3::Vector3(float tempX, float tempY, float tempZ)
 }
 
 
+Vector3::Vector3(const pxr::GfVec3f &usdVec3f)
+{
+    this->x = usdVec3f[0];
+    this->y = usdVec3f[1];
+    this->z = usdVec3f[2];
+}
+
+
 float Vector3::length() const
 {
     return std::sqrt(this->x * this->x + this->y * this->y + this->z * this->z);
@@ -190,6 +198,7 @@ bool Vector3::operator<(const Vector3 &tempVec3) const
 {
     return (this->x < tempVec3.x && this->y < tempVec3.y && this->z < tempVec3.z);
 }
+
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

@@ -26,7 +26,8 @@ int Window::renderWindow()
 
     ImGui_ImplGlfwGL3_Init(window, true);
 
-    renderScene.loadSceneFile("res/scenes/monoSphere.xml");
+    renderScene.loadScene("res/scenes/usd/monoSphere.usda");
+
     renderCamera.setCameraResolution(Vector2(progressiveWidth, progressiveHeight));
     renderCamera.initCameraData(renderScene.getCamera());
 
@@ -252,28 +253,46 @@ void Window::setupGUI()
         {
             if (ImGui::BeginMenu("Load..."))
             {
-                if (ImGui::MenuItem("Mono Sphere"))
+                if (ImGui::BeginMenu("USD"))
                 {
-                    renderScene.loadSceneFile("res/scenes/monoSphere.xml");
-                    renderCamera.initCameraData(renderScene.getCamera());
+                    if (ImGui::MenuItem("Mono Sphere"))
+                    {
+                        renderScene.loadScene("res/scenes/usd/monoSphere.usda");
+                        renderCamera.initCameraData(renderScene.getCamera());
 
-                    renderReset = true;
+                        renderReset = true;
+                    }
+
+                    ImGui::EndMenu();
                 }
 
-                if (ImGui::MenuItem("Material Test"))
+                if (ImGui::BeginMenu("XML"))
                 {
-                    renderScene.loadSceneFile("res/scenes/materialTest.xml");
-                    renderCamera.initCameraData(renderScene.getCamera());
+                    if (ImGui::MenuItem("Mono Sphere"))
+                    {
+                        renderScene.loadScene("res/scenes/xml/monoSphere.xml");
+                        renderCamera.initCameraData(renderScene.getCamera());
 
-                    renderReset = true;
-                }
+                        renderReset = true;
+                    }
 
-                if (ImGui::MenuItem("Cornell Box"))
-                {
-                    renderScene.loadSceneFile("res/scenes/cornell.xml");
-                    renderCamera.initCameraData(renderScene.getCamera());
+                    if (ImGui::MenuItem("Material Test"))
+                    {
+                        renderScene.loadScene("res/scenes/xml/materialTest.xml");
+                        renderCamera.initCameraData(renderScene.getCamera());
 
-                    renderReset = true;
+                        renderReset = true;
+                    }
+
+                    if (ImGui::MenuItem("Cornell Box"))
+                    {
+                        renderScene.loadScene("res/scenes/xml/cornell.xml");
+                        renderCamera.initCameraData(renderScene.getCamera());
+
+                        renderReset = true;
+                    }
+
+                    ImGui::EndMenu();
                 }
 
                 ImGui::EndMenu();

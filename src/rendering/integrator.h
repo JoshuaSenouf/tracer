@@ -5,7 +5,7 @@
 #include "randomizer.h"
 #include "ray.h"
 #include "sphere.h"
-#include "scene.h"
+#include "scenemanager.h"
 
 
 class PathTracer
@@ -13,7 +13,7 @@ class PathTracer
     public:
         PathTracer();
 
-        Vector3 getRadiance(Ray& cameraRay, Scene& renderScene, Randomizer& randEngine, int rayDepth);
+        Vector3 getRadiance(Ray& cameraRay, SceneManager& renderScene, Randomizer& randEngine, int rayDepth);
 
     private:
 
