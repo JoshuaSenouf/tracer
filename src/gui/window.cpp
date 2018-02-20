@@ -152,11 +152,7 @@ void Window::renderConfigWindow(bool& guiOpen)
         tracerRenderer.renderToTexture(progressiveWidth, progressiveHeight, frontBuffer.getBufferData());
 
         swapBool = !swapBool;
-
-        if (swapBool)
-            pauseBool = true;
-        else
-            pauseBool = false;
+        pauseBool = true;
     }
 
     ImGui::Separator();
@@ -258,6 +254,22 @@ void Window::setupGUI()
                     if (ImGui::MenuItem("Mono Sphere"))
                     {
                         renderScene.loadScene("res/scenes/usd/monoSphere.usda");
+                        renderCamera.initCameraData(renderScene.getCamera());
+
+                        renderReset = true;
+                    }
+
+                    if (ImGui::MenuItem("Material Test"))
+                    {
+                        renderScene.loadScene("res/scenes/usd/materialTest.usda");
+                        renderCamera.initCameraData(renderScene.getCamera());
+
+                        renderReset = true;
+                    }
+
+                    if (ImGui::MenuItem("Cornell Box"))
+                    {
+                        renderScene.loadScene("res/scenes/usd/cornell.usda");
                         renderCamera.initCameraData(renderScene.getCamera());
 
                         renderReset = true;

@@ -9,7 +9,7 @@
             
             <sphere name = "rightWall">
                 <radius value = "1000.0"/>
-                <position x = "1003.0" y = "0.0" z = "0.4"/>
+                <position x = "1003.0" y = "0.0" z = "0.0"/>
                 <material value = "greenWallMat"/>
             </sphere>
 
