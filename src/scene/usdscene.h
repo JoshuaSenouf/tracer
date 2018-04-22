@@ -30,6 +30,7 @@ class USDScene
         void loadMaterials(std::vector<BSDF> &materialsList);
         void loadSpheres(std::vector<Sphere> &spheresList, std::vector<BSDF>& materialsList);
         void loadMeshes(std::vector<Mesh> &meshesList, std::vector<BSDF>& materialsList);
+        void loadLights(std::vector<Sphere> &spheresList, std::vector<BSDF>& materialsList);
         void loadCamera(cameraData &sceneCamera);
         void loadSettings(settingsData &sceneSettings);
 

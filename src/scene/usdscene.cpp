@@ -161,10 +161,10 @@ void USDScene::loadSettings(settingsData& sceneSettings)
 
 void USDScene::getPrimFromType(const std::string& primType, const pxr::SdfPath& primPath, std::vector<pxr::UsdPrim>& primVector)
 {
-    pxr::UsdPrim worldPrim;
-    worldPrim = sceneStage->GetPrimAtPath(primPath);
+    pxr::UsdPrim basePrim;
+    basePrim = sceneStage->GetPrimAtPath(primPath);
 
-    for(const pxr::UsdPrim& prim: worldPrim.GetChildren())
+    for(const pxr::UsdPrim& prim: basePrim.GetChildren())
     {
         if (prim.GetTypeName() == primType)
             primVector.push_back(prim);

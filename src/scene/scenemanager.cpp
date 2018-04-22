@@ -89,7 +89,7 @@ void SceneManager::printSpheresData()
 void SceneManager::printCameraData()
 {
     std::cout << "\n///////////////\n" << std::endl;
-    std::cout << "POS X : " << sceneCamera.position.x << " POS Y : " << sceneCamera.position.x << " POS Z : " << sceneCamera.position.x << std::endl;
+    std::cout << "POS X : " << sceneCamera.position.x << " POS Y : " << sceneCamera.position.y << " POS Z : " << sceneCamera.position.z << std::endl;
     std::cout << "YAW : " << sceneCamera.yaw << std::endl;
     std::cout << "PITCH : " << sceneCamera.pitch << std::endl;
     std::cout << "FOV : " << sceneCamera.fov << std::endl;

@@ -9,7 +9,7 @@
 #include <glad/glad.h>
 #include "stb_image.h"
 
-#include "shader.h"
+#include "shaderGL.h"
 #include "vector.h"
 #include "camera.h"
 #include "scenemanager.h"
@@ -50,7 +50,7 @@ class Renderer
         GLuint quadVBO;
         GLuint renderTextureID;
 
-        Shader quadRenderShader;
+        ShaderGL quadRenderShader;
         PathTracer renderIntegrator;
 };
 

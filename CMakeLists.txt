@@ -35,20 +35,24 @@ else()
     endif()
 endif()
 
-include_directories(src/camera/
-                    src/geometry/
-                    src/gui/
-                    src/math/
-                    src/rendering/
-                    src/scene/
-                    src/utility/
-                    api/glad/include/
+include_directories(api/glad/include/
                     api/glfw/include/
                     api/stb/
                     api/imgui/
                     api/tinyobjloader/
                     api/tinyxml2/
                     api/tinyexr/
+                    src/camera/
+                    src/gui/
+                    src/math/
+                    src/objects/
+                    src/objects/geometry/
+                    src/objects/lights/
+                    src/rendering/
+                    src/rendering/integrators/
+                    src/rendering/materials/
+                    src/scene/
+                    src/utility/
                     ${USD_INCLUDE_DIR}
                     ${PYTHON_INCLUDE_PATH})
 
@@ -57,30 +61,39 @@ file(GLOB API_SOURCES api/glad/src/glad.c
                       api/tinyxml2/*.cpp)
 
 file(GLOB PROJECT_HEADERS src/camera/*.h
-                          src/geometry/*.h
                           src/gui/*.h
                           src/math/*.h
+                          src/objects/*.h
+                          src/objects/geometry/*.h
+                          src/objects/lights/*.h
                           src/rendering/*.h
+                          src/rendering/integrators/*.h
+                          src/rendering/materials/*.h
                           src/scene/*.h
-                          src/utility/*.h)
+                          src/utility/*.h
+                          src/*.h)
 
 file(GLOB PROJECT_SOURCES src/camera/*.cpp
-                          src/geometry/*.cpp
                           src/gui/*.cpp
                           src/math/*.cpp
+                          src/objects/*.cpp
+                          src/objects/geometry/*.cpp
+                          src/objects/lights/*.cpp
                           src/rendering/*.cpp
+                          src/rendering/integrators/*.cpp
+                          src/rendering/materials/*.cpp
                           src/scene/*.cpp
                           src/utility/*.cpp
                           src/*.cpp)
 
-file(GLOB PROJECT_SHADERS res/shaders/*.glsl
-                          res/shaders/*.frag
+file(GLOB PROJECT_SHADERS res/shaders/*.frag
+                          res/shaders/*.glsl
                           res/shaders/*.vert)
 
-file(GLOB PROJECT_SCENES res/scenes/xml/*.xml
-                         res/scenes/usd/*.usd
+file(GLOB PROJECT_SCENES res/scenes/usd/*.usd
                          res/scenes/usd/*.usda
-                         res/scenes/usd/*.usdc)
+                         res/scenes/usd/*.usdc
+                         res/scenes/xml/*.xml)
 
 file(GLOB PROJECT_CONFIGS CMakeLists.txt
                           README.md

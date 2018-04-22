@@ -5,22 +5,22 @@
 
 #include <glad/glad.h>
 
-#include "shader.h"
+#include "shaderGL.h"
 
 
-Shader::Shader()
+ShaderGL::ShaderGL()
 {
 
 }
 
 
-Shader::~Shader()
+ShaderGL::~ShaderGL()
 {
 
 }
 
 
-void Shader::setShader(std::string vertexPath, std::string fragmentPath)
+void ShaderGL::setShader(std::string vertexPath, std::string fragmentPath)
 {
     // Shaders reading
     std::string vertexCode;
@@ -104,7 +104,7 @@ void Shader::setShader(std::string vertexPath, std::string fragmentPath)
 }
 
 
-void Shader::useShader()
+void ShaderGL::useShader()
 {
     glUseProgram(this->Program);
 }
