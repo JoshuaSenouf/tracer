@@ -17,7 +17,8 @@ Renderer::~Renderer()
 }
 
 
-void Renderer::initRender(int progressiveWidth, int progressiveHeight)
+void Renderer::initRender(int progressiveWidth,
+    int progressiveHeight)
 {
     quadRenderShader.setShader("res/shaders/quadRender.vert", "res/shaders/quadRender.frag");
 
@@ -59,9 +60,16 @@ void Renderer::initQuadRender()
 }
 
 
-void Renderer::traceLoop(int progressiveWidth, int progressiveHeight, int progressiveSamples, int progressiveDepth, int frameCounter, std::vector<Vector3>& renderBuffer, Camera& renderCamera, SceneManager &renderScene)
+void Renderer::traceLoop(int progressiveWidth,
+    int progressiveHeight,
+    int progressiveSamples,
+    int progressiveDepth,
+    int frameCounter,
+    std::vector<Vector3>& renderBuffer,
+    Camera& renderCamera,
+    SceneManager &renderScene)
 {
-#pragma omp parallel for schedule(dynamic, 1)
+    #pragma omp parallel for schedule(dynamic, 1)
     for (int pixelY = 0; pixelY < progressiveHeight; ++pixelY)
     {
         Randomizer randEngine;
@@ -75,12 +83,17 @@ void Renderer::traceLoop(int progressiveWidth, int progressiveHeight, int progre
             {
                 Ray cameraRay = renderCamera.getCameraRay(pixelX, pixelY, randEngine);
 
-                radianceColor += (renderBuffer[pixelIndex] * (frameCounter - 1) + renderIntegrator.getRadiance(cameraRay, renderScene, randEngine, progressiveDepth)) / frameCounter * (1.0f / progressiveSamples);
+                radianceColor += (renderBuffer[pixelIndex] * (frameCounter - 1) +
+                    renderIntegrator.getRadiance(cameraRay,
+                    renderScene,
+                    randEngine,
+                    progressiveDepth)) / frameCounter * (1.0f / progressiveSamples);
 
                 // Random noise test
-//                radianceColor += (renderBuffer[pixelIndex] * (frameCounter - 1) + Vector3(randEngine.getRandomFloat(),
-//                                                                                          randEngine.getRandomFloat(),
-//                                                                                          randEngine.getRandomFloat())) / frameCounter * (1.0f / progressiveSamples);
+                // radianceColor += (renderBuffer[pixelIndex] * (frameCounter - 1) +
+                //     Vector3(randEngine.getRandomFloat(),
+                //     randEngine.getRandomFloat(),
+                //     randEngine.getRandomFloat())) / frameCounter * (1.0f / progressiveSamples);
             }
 
             renderBuffer[pixelIndex] = radianceColor;
@@ -89,7 +102,9 @@ void Renderer::traceLoop(int progressiveWidth, int progressiveHeight, int progre
 }
 
 
-void Renderer::renderToTexture(int textureWidth, int textureHeight, const std::vector<Vector3>& renderBuffer)
+void Renderer::renderToTexture(int textureWidth,
+    int textureHeight,
+    const std::vector<Vector3>& renderBuffer)
 {
     glBindTexture(GL_TEXTURE_2D, this->renderTextureID);
     glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, textureWidth, textureHeight, GL_RGB, GL_FLOAT, renderBuffer.data());

@@ -1,7 +1,9 @@
 #include "randomizer.h"
 
 
-Randomizer::Randomizer() : intDistrib(), floatDistrib(0, 1), mtEngine(getNewSeed())
+Randomizer::Randomizer() : intDistrib(),
+    floatDistrib(0, 1),
+    mtEngine(getNewSeed())
 {
 
 }

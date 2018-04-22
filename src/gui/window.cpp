@@ -71,7 +71,14 @@ int Window::renderWindow()
 
             frameCounter++;
 
-            tracerRenderer.traceLoop(progressiveWidth, progressiveHeight, progressiveSamples, progressiveDepth, frameCounter, frontBuffer.getBufferData(), renderCamera, renderScene); // Progressive rendering
+            tracerRenderer.traceLoop(progressiveWidth,
+                progressiveHeight,
+                progressiveSamples,
+                progressiveDepth,
+                frameCounter,
+                frontBuffer.getBufferData(),
+                renderCamera,
+                renderScene); // Progressive rendering
             tracerRenderer.renderToTexture(progressiveWidth, progressiveHeight, frontBuffer.getBufferData());
         }
 
@@ -109,7 +116,13 @@ void Window::fpsWindow(bool& guiOpen)
 {
     ImGui::SetNextWindowPos(ImVec2(ImGui::GetIO().DisplaySize.x - 160, 30), 1);
 
-    ImGui::Begin("FPS Counter", &guiOpen, ImGuiWindowFlags_NoTitleBar|ImGuiWindowFlags_NoResize|ImGuiWindowFlags_AlwaysAutoResize|ImGuiWindowFlags_NoMove|ImGuiWindowFlags_NoSavedSettings);
+    ImGui::Begin("FPS Counter",
+        &guiOpen,
+        ImGuiWindowFlags_NoTitleBar
+        |ImGuiWindowFlags_NoResize
+        |ImGuiWindowFlags_AlwaysAutoResize
+        |ImGuiWindowFlags_NoMove
+        |ImGuiWindowFlags_NoSavedSettings);
 
     ImGui::Text("Framerate %.2f FPS", ImGui::GetIO().Framerate, 1000.0f / ImGui::GetIO().Framerate);
 
@@ -197,7 +210,14 @@ void Window::setupGUI()
                     std::vector<Vector3> ppmBuffer;
 
                     ppmBuffer.resize(outputWidth * outputHeight);
-                    tracerRenderer.traceLoop(outputWidth, outputHeight, outputSamples, outputDepth, 1, ppmBuffer, renderCamera, renderScene);
+                    tracerRenderer.traceLoop(outputWidth,
+                        outputHeight,
+                        outputSamples,
+                        outputDepth,
+                        1,
+                        ppmBuffer,
+                        renderCamera,
+                        renderScene);
 
                     exportToPPM(outputWidth, outputHeight, ppmBuffer);
                 }
@@ -207,7 +227,14 @@ void Window::setupGUI()
                     std::vector<Vector3> exrBuffer;
 
                     exrBuffer.resize(outputWidth * outputHeight);
-                    tracerRenderer.traceLoop(outputWidth, outputHeight, outputSamples, outputDepth, 1, exrBuffer, renderCamera, renderScene);
+                    tracerRenderer.traceLoop(outputWidth,
+                        outputHeight,
+                        outputSamples,
+                        outputDepth,
+                        1,
+                        exrBuffer,
+                        renderCamera,
+                        renderScene);
 
                     exportToEXR(outputWidth, outputHeight, exrBuffer);
                 }
@@ -392,7 +419,9 @@ void Window::keyboardCallback(ImGuiIO& guiIO)
 }
 
 
-void Window::mouseCallback(ImGuiIO& guiIO, float mousePosX, float mousePosY)
+void Window::mouseCallback(ImGuiIO& guiIO,
+    float mousePosX,
+    float mousePosY)
 {
     if (firstMouse)
     {

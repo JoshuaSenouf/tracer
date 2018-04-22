@@ -15,7 +15,9 @@ void BSDF::materialSetup()
 }
 
 
-const Vector3 BSDF::computeSampling(Vector3& rayDirection, const Vector3& hitNormal, Randomizer& randEngine)
+const Vector3 BSDF::computeSampling(Vector3& rayDirection,
+    const Vector3& hitNormal,
+    Randomizer& randEngine)
 {
     Vector3 computedColor;
 
@@ -65,7 +67,8 @@ const Vector3 BSDF::computeSampling(Vector3& rayDirection, const Vector3& hitNor
 }
 
 
-const Vector3 BSDF::hemisphereSampling(const Vector3& rayDirection, Randomizer& randEngine)
+const Vector3 BSDF::hemisphereSampling(const Vector3& rayDirection,
+    Randomizer& randEngine)
 {
     const float rand1 = randEngine.getRandomFloat();
     const float rand2 = randEngine.getRandomFloat();
@@ -74,7 +77,8 @@ const Vector3 BSDF::hemisphereSampling(const Vector3& rayDirection, Randomizer& 
     const float x = r * std::cos(theta);
     const float y = r * std::sin(theta);
 
-    Vector3 u = rayDirection.cross(sphereRandomSampling(randEngine.getRandomFloat() * M_PI * 2.0f, std::asin(randEngine.getRandomFloat() * 2.0f - 1.0f))).normalize();
+    Vector3 u = rayDirection.cross(sphereRandomSampling(randEngine.getRandomFloat() * M_PI * 2.0f,
+        std::asin(randEngine.getRandomFloat() * 2.0f - 1.0f))).normalize();
     Vector3 v = rayDirection.cross(u);
 
     Vector3 newRayDir = rayDirection * (std::sqrt(1 - rand1));
@@ -85,7 +89,9 @@ const Vector3 BSDF::hemisphereSampling(const Vector3& rayDirection, Randomizer& 
 }
 
 
-const Vector3 BSDF::coneSampling(const Vector3& rayDirection, float factor, Randomizer& randEngine)
+const Vector3 BSDF::coneSampling(const Vector3& rayDirection,
+    float factor,
+    Randomizer& randEngine)
 {
     const float rand1 = randEngine.getRandomFloat();
     const float rand2 = randEngine.getRandomFloat();
@@ -94,7 +100,8 @@ const Vector3 BSDF::coneSampling(const Vector3& rayDirection, float factor, Rand
     const float x = std::sin(phi);
     const float y = std::cos(phi);
 
-    Vector3 u = rayDirection.cross(sphereRandomSampling(randEngine.getRandomFloat() * M_PI * 2.0f, std::asin(randEngine.getRandomFloat() * 2.0f - 1.0f)));
+    Vector3 u = rayDirection.cross(sphereRandomSampling(randEngine.getRandomFloat() * M_PI * 2.0f,
+        std::asin(randEngine.getRandomFloat() * 2.0f - 1.0f)));
     Vector3 v = rayDirection.cross(v);
 
     Vector3 newRayDir = (rayDirection * y);
@@ -105,13 +112,15 @@ const Vector3 BSDF::coneSampling(const Vector3& rayDirection, float factor, Rand
 }
 
 
-const Vector3 BSDF::sphereRandomSampling(float theta, float phi)
+const Vector3 BSDF::sphereRandomSampling(float theta,
+    float phi)
 {
     return Vector3(std::cos(theta) * std::cos(phi), std::sin(phi), std::sin(theta) * std::cos(phi));
 }
 
 
-const Vector3 BSDF::computeSchlick(const Vector3& rayDirection, const Vector3& hitNormal)
+const Vector3 BSDF::computeSchlick(const Vector3& rayDirection,
+    const Vector3& hitNormal)
 {
     float LdotH = -hitNormal.dot(rayDirection);
 
@@ -120,7 +129,8 @@ const Vector3 BSDF::computeSchlick(const Vector3& rayDirection, const Vector3& h
 }
 
 
-const Vector3 BSDF::computeReflectedRay(const Vector3& rayDirection, const Vector3& hitNormal)
+const Vector3 BSDF::computeReflectedRay(const Vector3& rayDirection,
+    const Vector3& hitNormal)
 {
     float cos = hitNormal.dot(rayDirection);
 

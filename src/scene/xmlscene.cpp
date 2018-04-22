@@ -22,17 +22,21 @@ int XMLScene::loadSceneFile(const std::string& scenePath)
 }
 
 
-void XMLScene::loadMaterials(std::vector<BSDF>& materialsList)
+void XMLScene::loadMaterials(std::vector<BSDF>& materialList)
 {
     tinyxml2::XMLElement* materialLevel = xmlSceneFile.FirstChildElement("scene")->FirstChildElement("materials");
 
-    for (tinyxml2::XMLElement *materialElement = materialLevel->FirstChildElement(); materialElement; materialElement = materialElement->NextSiblingElement())
+    for (tinyxml2::XMLElement *materialElement = materialLevel->FirstChildElement();
+        materialElement;
+        materialElement = materialElement->NextSiblingElement())
     {
         BSDF tempMaterial;
 
         tempMaterial.name = materialElement->Attribute("name");
 
-        for (tinyxml2::XMLNode *materialParameter = materialElement->FirstChild(); materialParameter; materialParameter = materialParameter->NextSibling())
+        for (tinyxml2::XMLNode *materialParameter = materialElement->FirstChild();
+            materialParameter;
+            materialParameter = materialParameter->NextSibling())
         {
             if (materialParameter->Value() == std::string("color"))
                 getVectorAttribute(tempMaterial.color, std::vector<std::string> {"r", "g", "b"}, *materialParameter);
@@ -58,22 +62,27 @@ void XMLScene::loadMaterials(std::vector<BSDF>& materialsList)
 
         tempMaterial.materialSetup();
 
-        materialsList.push_back(tempMaterial);
+        materialList.push_back(tempMaterial);
     }
 }
 
 
-void XMLScene::loadSpheres(std::vector<Sphere>& spheresList, std::vector<BSDF>& materialsList)
+void XMLScene::loadSpheres(std::vector<Sphere>& sphereList,
+    std::vector<BSDF>& materialList)
 {
     tinyxml2::XMLElement* sphereLevel = xmlSceneFile.FirstChildElement("scene")->FirstChildElement("geometry")->FirstChildElement("spheres");
 
-    for (tinyxml2::XMLElement *sphereElement = sphereLevel->FirstChildElement(); sphereElement; sphereElement = sphereElement->NextSiblingElement())
+    for (tinyxml2::XMLElement *sphereElement = sphereLevel->FirstChildElement();
+        sphereElement;
+        sphereElement = sphereElement->NextSiblingElement())
     {
         Sphere tempSphere;
 
         tempSphere.name = sphereElement->Attribute("name");
 
-        for (tinyxml2::XMLNode *sphereParameter = sphereElement->FirstChild(); sphereParameter; sphereParameter = sphereParameter->NextSibling())
+        for (tinyxml2::XMLNode *sphereParameter = sphereElement->FirstChild();
+            sphereParameter;
+            sphereParameter = sphereParameter->NextSibling())
         {
             if (sphereParameter->Value() == std::string("radius"))
                 getDoubleAttribute(tempSphere.radius, "value", *sphereParameter);
@@ -87,7 +96,7 @@ void XMLScene::loadSpheres(std::vector<Sphere>& spheresList, std::vector<BSDF>& 
 
                 getStringAttribute(tempMaterialName, "value", *sphereParameter);
 
-                for (const BSDF& currentMaterial : materialsList)
+                for (const BSDF& currentMaterial : materialList)
                 {
                     if (currentMaterial.name == tempMaterialName)
                         tempSphere.material = currentMaterial;
@@ -95,12 +104,13 @@ void XMLScene::loadSpheres(std::vector<Sphere>& spheresList, std::vector<BSDF>& 
             }
         }
 
-        spheresList.push_back(tempSphere);
+        sphereList.push_back(tempSphere);
     }
 }
 
 
-void XMLScene::loadMeshes(std::vector<Mesh>& meshesList, std::vector<BSDF> &materialsList)
+void XMLScene::loadMeshes(std::vector<Mesh>& meshList,
+    std::vector<BSDF> &materialList)
 {
 
 }
@@ -110,7 +120,9 @@ void XMLScene::loadCamera(cameraData& sceneCamera)
 {
     tinyxml2::XMLElement* cameraLevel = xmlSceneFile.FirstChildElement("camera");
 
-    for (tinyxml2::XMLNode *cameraParameter = cameraLevel->FirstChild(); cameraParameter; cameraParameter = cameraParameter->NextSibling())
+    for (tinyxml2::XMLNode *cameraParameter = cameraLevel->FirstChild();
+        cameraParameter;
+        cameraParameter = cameraParameter->NextSibling())
     {
         if (cameraParameter->Value() == std::string("position"))
             getVectorAttribute(sceneCamera.position, std::vector<std::string> {"x", "y", "z"}, *cameraParameter);
@@ -137,7 +149,9 @@ void XMLScene::loadSettings(settingsData& sceneSettings)
 {
     tinyxml2::XMLElement* settingsLevel = xmlSceneFile.FirstChildElement("settings");
 
-    for (tinyxml2::XMLNode *settingsParameter = settingsLevel->FirstChild(); settingsParameter; settingsParameter = settingsParameter->NextSibling())
+    for (tinyxml2::XMLNode *settingsParameter = settingsLevel->FirstChild();
+        settingsParameter;
+        settingsParameter = settingsParameter->NextSibling())
     {
         if (settingsParameter->Value() == std::string("skyColor"))
         {
@@ -147,25 +161,33 @@ void XMLScene::loadSettings(settingsData& sceneSettings)
 }
 
 
-void XMLScene::getFloatAttribute(float& floatAttr, const std::string& floatName, const tinyxml2::XMLNode& objectParameter)
+void XMLScene::getFloatAttribute(float& floatAttr,
+    const std::string& floatName,
+    const tinyxml2::XMLNode& objectParameter)
 {
     objectParameter.ToElement()->QueryFloatAttribute(floatName.c_str(), &floatAttr);
 }
 
 
-void XMLScene::getDoubleAttribute(double& doubleAttr, const std::string& floatName, const tinyxml2::XMLNode& objectParameter)
+void XMLScene::getDoubleAttribute(double& doubleAttr,
+    const std::string& floatName,
+    const tinyxml2::XMLNode& objectParameter)
 {
     objectParameter.ToElement()->QueryDoubleAttribute(floatName.c_str(), &doubleAttr);
 }
 
 
-void XMLScene::getStringAttribute(std::string& stringAttr, const std::string& stringName, const tinyxml2::XMLNode& objectParameter)
+void XMLScene::getStringAttribute(std::string& stringAttr,
+    const std::string& stringName,
+    const tinyxml2::XMLNode& objectParameter)
 {
     stringAttr = objectParameter.ToElement()->Attribute(stringName.c_str());
 }
 
 
-void XMLScene::getVectorAttribute(Vector3& vectorAttr, const std::vector<std::string>& vectorNameList, const tinyxml2::XMLNode& objectParameter)
+void XMLScene::getVectorAttribute(Vector3& vectorAttr, const
+    std::vector<std::string>& vectorNameList,
+    const tinyxml2::XMLNode& objectParameter)
 {
     objectParameter.ToElement()->QueryFloatAttribute(vectorNameList.at(0).c_str(), &vectorAttr.x);
     objectParameter.ToElement()->QueryFloatAttribute(vectorNameList.at(1).c_str(), &vectorAttr.y);

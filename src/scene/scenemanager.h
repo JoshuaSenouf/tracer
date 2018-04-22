@@ -27,40 +27,42 @@ class SceneManager
         int loadScene(const std::string& scenePath);
 
         void cleanScene();
-        void cleanMaterialsList();
-        void cleanSpheresList();
-        void cleanMeshesList();
-        void cleanLightsList();
+        void cleanMaterialList();
+        void cleanSphereList();
+        void cleanMeshList();
+        void cleanLightList();
         void cleanCamera();
         void cleanSettings();
 
-        void printMaterialsData();
-        void printSpheresData();
-        void printMeshesData();
-        void printLightsData();
+        void printMaterialData();
+        void printSphereData();
+        void printMeshData();
+        void printLightData();
         void printCameraData();
         void printSettingsData();
 
-        const std::vector<BSDF>& getMaterialsList();
-        const std::vector<Sphere>& getSpheresList();
-        const std::vector<Mesh>& getMeshesList();
-        const std::vector<Light>& getLightsList();
+        const std::vector<BSDF>& getMaterialList();
+        const std::vector<Sphere>& getSphereList();
+        const std::vector<Mesh>& getMeshList();
+        const std::vector<Light>& getLightList();
         const cameraData& getCamera();
         const settingsData& getSettings();
 
         const XMLScene& getXMLScene();
         const USDScene& getUSDScene();
 
-        bool isIntersected(const Ray& ray, float& closestSphereDist, int& closestSphereID);
+        bool isIntersected(const Ray& ray,
+            float& closestSphereDist,
+            int& closestSphereID);
 
     private:
         XMLScene xmlScene;
         USDScene usdScene;
 
-        std::vector<BSDF> materialsList;
-        std::vector<Sphere> spheresList;
-        std::vector<Mesh> meshesList;
-        std::vector<Light> lightsList;
+        std::vector<BSDF> materialList;
+        std::vector<Sphere> sphereList;
+        std::vector<Mesh> meshList;
+        std::vector<Light> lightList;
         cameraData sceneCamera;
         settingsData sceneSettings;
 };

@@ -59,7 +59,9 @@ void Camera::setCameraRight(Vector3 tempRight)
 void Camera::setCameraFOV(float tempFOV)
 {
     cameraFOV.x = tempFOV;
-    cameraFOV.y = (atan(tan(tempFOV * M_PI * M_1_180 * 0.5f) * ((float)cameraResolution.y / (float)cameraResolution.x)) * 2.0f) * 180.0f * M_1_PI;
+    cameraFOV.y = (atan(tan(tempFOV * M_PI * M_1_180 * 0.5f)
+        * ((float)cameraResolution.y / (float)cameraResolution.x)) * 2.0f)
+        * 180.0f * M_1_PI;
 }
 
 
@@ -171,7 +173,8 @@ float Camera::getCameraFocalDistance()
 }
 
 
-void Camera::keyboardCall(cameraMovement direction, GLfloat deltaTime)
+void Camera::keyboardCall(cameraMovement direction,
+    GLfloat deltaTime)
 {
     GLfloat cameraVelocity = cameraSpeed * deltaTime;
 
@@ -186,7 +189,9 @@ void Camera::keyboardCall(cameraMovement direction, GLfloat deltaTime)
 }
 
 
-void Camera::mouseCall(GLfloat xoffset, GLfloat yoffset, GLboolean constrainPitch)
+void Camera::mouseCall(GLfloat xoffset,
+    GLfloat yoffset,
+    GLboolean constrainPitch)
 {
     xoffset *= cameraSensitivity;
     yoffset *= cameraSensitivity;
@@ -219,7 +224,9 @@ void Camera::updateCameraVectors()
 }
 
 
-Ray Camera::getCameraRay(int posX, int posY, Randomizer& randEngine)
+Ray Camera::getCameraRay(int posX,
+    int posY,
+    Randomizer& randEngine)
 {
     Vector3 horizontalAxis = cameraFront.cross(cameraUp).normalize();
     Vector3 verticalAxis = horizontalAxis.cross(cameraFront).normalize();

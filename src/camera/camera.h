@@ -51,10 +51,15 @@ class Camera
         float getCameraApertureRadius();
         float getCameraFocalDistance();
 
-        void keyboardCall(cameraMovement direction, GLfloat deltaTime);
-        void mouseCall(GLfloat xoffset, GLfloat yoffset, GLboolean constrainPitch);
+        void keyboardCall(cameraMovement direction,
+            GLfloat deltaTime);
+        void mouseCall(GLfloat xoffset,
+            GLfloat yoffset,
+            GLboolean constrainPitch);
 
-        Ray getCameraRay(int posX, int posY, Randomizer& randEngine);
+        Ray getCameraRay(int posX,
+            int posY,
+            Randomizer& randEngine);
 
     private:
         void updateCameraVectors();

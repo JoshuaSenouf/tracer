@@ -17,7 +17,8 @@ class ShaderGL
         ShaderGL();
         ~ShaderGL();
 
-        void setShader(std::string vertexPath, std::string fragmentPath);
+        void setShader(std::string vertexPath,
+            std::string fragmentPath);
         void useShader();
 };
 

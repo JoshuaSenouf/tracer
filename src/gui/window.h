@@ -35,7 +35,9 @@ class Window
         void aboutWindow(bool &guiOpen);
 
         void keyboardCallback(ImGuiIO &guiIO);
-        void mouseCallback(ImGuiIO &guiIO, float mousePosX, float mousePosY);
+        void mouseCallback(ImGuiIO &guiIO,
+            float mousePosX,
+            float mousePosY);
 
     private:
         bool firstMouse = true;

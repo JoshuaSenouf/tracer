@@ -30,7 +30,9 @@ inline float clamp(float x)
 
 inline Vector3 clamp(const Vector3 &tempVector)
 {
-    return Vector3(clamp(tempVector.x), clamp(tempVector.y), clamp(tempVector.z));
+    return Vector3(clamp(tempVector.x),
+        clamp(tempVector.y),
+        clamp(tempVector.z));
 }
 
 
@@ -42,7 +44,9 @@ inline float convertToSRGB(float x)
 
 inline Vector3 convertToSRGB(const Vector3 &tempVector)
 {
-    return Vector3(convertToSRGB(tempVector.x), convertToSRGB(tempVector.y), convertToSRGB(tempVector.z));
+    return Vector3(convertToSRGB(tempVector.x),
+        convertToSRGB(tempVector.y),
+        convertToSRGB(tempVector.z));
 }
 
 
@@ -54,7 +58,9 @@ inline float convertToLinear(float x)
 
 inline Vector3 convertToLinear(const Vector3 &tempVector)
 {
-    return Vector3(convertToLinear(tempVector.x), convertToLinear(tempVector.y), convertToLinear(tempVector.z));
+    return Vector3(convertToLinear(tempVector.x),
+        convertToLinear(tempVector.y),
+        convertToLinear(tempVector.z));
 }
 
 

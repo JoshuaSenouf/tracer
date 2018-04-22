@@ -9,13 +9,15 @@ Buffer::Buffer()
 }
 
 
-void Buffer::initBuffer(int bufferWidth, int bufferHeight)
+void Buffer::initBuffer(int bufferWidth,
+    int bufferHeight)
 {
     bufferData.resize(bufferWidth * bufferHeight);
 }
 
 
-void Buffer::cleanBufferData(int bufferWidth, int bufferHeight)
+void Buffer::cleanBufferData(int bufferWidth,
+    int bufferHeight)
 {
     bufferData.clear();
     bufferData.shrink_to_fit();
@@ -41,7 +43,9 @@ void Buffer::setBufferData(const std::vector<Vector3>& buffer)
 }
 
 
-void exportToPPM(int ppmWidth, int ppmHeight, const std::vector<Vector3>& exportBuffer)
+void exportToPPM(int ppmWidth,
+    int ppmHeight,
+    const std::vector<Vector3>& exportBuffer)
 {
     FILE *ppmFile = fopen("tracerRender.ppm", "w");
     fprintf(ppmFile, "P3\n%d %d\n%d\n", ppmWidth, ppmHeight, 255);
@@ -59,7 +63,9 @@ void exportToPPM(int ppmWidth, int ppmHeight, const std::vector<Vector3>& export
 
 
 // Based on TinyEXR way of saving scanline EXR file
-void exportToEXR(int exrWidth, int exrHeight, const std::vector<Vector3>& exportBuffer)
+void exportToEXR(int exrWidth,
+    int exrHeight,
+    const std::vector<Vector3>& exportBuffer)
 {
     EXRHeader exrHeader;
     EXRImage exrImage;

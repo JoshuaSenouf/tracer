@@ -39,7 +39,7 @@ Features
     * **TODO :** Physically-based BSDF (Probably a simplified version of the Disney principled BSDF)
 
 * Light sources:
-    * Mesh/primitive lights
+    * Mesh light
     * Sky light
 
 * Primitives:
@@ -54,11 +54,16 @@ Features
 
 * Scene:
     * Formats:
-        * Pixar USD, using a mix of native and custom schemas in the scene files.
+        * Pixar USD
         * XML
-    * Materials loading
-    * Sphere primitives loading
-    * **TODO :** Meshes loading
+    * Material loading
+    * Primitives loading:
+        * Sphere
+        * **TODO :** Quad
+        * **TODO :** Cube
+        * **TODO :** Triangle
+    * **TODO :** Mesh loading
+    * **TODO :** Light loading
     * Camera loading
     * Settings loading
 
@@ -89,6 +94,6 @@ Dependencies (included, aside from OpenMP, as well as Pixar USD and its own depe
 - Multithreading : OpenMP
 - XML handling : TinyXML2
 - EXR handling : tinyexr
-- Mesh Loading : tinyobjloader
+- Mesh loading : tinyobjloader
 - Image loading : stb
 - Scene loading : Pixar USD

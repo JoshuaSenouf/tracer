@@ -49,6 +49,16 @@ def Group "world"
         }
     }
 
+    def Group "lights"
+    {
+        def Light "sphereLight"
+        {
+            string lightShape = "lightSource"
+            string material = "light"
+        }
+
+    }
+
     def Group "materials"
     {
         def Material "ground"

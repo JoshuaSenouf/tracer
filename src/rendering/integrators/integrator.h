@@ -13,7 +13,10 @@ class PathTracer
     public:
         PathTracer();
 
-        Vector3 getRadiance(Ray& cameraRay, SceneManager& renderScene, Randomizer& randEngine, int rayDepth);
+        Vector3 getRadiance(Ray& cameraRay,
+            SceneManager& renderScene,
+            Randomizer& randEngine,
+            int rayDepth);
 
     private:
 

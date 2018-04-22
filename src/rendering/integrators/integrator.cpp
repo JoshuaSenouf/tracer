@@ -7,7 +7,10 @@ PathTracer::PathTracer()
 }
 
 
-Vector3 PathTracer::getRadiance(Ray& cameraRay, SceneManager &renderScene, Randomizer& randEngine, int rayDepth)
+Vector3 PathTracer::getRadiance(Ray& cameraRay,
+    SceneManager &renderScene,
+    Randomizer& randEngine,
+    int rayDepth)
 {
     Vector3 bsdfSampling;
     Vector3 colorAccumulation;
@@ -21,7 +24,7 @@ Vector3 PathTracer::getRadiance(Ray& cameraRay, SceneManager &renderScene, Rando
         if (!renderScene.isIntersected(cameraRay, closestSphereDist, closestSphereID))
             return colorAccumulation += colorMask * renderScene.getSettings().skyColor; // If we hit no object, we return the sky color
 
-        Sphere hitSphere = renderScene.getSpheresList()[closestSphereID];
+        Sphere hitSphere = renderScene.getSphereList()[closestSphereID];
 
         if (hitSphere.material.emissiveColor != Vector3())
             return colorAccumulation += colorMask * hitSphere.material.emissiveColor; // If we hit a light source, how about stopping earlier ?

@@ -14,7 +14,7 @@ int USDScene::loadSceneFile(const std::string& scenePath)
     return true;
 }
 
-void USDScene::loadMaterials(std::vector<BSDF>& materialsList)
+void USDScene::loadMaterials(std::vector<BSDF>& materialList)
 {
     std::vector<pxr::UsdPrim> usdPrimMaterials;
 
@@ -58,12 +58,13 @@ void USDScene::loadMaterials(std::vector<BSDF>& materialsList)
                 usdAttr.Get(&tempMaterial.ior);
         }
 
-        materialsList.push_back(tempMaterial);
+        materialList.push_back(tempMaterial);
     }
 }
 
 
-void USDScene::loadSpheres(std::vector<Sphere>& spheresList, std::vector<BSDF>& materialsList)
+void USDScene::loadSpheres(std::vector<Sphere>& sphereList,
+    std::vector<BSDF>& materialList)
 {
     std::vector<pxr::UsdPrim> usdPrimSpheres;
 
@@ -92,7 +93,7 @@ void USDScene::loadSpheres(std::vector<Sphere>& spheresList, std::vector<BSDF>& 
                 std::string tempMaterialName;
                 usdAttr.Get(&tempMaterialName);
 
-                for (const BSDF& currentMaterial : materialsList)
+                for (const BSDF& currentMaterial : materialList)
                 {
                     if (currentMaterial.name == tempMaterialName)
                         tempSphere.material = currentMaterial;
@@ -100,12 +101,13 @@ void USDScene::loadSpheres(std::vector<Sphere>& spheresList, std::vector<BSDF>& 
             }
         }
 
-        spheresList.push_back(tempSphere);
+        sphereList.push_back(tempSphere);
     }
 }
 
 
-void USDScene::loadMeshes(std::vector<Mesh>& meshesList, std::vector<BSDF> &materialsList)
+void USDScene::loadMeshes(std::vector<Mesh>& meshList,
+    std::vector<BSDF> &materialList)
 {
 
 }
@@ -159,7 +161,9 @@ void USDScene::loadSettings(settingsData& sceneSettings)
 }
 
 
-void USDScene::getPrimFromType(const std::string& primType, const pxr::SdfPath& primPath, std::vector<pxr::UsdPrim>& primVector)
+void USDScene::getPrimFromType(const std::string& primType,
+    const pxr::SdfPath& primPath,
+    std::vector<pxr::UsdPrim>& primVector)
 {
     pxr::UsdPrim basePrim;
     basePrim = sceneStage->GetPrimAtPath(primPath);

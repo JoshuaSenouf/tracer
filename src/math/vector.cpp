@@ -1,7 +1,9 @@
 #include "vector.h"
 
 
-Vector3::Vector3() : x(0.0f), y(0.0f), z(0.0f)
+Vector3::Vector3() : x(0.0f),
+    y(0.0f),
+    z(0.0f)
 {
 
 }
@@ -41,7 +43,9 @@ Vector3 Vector3::normalize() const
 {
     float vecLength = length();
 
-    return Vector3(this->x / vecLength, this->y / vecLength, this->z / vecLength);
+    return Vector3(this->x / vecLength,
+        this->y / vecLength,
+        this->z / vecLength);
 }
 
 
@@ -53,7 +57,9 @@ float Vector3::dot(const Vector3 &tempVec3) const
 
 Vector3 Vector3::cross(const Vector3 &tempVec3) const
 {
-    return Vector3(this->y * tempVec3.z - this->z * tempVec3.y, this->z * tempVec3.x - this->x * tempVec3.z, this->x * tempVec3.y - this->y * tempVec3.x);
+    return Vector3(this->y * tempVec3.z - this->z * tempVec3.y,
+        this->z * tempVec3.x - this->x * tempVec3.z,
+        this->x * tempVec3.y - this->y * tempVec3.x);
 }
 
 

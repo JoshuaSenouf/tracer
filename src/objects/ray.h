@@ -11,7 +11,8 @@ class Ray
         Vector3 direction;
 
         Ray();
-        Ray(Vector3 tempOrigin, Vector3 tempDirection);
+        Ray(Vector3 tempOrigin,
+            Vector3 tempDirection);
 
     private:
 };

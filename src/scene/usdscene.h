@@ -27,14 +27,19 @@ class USDScene
 
         int loadSceneFile(const std::string& scenePath);
 
-        void loadMaterials(std::vector<BSDF> &materialsList);
-        void loadSpheres(std::vector<Sphere> &spheresList, std::vector<BSDF>& materialsList);
-        void loadMeshes(std::vector<Mesh> &meshesList, std::vector<BSDF>& materialsList);
-        void loadLights(std::vector<Sphere> &spheresList, std::vector<BSDF>& materialsList);
+        void loadMaterials(std::vector<BSDF> &materialList);
+        void loadSpheres(std::vector<Sphere> &sphereList,
+            std::vector<BSDF>& materialList);
+        void loadMeshes(std::vector<Mesh> &meshList,
+            std::vector<BSDF>& materialList);
+        void loadLights(std::vector<Sphere> &sphereList,
+            std::vector<BSDF>& materialList);
         void loadCamera(cameraData &sceneCamera);
         void loadSettings(settingsData &sceneSettings);
 
-        void getPrimFromType(const std::string &primType, const pxr::SdfPath &primPath, std::vector<pxr::UsdPrim>& primVector);
+        void getPrimFromType(const std::string &primType,
+            const pxr::SdfPath &primPath,
+            std::vector<pxr::UsdPrim>& primVector);
 
     private:
         pxr::UsdStageRefPtr sceneStage;

@@ -20,7 +20,8 @@ ShaderGL::~ShaderGL()
 }
 
 
-void ShaderGL::setShader(std::string vertexPath, std::string fragmentPath)
+void ShaderGL::setShader(std::string vertexPath,
+    std::string fragmentPath)
 {
     // Shaders reading
     std::string vertexCode;

@@ -6,8 +6,10 @@ Ray::Ray()
 
 }
 
-Ray::Ray(Vector3 tempOrigin, Vector3 tempDirection) :
-    origin(tempOrigin), direction(tempDirection)
+Ray::Ray(Vector3 tempOrigin,
+    Vector3 tempDirection) :
+    origin(tempOrigin),
+    direction(tempDirection)
 {
 
 }
