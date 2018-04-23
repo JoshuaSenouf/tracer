@@ -1,7 +1,7 @@
 #include "vector.h"
 
 
-Vector3::Vector3() : x(0.0f),
+Vector3::Vector3(): x(0.0f),
     y(0.0f),
     z(0.0f)
 {
@@ -71,7 +71,7 @@ Vector3 Vector3::lerp(const Vector3& tempVec3, float weightFactor)
 
 void Vector3::print()
 {
-    std::cout << "X : " << this->x << "\nY : " << this->y << "\nZ : " << this->z << std::endl;
+    std::cout << "X: " << this->x << "\nY: " << this->y << "\nZ: " << this->z << std::endl;
 }
 
 
@@ -210,7 +210,7 @@ bool Vector3::operator<(const Vector3 &tempVec3) const
 /////////////////////////////////////////////////////////////
 
 
-Vector2::Vector2() : x(0.0f),
+Vector2::Vector2(): x(0.0f),
     y(0.0f)
 {
 
@@ -260,7 +260,7 @@ float Vector2::dot(const Vector2 &tempVec2) const
 
 void Vector2::print()
 {
-    std::cout << "X : " << this->x << "\nY : " << this->y << std::endl;
+    std::cout << "X: " << this->x << "\nY: " << this->y << std::endl;
 }
 
 

@@ -93,7 +93,7 @@ void USDScene::loadSpheres(std::vector<Sphere>& sphereList,
                 std::string tempMaterialName;
                 usdAttr.Get(&tempMaterialName);
 
-                for (BSDF& currentMaterial : materialList)
+                for (BSDF& currentMaterial: materialList)
                 {
                     if (currentMaterial.getName() == tempMaterialName)
                         tempSphere.setMaterial(currentMaterial);
@@ -114,9 +114,46 @@ void USDScene::loadMeshes(std::vector<Mesh>& meshList,
 
 
 void USDScene::loadLights(std::vector<GeoLight>& lightList,
+    std::vector<Sphere>& sphereList,
     std::vector<BSDF> &materialList)
 {
+    std::vector<pxr::UsdPrim> usdPrimLights;
 
+    getPrimFromType("GeoLight", pxr::SdfPath("/world"), usdPrimLights);
+
+    for(const pxr::UsdPrim& usdGeoLight: usdPrimLights)
+    {
+        GeoLight tempLight;
+
+        for(const pxr::UsdAttribute& usdAttr : usdGeoLight.GetAttributes())
+        {
+            if (usdAttr.GetName() == std::string("geometry"))
+            {
+                std::string tempGeometryName;
+                usdAttr.Get(&tempGeometryName);
+
+                for (Sphere& currentSphere: sphereList)
+                {
+                    if (currentSphere.getName() == tempGeometryName)
+                        tempLight.setGeometry(currentSphere);
+                }
+            }
+
+            else if (usdAttr.GetName() == std::string("material"))
+            {
+                std::string tempMaterialName;
+                usdAttr.Get(&tempMaterialName);
+
+                for (BSDF& currentMaterial: materialList)
+                {
+                    if (currentMaterial.getName() == tempMaterialName)
+                        tempLight.setMaterial(currentMaterial);
+                }
+            }
+        }
+
+        lightList.push_back(tempLight);
+    }
 }
 
 

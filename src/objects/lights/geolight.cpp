@@ -7,8 +7,10 @@ GeoLight::GeoLight()
 }
 
 
-GeoLight::GeoLight(const Sphere& tempGeometry) :
-    geometry(tempGeometry)
+GeoLight::GeoLight(const Sphere& tempGeometry,
+    const BSDF& tempMaterial):
+    geometry(tempGeometry),
+    material(tempMaterial)
 {
 
 }
@@ -16,11 +18,23 @@ GeoLight::GeoLight(const Sphere& tempGeometry) :
 
 Sphere& GeoLight::getGeometry()
 {
-    return geometry;
+    return this->geometry;
 }
 
 
 BSDF& GeoLight::getMaterial()
 {
-    return geometry.getMaterial();
+    return this->material;
+}
+
+
+void GeoLight::setGeometry(const Sphere& tempGeometry)
+{
+    this->geometry = tempGeometry;
+}
+
+
+void GeoLight::setMaterial(const BSDF& tempMaterial)
+{
+    this->material = tempMaterial;
 }

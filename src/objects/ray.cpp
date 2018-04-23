@@ -7,7 +7,7 @@ Ray::Ray()
 }
 
 Ray::Ray(const Vector3& tempOrigin,
-    const Vector3& tempDirection) :
+    const Vector3& tempDirection):
     origin(tempOrigin),
     direction(tempDirection)
 {

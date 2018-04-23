@@ -121,7 +121,7 @@ void exportToEXR(int exrWidth,
     int exrResult = SaveEXRImageToFile(&exrImage, &exrHeader, "tracerRender.exr", &exrError);
 
     if (exrResult != TINYEXR_SUCCESS)
-        fprintf(stderr, "EXR Error : %s\n", exrError);
+        fprintf(stderr, "EXR Error: %s\n", exrError);
 
     free(exrHeader.channels);
     free(exrHeader.pixel_types);

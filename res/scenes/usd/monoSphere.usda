@@ -56,7 +56,6 @@ def Group "world"
             string geometry = "lightSource"
             string material = "light"
         }
-
     }
 
     def Group "materials"

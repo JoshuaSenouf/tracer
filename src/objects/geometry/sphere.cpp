@@ -12,7 +12,7 @@ Sphere::Sphere()
 Sphere::Sphere(const std::string& tempName,
     double tempRadius,
     const Vector3& tempPosition,
-    const BSDF& tempMaterial) :
+    const BSDF& tempMaterial):
     name(tempName),
     radius(tempRadius),
     position(tempPosition),
