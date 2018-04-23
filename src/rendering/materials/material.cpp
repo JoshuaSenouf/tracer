@@ -28,12 +28,12 @@ const Vector3 BSDF::computeSampling(Vector3& rayDirection,
         // Specular
         if (Vector3(randEngine.getRandomFloat()) < reflectVector)
         {
-            Vector3 reflectedRay = coneSampling(computeReflectedRay(rayDirection, hitNormal), roughness, randEngine);
+            Vector3 reflectedRay = coneSampling(computeReflectedRay(rayDirection, hitNormal), this->roughness, randEngine);
 
             if (hitNormal.dot(reflectedRay) > 0.0f)
             {
                 rayDirection = reflectedRay;
-                computedColor = Vector3(1.0f).lerp(fresnelColor, roughness);
+                computedColor = Vector3(1.0f).lerp(this->fresnelColor, this->roughness);
 
                 return computedColor;
             }
@@ -42,11 +42,11 @@ const Vector3 BSDF::computeSampling(Vector3& rayDirection,
                 rayDirection =  hemisphereSampling(hitNormal, randEngine);
 
                 // Lambertian diffuse
-                return color * (1.0f / M_PI);
+                return this->color * (1.0f / M_PI);
             }
         }
 
-        else if (randEngine.getRandomFloat() < metalness)
+        else if (randEngine.getRandomFloat() < this->metalness)
             return Vector3();
 
         // Diffuse
@@ -55,7 +55,7 @@ const Vector3 BSDF::computeSampling(Vector3& rayDirection,
             rayDirection =  hemisphereSampling(hitNormal, randEngine);
 
             // Lambertian diffuse
-            return color * (1.0f / M_PI);
+            return this->color * (1.0f / M_PI);
         }
     }
     else
@@ -124,8 +124,8 @@ const Vector3 BSDF::computeSchlick(const Vector3& rayDirection,
 {
     float LdotH = -hitNormal.dot(rayDirection);
 
-    return fresnelColor + ((std::max(Vector3(1.0f - roughness), fresnelColor) - fresnelColor) * std::pow(1.0f - LdotH, 5.0f));
-    //return fresnelColor + ((Vector3(1.0f) - fresnelColor) * std::pow(1.0f - LdotH, 5.0f));
+    return this->fresnelColor + ((std::max(Vector3(1.0f - this->roughness), this->fresnelColor) - this->fresnelColor) * std::pow(1.0f - LdotH, 5.0f));
+    //return this->fresnelColor + ((Vector3(1.0f) - this->fresnelColor) * std::pow(1.0f - LdotH, 5.0f));
 }
 
 

@@ -20,7 +20,7 @@ Renderer::~Renderer()
 void Renderer::initRender(int progressiveWidth,
     int progressiveHeight)
 {
-    quadRenderShader.setShader("res/shaders/quadRender.vert", "res/shaders/quadRender.frag");
+    this->quadRenderShader.setShader("res/shaders/quadRender.vert", "res/shaders/quadRender.frag");
 
     initQuadRender();
 
@@ -43,8 +43,8 @@ void Renderer::initRender(int progressiveWidth,
 
 void Renderer::initQuadRender()
 {
-    glGenVertexArrays(1, &quadVAO);
-    glGenBuffers(1, &quadVBO);
+    glGenVertexArrays(1, &this->quadVAO);
+    glGenBuffers(1, &this->quadVBO);
     glBindBuffer(GL_ARRAY_BUFFER, this->quadVBO);
 
     glBufferData(GL_ARRAY_BUFFER, sizeof(quadVertices), quadVertices, GL_STATIC_DRAW);
@@ -118,10 +118,10 @@ void Renderer::renderToTexture(int textureWidth,
 
 void Renderer::cleanQuadRender()
 {
-    glBindBuffer(GL_ARRAY_BUFFER, quadVBO);
-    glDeleteBuffers(1, &quadVBO);
+    glBindBuffer(GL_ARRAY_BUFFER, this->quadVBO);
+    glDeleteBuffers(1, &this->quadVBO);
 
-    quadVBO = 0;
+    this->quadVBO = 0;
 }
 
 
