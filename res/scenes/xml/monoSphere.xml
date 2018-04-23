@@ -10,13 +10,12 @@
             <sphere name = "testSphere">
                 <radius value = "1.0"/>
                 <position x = "0.0" y = "0.6" z = "0.0"/>
-                <material value = "redMat"/>
+                <material value = "redPlastic"/>
             </sphere>
 
             <sphere name = "lightSource">
                 <radius value = "1.0"/>
                 <position x = "0.0" y = "4.0" z = "-7.0"/>
-                <material value = "light"/>
             </sphere>
         </spheres>
 
@@ -24,6 +23,13 @@
         </models>
 
     </geometry>
+
+    <lights>
+        <geolight name = "sphereLight">
+            <geometry value = "lightSource"/>
+            <material value = "light"/>
+        </geolight>
+    </lights>
 
     <materials>
         <material name = "ground">
@@ -36,8 +42,8 @@
             <ior value = "1.0"/>
         </material>
 
-        <material name = "redMat">
-            <color r = "0.9" g = "0.1" b = "0.1"/>
+        <material name = "redPlastic">
+            <color r = "1.0" g = "0.1" b = "0.1"/>
             <emissiveColor r = "0.0" g = "0.0" b = "0.0"/>
             <fresnelColor r = "0.04" g = "0.04" b = "0.04"/>
             <roughness value = "0.3"/>

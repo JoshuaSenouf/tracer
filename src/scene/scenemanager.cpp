@@ -25,7 +25,7 @@ int SceneManager::loadScene(const std::string& scenePath)
         xmlScene.loadMaterials(materialList);
         xmlScene.loadSpheres(sphereList, materialList);
         xmlScene.loadMeshes(meshList, materialList);
-        //xmlScene.loadLights(lightList, sphereList, materialList);
+        xmlScene.loadLights(lightList, sphereList, materialList);
         xmlScene.loadCamera(sceneCamera);
         xmlScene.loadSettings(sceneSettings);
     }
@@ -109,6 +109,7 @@ void SceneManager::printLightData()
 
     for(unsigned int i = 0; i < lightList.size(); ++i)
     {
+        std::cout << "NAME: " << lightList[i].getName() << std::endl;
         std::cout << "GEOMETRY: " << lightList[i].getGeometry().getName() << std::endl;
         std::cout << "MATERIAL: " << lightList[i].getMaterial().getName() << std::endl;
         std::cout << "\n///////////////\n" << std::endl;
@@ -146,6 +147,7 @@ void SceneManager::cleanScene()
     cleanMaterialList();
     cleanSphereList();
     cleanMeshList();
+    cleanLightList();
 }
 
 
@@ -172,74 +174,87 @@ void SceneManager::cleanMeshList()
 
 void SceneManager::cleanLightList()
 {
-    sphereList.clear();
-    sphereList.shrink_to_fit();
+    lightList.clear();
+    lightList.shrink_to_fit();
 }
 
 
-const std::vector<BSDF>& SceneManager::getMaterialList()
+std::vector<BSDF>& SceneManager::getMaterialList()
 {
     return materialList;
 }
 
 
-const std::vector<Sphere>& SceneManager::getSphereList()
+std::vector<Sphere>& SceneManager::getSphereList()
 {
     return sphereList;
 }
 
 
-const std::vector<Mesh>& SceneManager::getMeshList()
+std::vector<Mesh>& SceneManager::getMeshList()
 {
     return meshList;
 }
 
 
-const std::vector<GeoLight>& SceneManager::getLightList()
+std::vector<GeoLight>& SceneManager::getLightList()
 {
     return lightList;
 }
 
 
-const cameraData &SceneManager::getCamera()
+cameraData &SceneManager::getCamera()
 {
     return sceneCamera;
 }
 
 
-const settingsData &SceneManager::getSettings()
+settingsData &SceneManager::getSettings()
 {
     return sceneSettings;
 }
 
 
-const XMLScene& SceneManager::getXMLScene()
+XMLScene& SceneManager::getXMLScene()
 {
     return xmlScene;
 }
 
 
-const USDScene& SceneManager::getUSDScene()
+USDScene& SceneManager::getUSDScene()
 {
     return usdScene;
 }
 
 
 bool SceneManager::isIntersected(Ray& ray,
-    float& closestSphereDist,
-    int& closestSphereID)
+    float& closestGeoDist,
+    int& closestGeoID,
+    bool& isLightSource)
 {
     float distance;
-    float infiniteDistance = closestSphereDist = 1e20;
+    float infiniteDistance = closestGeoDist = 1e20;
 
-    for(unsigned int i = 0; i < sphereList.size(); i++)
+    // Would be better to parse all the geometry once and at the same time check whether it is a light source or not.
+    for(unsigned int i = 0; i < lightList.size(); i++)
     {
-        if((distance = sphereList[i].computeIntersection(ray)) && distance < closestSphereDist)
+        if((distance = lightList[i].getGeometry().computeIntersection(ray)) && distance < closestGeoDist)
         {
-            closestSphereDist = distance;
-            closestSphereID = i;
+            closestGeoDist = distance;
+            closestGeoID = i;
+            isLightSource = true;
         }
     }
 
-    return closestSphereDist < infiniteDistance;
+    for(unsigned int i = 0; i < sphereList.size(); i++)
+    {
+        if((distance = sphereList[i].computeIntersection(ray)) && distance < closestGeoDist)
+        {
+            closestGeoDist = distance;
+            closestGeoID = i;
+            isLightSource = false;
+        }
+    }
+
+    return closestGeoDist < infiniteDistance;
 }

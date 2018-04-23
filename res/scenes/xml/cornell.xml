@@ -4,55 +4,54 @@
             <sphere name = "leftWall">
                 <radius value = "1000.0"/>
                 <position x = "-1003.0" y = "0.0" z = "0.0"/>
-                <material value = "redWallMat"/>
+                <material value = "redWall"/>
             </sphere>
             
             <sphere name = "rightWall">
                 <radius value = "1000.0"/>
                 <position x = "1003.0" y = "0.0" z = "0.0"/>
-                <material value = "greenWallMat"/>
+                <material value = "greenWall"/>
             </sphere>
 
             <sphere name = "backWall">
                 <radius value = "1000.0"/>
                 <position x = "0.0" y = "0.0" z = "1020.0"/>
-                <material value = "greyWallMat"/>
+                <material value = "greyWall"/>
             </sphere>
 
             <sphere name = "frontWall">
                 <radius value = "1000.0"/>
                 <position x = "0.0" y = "0.0" z = "-1003.0"/>
-                <material value = "greyWallMat"/>
+                <material value = "greyWall"/>
             </sphere>
 
             <sphere name = "floor">
                 <radius value = "1000.0"/>
                 <position x = "0.0" y = "-1000.4" z = "0.0"/>
-                <material value = "greyWallMat"/>
+                <material value = "greyWall"/>
             </sphere>
 
             <sphere name = "roof">
                 <radius value = "1000.0"/>
                 <position x = "0.0" y = "1004.7.0" z = "0.0"/>
-                <material value = "greyWallMat"/>
+                <material value = "greyWall"/>
             </sphere>
 
             <sphere name = "leftSphere">
                 <radius value = "1.0"/>
                 <position x = "-1.35" y = "0.6" z = "-0.5"/>
-                <material value = "sphereMat"/>
+                <material value = "whiteSphere"/>
             </sphere>
 
             <sphere name = "rightSphere">
                 <radius value = "1.0"/>
                 <position x = "1.35" y = "0.6" z = "1.4"/>
-                <material value = "sphereMat"/>
+                <material value = "whiteSphere"/>
             </sphere>
 
-            <sphere name = "ceilingLight">
+            <sphere name = "lightSource">
                 <radius value = "100.0"/>
                 <position x = "0.0" y = "104.68" z = "1.4"/>
-                <material value = "lightMat"/>
             </sphere>
         </spheres>
 
@@ -61,8 +60,15 @@
 
     </geometry>
 
+    <lights>
+        <geolight name = "ceilingLight">
+            <geometry value = "lightSource"/>
+            <material value = "light"/>
+        </geolight>
+    </lights>
+
     <materials>
-        <material name = "redWallMat">
+        <material name = "redWall">
             <color r = "0.611" g = "0.0555" b = "0.062"/>
             <emissiveColor r = "0.0" g = "0.0" b = "0.0"/>
             <fresnelColor r = "0.04" g = "0.04" b = "0.04"/>
@@ -72,7 +78,7 @@
             <ior value = "1.0"/>
         </material>
 
-        <material name = "greenWallMat">
+        <material name = "greenWall">
             <color r = "0.117" g = "0.4125" b = "0.115"/>
             <emissiveColor r = "0.0" g = "0.0" b = "0.0"/>
             <fresnelColor r = "0.04" g = "0.04" b = "0.04"/>
@@ -82,7 +88,7 @@
             <ior value = "1.0"/>
         </material>
 
-        <material name = "greyWallMat">
+        <material name = "greyWall">
             <color r = "0.7295" g = "0.7355" b = "0.729"/>
             <emissiveColor r = "0.0" g = "0.0" b = "0.0"/>
             <fresnelColor r = "0.04" g = "0.04" b = "0.04"/>
@@ -92,7 +98,7 @@
             <ior value = "1.0"/>
         </material>
 
-        <material name = "sphereMat">
+        <material name = "whiteSphere">
             <color r = "1.0" g = "1.0" b = "1.0"/>
             <emissiveColor r = "0.0" g = "0.0" b = "0.0"/>
             <fresnelColor r = "0.04" g = "0.04" b = "0.04"/>
@@ -102,7 +108,7 @@
             <ior value = "1.0"/>
         </material>
 
-        <material name = "lightMat">
+        <material name = "light">
             <color r = "0.0" g = "0.0" b = "0.0"/>
             <emissiveColor r = "4.215" g = "2.69" b = "0.925"/>
             <fresnelColor r = "0.04" g = "0.04" b = "0.04"/>

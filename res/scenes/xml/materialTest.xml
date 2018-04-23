@@ -34,7 +34,6 @@
             <sphere name = "lightSource">
                 <radius value = "1.0"/>
                 <position x = "0.0" y = "4.0" z = "-7.0"/>
-                <material value = "light"/>
             </sphere>
         </spheres>
 
@@ -42,6 +41,13 @@
         </models>
 
     </geometry>
+
+    <lights>
+        <geolight name = "sphereLight">
+            <geometry value = "lightSource"/>
+            <material value = "light"/>
+        </geolight>
+    </lights>
 
     <materials>
         <material name = "redPlastic">

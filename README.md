@@ -63,7 +63,7 @@ Features
         * **TODO :** Cube
         * **TODO :** Triangle
     * **TODO :** Mesh loading
-    * **TODO :** Light loading
+    * Light loading
     * Camera loading
     * Settings loading
 

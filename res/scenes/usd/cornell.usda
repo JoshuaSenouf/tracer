@@ -2,7 +2,7 @@
 
 def Group "world"
 {
-    def Group "geo"
+    def Group "geometry"
     {
         def Group "primitives"
         {
@@ -12,7 +12,7 @@ def Group "world"
                 {
                     double radius = 1000
                     float3 position = (-1003, 0, 0)
-                    string material = "redWallMat"
+                    string material = "redWall"
 
                     float3[] extent = [(-1000, -1000, -1000), (1000, 1000, 1000)]
                     double3 xformOp:translate = (-1003, 0, 0)
@@ -23,7 +23,7 @@ def Group "world"
                 {
                     double radius = 1000
                     float3 position = (1003, 0, 0)
-                    string material = "greenWallMat"
+                    string material = "greenWall"
 
                     float3[] extent = [(-1000, -1000, -1000), (1000, 1000, 1000)]
                     double3 xformOp:translate = (1003, 0, 0)
@@ -34,7 +34,7 @@ def Group "world"
                 {
                     double radius = 1000
                     float3 position = (0, 0, 1020)
-                    string material = "greyWallMat"
+                    string material = "greyWall"
 
                     float3[] extent = [(-1000, -1000, -1000), (1000, 1000, 1000)]
                     double3 xformOp:translate = (0, 0, 1020)
@@ -45,7 +45,7 @@ def Group "world"
                 {
                     double radius = 1000
                     float3 position = (0, 0, -1003)
-                    string material = "greyWallMat"
+                    string material = "greyWall"
 
                     float3[] extent = [(-1000, -1000, -1000), (1000, 1000, 1000)]
                     double3 xformOp:translate = (0, 0, -1003)
@@ -56,7 +56,7 @@ def Group "world"
                 {
                     double radius = 1000
                     float3 position = (0, -1000.4, 0)
-                    string material = "greyWallMat"
+                    string material = "greyWall"
 
                     float3[] extent = [(-1000, -1000, -1000), (1000, 1000, 1000)]
                     double3 xformOp:translate = (0, -1000.4, 0)
@@ -67,7 +67,7 @@ def Group "world"
                 {
                     double radius = 1000
                     float3 position = (0, 1004.7, 0)
-                    string material = "greyWallMat"
+                    string material = "greyWall"
 
                     float3[] extent = [(-1000, -1000, -1000), (1000, 1000, 1000)]
                     double3 xformOp:translate = (0, 1004.7, 0)
@@ -78,7 +78,7 @@ def Group "world"
                 {
                     double radius = 1
                     float3 position = (-1.35, 0.6, -0.5)
-                    string material = "sphereMat"
+                    string material = "whiteSphere"
 
                     float3[] extent = [(-1, -1, -1), (1, 1, 1)]
                     double3 xformOp:translate = (-1.35, 0.6, -0.5)
@@ -89,18 +89,17 @@ def Group "world"
                 {
                     double radius = 1
                     float3 position = (1.35, 0.6, 1.4)
-                    string material = "sphereMat"
+                    string material = "whiteSphere"
 
                     float3[] extent = [(-1, -1, -1), (1, 1, 1)]
                     double3 xformOp:translate = (1.35, 0.6, 1.4)
                     uniform token[] xformOpOrder = ["xformOp:translate"]
                 }
 
-                def Sphere "ceilingLight"
+                def Sphere "lightSource"
                 {
                     double radius = 100
                     float3 position = (0, 104.68, 1.4)
-                    string material = "lightMat"
 
                     float3[] extent = [(-100, -100, -100), (100, 100, 100)]
                     double3 xformOp:translate = (0, 104.68, 1.4)
@@ -116,9 +115,18 @@ def Group "world"
         }
     }
 
+    def Group "lights"
+    {
+        def GeoLight "ceilingLight"
+        {
+            string geometry = "lightSource"
+            string material = "light"
+        }
+    }
+
     def Group "materials"
     {
-        def Material "redWallMat"
+        def Material "redWall"
         {
             float3 color = (0.611, 0.0555, 0.062)
             float3 emissiveColor = (0, 0, 0)
@@ -129,7 +137,7 @@ def Group "world"
             float ior = 1
         }
 
-        def Material "greenWallMat"
+        def Material "greenWall"
         {
             float3 color = (0.117, 0.4125, 0.115)
             float3 emissiveColor = (0, 0, 0)
@@ -140,7 +148,7 @@ def Group "world"
             float ior = 1
         }
 
-        def Material "greyWallMat"
+        def Material "greyWall"
         {
             float3 color = (0.7295, 0.7355, 0.729)
             float3 emissiveColor = (0, 0, 0)
@@ -151,7 +159,7 @@ def Group "world"
             float ior = 1
         }
 
-        def Material "sphereMat"
+        def Material "whiteSphere"
         {
             float3 color = (1, 1, 1)
             float3 emissiveColor = (0, 0, 0)
@@ -162,7 +170,7 @@ def Group "world"
             float ior = 1
         }
 
-        def Material "lightMat"
+        def Material "light"
         {
             float3 color = (0, 0, 0)
             float3 emissiveColor = (4.215, 2.69, 0.925)

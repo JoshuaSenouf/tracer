@@ -41,18 +41,19 @@ class SceneManager
         void printCameraData();
         void printSettingsData();
 
-        const std::vector<BSDF>& getMaterialList();
-        const std::vector<Sphere>& getSphereList();
-        const std::vector<Mesh>& getMeshList();
-        const std::vector<GeoLight>& getLightList();
-        const cameraData& getCamera();
-        const settingsData& getSettings();
-        const XMLScene& getXMLScene();
-        const USDScene& getUSDScene();
+        std::vector<BSDF>& getMaterialList();
+        std::vector<Sphere>& getSphereList();
+        std::vector<Mesh>& getMeshList();
+        std::vector<GeoLight>& getLightList();
+        cameraData& getCamera();
+        settingsData& getSettings();
+        XMLScene& getXMLScene();
+        USDScene& getUSDScene();
 
         bool isIntersected(Ray& ray,
-            float& closestSphereDist,
-            int& closestSphereID);
+            float& closestGeoDist,
+            int& closestGeoID,
+            bool& isLightSource);
 
     private:
         XMLScene xmlScene;

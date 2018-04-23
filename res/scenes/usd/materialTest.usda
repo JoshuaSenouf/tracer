@@ -2,7 +2,7 @@
 
 def Group "world"
 {
-    def Group "geo"
+    def Group "geometry"
     {
         def Group "primitives"
         {
@@ -67,7 +67,6 @@ def Group "world"
                 {
                     double radius = 1
                     float3 position = (0, 4, -7)
-                    string material = "light"
 
                     float3[] extent = [(-1, -1, -1), (1, 1, 1)]
                     double3 xformOp:translate = (0, 4, -7)
@@ -79,6 +78,15 @@ def Group "world"
         def Group "meshes"
         {
 
+        }
+    }
+
+    def Group "lights"
+    {
+        def GeoLight "sphereLight"
+        {
+            string geometry = "lightSource"
+            string material = "light"
         }
     }
 

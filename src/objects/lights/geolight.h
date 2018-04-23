@@ -10,16 +10,20 @@ class GeoLight
 {
     public:
         GeoLight();
-        GeoLight(const Sphere& tempGeometry,
+        GeoLight(const std::string& tempName,
+            const Sphere& tempGeometry,
             const BSDF& tempMaterial);
 
+        std::string& getName();
         Sphere& getGeometry();
         BSDF& getMaterial();
 
+        void setName(const std::string& tempName);
         void setGeometry(const Sphere& tempGeometry);
         void setMaterial(const BSDF& tempMaterial);
 
     private:
+        std::string name;
         Sphere geometry;
         BSDF material;
 };

@@ -28,8 +28,6 @@ int Window::renderWindow()
 
     renderScene.loadScene("res/scenes/usd/monoSphere.usda");
 
-    renderScene.printLightData();
-
     renderCamera.setResolution(Vector2(progressiveWidth, progressiveHeight));
     renderCamera.initCameraData(renderScene.getCamera());
 

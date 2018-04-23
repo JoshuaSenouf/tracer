@@ -116,10 +116,53 @@ void XMLScene::loadMeshes(std::vector<Mesh>& meshList,
 }
 
 
-void XMLScene::loadLights(std::vector<GeoLight>& lightLight,
+void XMLScene::loadLights(std::vector<GeoLight>& lightList,
+    std::vector<Sphere>& sphereList,
     std::vector<BSDF> &materialList)
 {
+    tinyxml2::XMLElement* lightLevel = xmlSceneFile.FirstChildElement("scene")->FirstChildElement("lights");
 
+    for (tinyxml2::XMLElement *lightElement = lightLevel->FirstChildElement();
+        lightElement;
+        lightElement = lightElement->NextSiblingElement())
+    {
+        GeoLight tempLight;
+
+        tempLight.setName(lightElement->Attribute("name"));
+
+        for (tinyxml2::XMLNode *lightParameter = lightElement->FirstChild();
+            lightParameter;
+            lightParameter = lightParameter->NextSibling())
+        {
+            if (lightParameter->Value() == std::string("geometry"))
+            {
+                std::string tempGeometryName;
+
+                getStringAttribute(tempGeometryName, "value", *lightParameter);
+
+                for (Sphere& currentSphere : sphereList)
+                {
+                    if (currentSphere.getName() == tempGeometryName)
+                        tempLight.setGeometry(currentSphere);
+                }
+            }
+
+            if (lightParameter->Value() == std::string("material"))
+            {
+                std::string tempMaterialName;
+
+                getStringAttribute(tempMaterialName, "value", *lightParameter);
+
+                for (BSDF& currentMaterial : materialList)
+                {
+                    if (currentMaterial.getName() == tempMaterialName)
+                        tempLight.setMaterial(currentMaterial);
+                }
+            }
+        }
+
+        lightList.push_back(tempLight);
+    }
 }
 
 

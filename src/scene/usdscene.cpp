@@ -125,6 +125,8 @@ void USDScene::loadLights(std::vector<GeoLight>& lightList,
     {
         GeoLight tempLight;
 
+        tempLight.setName(usdGeoLight.GetName());
+
         for(const pxr::UsdAttribute& usdAttr : usdGeoLight.GetAttributes())
         {
             if (usdAttr.GetName() == std::string("geometry"))

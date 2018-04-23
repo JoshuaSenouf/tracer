@@ -30,6 +30,7 @@ class XMLScene
         void loadMeshes(std::vector<Mesh> &meshList,
             std::vector<BSDF>& materialList);
         void loadLights(std::vector<GeoLight> &lightList,
+            std::vector<Sphere> &sphereList,
             std::vector<BSDF>& materialList);
         void loadCamera(cameraData &sceneCamera);
         void loadSettings(settingsData &sceneSettings);
