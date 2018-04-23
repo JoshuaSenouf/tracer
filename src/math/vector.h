@@ -13,7 +13,9 @@
 class Vector3
 {
     public:
-        float x, y, z;
+        float x;
+        float y;
+        float z;
 
         Vector3();
         Vector3(float tempXYZ);
@@ -45,16 +47,22 @@ class Vector3
         bool operator==(const Vector3 &tempVec3) const;
         bool operator!=(const Vector3 &tempVec3) const;
         bool operator<(const Vector3 &tempVec3) const;
+
+    private:
+
 };
 
 
 class Vector2
 {
     public:
-        float x, y;
+        float x;
+        float y;
 
         Vector2();
+        Vector2(float tempXY);
         Vector2(float tempX, float tempY);
+        Vector2(const pxr::GfVec2f& usdVec2f);
 
         float length() const;
         Vector2 normalize() const;
@@ -78,6 +86,9 @@ class Vector2
         Vector2 operator/(float divFactor) const;
         bool operator==(const Vector2 &tempVec2) const;
         bool operator!=(const Vector2 &tempVec2) const;
+
+    private:
+
 };
 
 std::ostream& operator<<(std::ostream &os, const Vector3 &tempVec3);

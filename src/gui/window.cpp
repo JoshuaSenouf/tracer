@@ -28,7 +28,7 @@ int Window::renderWindow()
 
     renderScene.loadScene("res/scenes/usd/monoSphere.usda");
 
-    renderCamera.setCameraResolution(Vector2(progressiveWidth, progressiveHeight));
+    renderCamera.setResolution(Vector2(progressiveWidth, progressiveHeight));
     renderCamera.initCameraData(renderScene.getCamera());
 
     frontBuffer.initBuffer(progressiveWidth, progressiveHeight);
@@ -400,9 +400,9 @@ void Window::keyboardCallback(ImGuiIO& guiIO)
     if (guiIO.KeysDown[GLFW_KEY_KP_ADD])
     {
         if (guiIO.KeysDown[GLFW_KEY_LEFT_CONTROL])
-            renderCamera.setCameraFocalDistance(renderCamera.getCameraFocalDistance() + 0.1f);
+            renderCamera.setFocalDistance(renderCamera.getFocalDistance() + 0.1f);
         else
-            renderCamera.setCameraApertureRadius(renderCamera.getCameraApertureRadius() + 0.005f);
+            renderCamera.setApertureRadius(renderCamera.getApertureRadius() + 0.005f);
 
         renderReset = true;
     }
@@ -410,9 +410,9 @@ void Window::keyboardCallback(ImGuiIO& guiIO)
     if (guiIO.KeysDown[GLFW_KEY_KP_SUBTRACT])
     {
         if (guiIO.KeysDown[GLFW_KEY_LEFT_CONTROL])
-            renderCamera.setCameraFocalDistance(renderCamera.getCameraFocalDistance() - 0.1f);
+            renderCamera.setFocalDistance(renderCamera.getFocalDistance() - 0.1f);
         else
-            renderCamera.setCameraApertureRadius(renderCamera.getCameraApertureRadius() - 0.005f);
+            renderCamera.setApertureRadius(renderCamera.getApertureRadius() - 0.005f);
 
         renderReset = true;
     }

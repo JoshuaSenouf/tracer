@@ -24,6 +24,7 @@ class Buffer
         void swapBufferData(std::vector<Vector3>& buffer);
 
         std::vector<Vector3>& getBufferData();
+
         void setBufferData(const std::vector<Vector3>& buffer);
 
     private:

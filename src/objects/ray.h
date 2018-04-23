@@ -7,14 +7,19 @@
 class Ray
 {
     public:
-        Vector3 origin;
-        Vector3 direction;
-
         Ray();
-        Ray(Vector3 tempOrigin,
-            Vector3 tempDirection);
+        Ray(const Vector3& tempOrigin,
+            const Vector3& tempDirection);
+
+        Vector3& getOrigin();
+        Vector3& getDirection();
+
+        void setOrigin(const Vector3& tempOrigin);
+        void setDirection(const Vector3& tempDirection);
 
     private:
+        Vector3 origin;
+        Vector3 direction;
 };
 
 #endif // RAY_H

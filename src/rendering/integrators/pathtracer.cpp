@@ -1,4 +1,4 @@
-#include "integrator.h"
+#include "pathtracer.h"
 
 
 PathTracer::PathTracer()
@@ -26,13 +26,13 @@ Vector3 PathTracer::getRadiance(Ray& cameraRay,
 
         Sphere hitSphere = renderScene.getSphereList()[closestSphereID];
 
-        if (hitSphere.material.emissiveColor != Vector3())
-            return colorAccumulation += colorMask * hitSphere.material.emissiveColor; // If we hit a light source, how about stopping earlier ?
+        if (hitSphere.getMaterial().getEmissiveColor() != Vector3())
+            return colorAccumulation += colorMask * hitSphere.getMaterial().getEmissiveColor(); // If we hit a light source, how about stopping earlier ?
 
-        cameraRay.origin += cameraRay.direction * closestSphereDist;
-        const Vector3 hitNormal = (cameraRay.origin - hitSphere.position).normalize();
+        cameraRay.getOrigin() += cameraRay.getDirection() * closestSphereDist;
+        const Vector3 hitNormal = (cameraRay.getOrigin() - hitSphere.getPosition()).normalize();
 
-        bsdfSampling = hitSphere.material.computeSampling(cameraRay.direction, hitNormal, randEngine);
+        bsdfSampling = hitSphere.getMaterial().computeSampling(cameraRay.getDirection(), hitNormal, randEngine);
 
         colorMask *= bsdfSampling;
     }

@@ -137,3 +137,110 @@ const Vector3 BSDF::computeReflectedRay(const Vector3& rayDirection,
     return (rayDirection - (hitNormal * (2.0f * cos))).normalize();
 }
 
+
+std::string& BSDF::getName()
+{
+    return this->name;
+}
+
+
+Vector3& BSDF::getColor()
+{
+    return this->color;
+}
+
+
+Vector3& BSDF::getEmissiveColor()
+{
+    return this->emissiveColor;
+}
+
+
+Vector3& BSDF::getFresnelColor()
+{
+    return this->fresnelColor;
+}
+
+
+float& BSDF::getRoughness()
+{
+    return this->roughness;
+}
+
+
+float& BSDF::getMetalness()
+{
+    return this->metalness;
+}
+
+
+float& BSDF::getTransmittance()
+{
+    return this->transmittance;
+}
+
+
+float& BSDF::getIOR()
+{
+    return this->IOR;
+}
+
+
+float& BSDF::getFresnelR0()
+{
+    return this->fresnelR0;
+}
+
+
+void BSDF::setName(const std::string& tempName)
+{
+    this->name = tempName;
+}
+
+
+void BSDF::setColor(const Vector3& tempColor)
+{
+    this->color = tempColor;
+}
+
+
+void BSDF::setEmissiveColor(const Vector3& tempEmissiveColor)
+{
+    this->emissiveColor = tempEmissiveColor;
+}
+
+
+void BSDF::setFresnelColor(const Vector3& tempFresnelColor)
+{
+    this->fresnelColor = tempFresnelColor;
+}
+
+
+void BSDF::setRoughness(float tempRoughness)
+{
+    this->roughness = tempRoughness;
+}
+
+
+void BSDF::setMetalness(float tempMetalness)
+{
+    this->metalness = tempMetalness;
+}
+
+
+void BSDF::setTransmittance(float tempTransmittance)
+{
+    this->transmittance = tempTransmittance;
+}
+
+
+void BSDF::setIOR(float tempIOR)
+{
+    this->IOR = tempIOR;
+}
+
+
+void BSDF::setFresnelR0(float tempFresnelR0)
+{
+    this->fresnelR0 = tempFresnelR0;
+}

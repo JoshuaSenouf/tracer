@@ -51,9 +51,9 @@ def Group "world"
 
     def Group "lights"
     {
-        def Light "sphereLight"
+        def GeoLight "sphereLight"
         {
-            string lightShape = "lightSource"
+            string geometry = "lightSource"
             string material = "light"
         }
 

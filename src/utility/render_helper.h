@@ -11,7 +11,7 @@ struct cameraData
     Vector3 position;
     float yaw;
     float pitch;
-    float fov;
+    float FOV;
     float apertureRadius;
     float focalDistance;
 };

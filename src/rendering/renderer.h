@@ -13,7 +13,7 @@
 #include "vector.h"
 #include "camera.h"
 #include "scenemanager.h"
-#include "integrator.h"
+#include "pathtracer.h"
 
 
 const GLfloat quadVertices[] =

@@ -32,32 +32,32 @@ void XMLScene::loadMaterials(std::vector<BSDF>& materialList)
     {
         BSDF tempMaterial;
 
-        tempMaterial.name = materialElement->Attribute("name");
+        tempMaterial.setName(materialElement->Attribute("name"));
 
         for (tinyxml2::XMLNode *materialParameter = materialElement->FirstChild();
             materialParameter;
             materialParameter = materialParameter->NextSibling())
         {
             if (materialParameter->Value() == std::string("color"))
-                getVectorAttribute(tempMaterial.color, std::vector<std::string> {"r", "g", "b"}, *materialParameter);
+                getVectorAttribute(tempMaterial.getColor(), std::vector<std::string> {"r", "g", "b"}, *materialParameter);
 
             else if (materialParameter->Value() == std::string("emissiveColor"))
-                getVectorAttribute(tempMaterial.emissiveColor, std::vector<std::string> {"r", "g", "b"}, *materialParameter);
+                getVectorAttribute(tempMaterial.getEmissiveColor(), std::vector<std::string> {"r", "g", "b"}, *materialParameter);
 
             else if (materialParameter->Value() == std::string("fresnelColor"))
-                getVectorAttribute(tempMaterial.fresnelColor, std::vector<std::string> {"r", "g", "b"}, *materialParameter);
+                getVectorAttribute(tempMaterial.getFresnelColor(), std::vector<std::string> {"r", "g", "b"}, *materialParameter);
 
             else if (materialParameter->Value() == std::string("roughness"))
-                getFloatAttribute(tempMaterial.roughness, "value", *materialParameter);
+                getFloatAttribute(tempMaterial.getRoughness(), "value", *materialParameter);
 
             else if (materialParameter->Value() == std::string("metalness"))
-                getFloatAttribute(tempMaterial.metalness, "value", *materialParameter);
+                getFloatAttribute(tempMaterial.getMetalness(), "value", *materialParameter);
 
             else if (materialParameter->Value() == std::string("transmittance"))
-                getFloatAttribute(tempMaterial.transmittance, "value", *materialParameter);
+                getFloatAttribute(tempMaterial.getTransmittance(), "value", *materialParameter);
 
             else if (materialParameter->Value() == std::string("ior"))
-                getFloatAttribute(tempMaterial.ior, "value", *materialParameter);
+                getFloatAttribute(tempMaterial.getIOR(), "value", *materialParameter);
         }
 
         tempMaterial.materialSetup();
@@ -78,17 +78,17 @@ void XMLScene::loadSpheres(std::vector<Sphere>& sphereList,
     {
         Sphere tempSphere;
 
-        tempSphere.name = sphereElement->Attribute("name");
+        tempSphere.setName(sphereElement->Attribute("name"));
 
         for (tinyxml2::XMLNode *sphereParameter = sphereElement->FirstChild();
             sphereParameter;
             sphereParameter = sphereParameter->NextSibling())
         {
             if (sphereParameter->Value() == std::string("radius"))
-                getDoubleAttribute(tempSphere.radius, "value", *sphereParameter);
+                getDoubleAttribute(tempSphere.getRadius(), "value", *sphereParameter);
 
             else if (sphereParameter->Value() == std::string("position"))
-                 getVectorAttribute(tempSphere.position, std::vector<std::string> {"x", "y", "z"}, *sphereParameter);
+                 getVectorAttribute(tempSphere.getPosition(), std::vector<std::string> {"x", "y", "z"}, *sphereParameter);
 
             else if (sphereParameter->Value() == std::string("material"))
             {
@@ -96,10 +96,10 @@ void XMLScene::loadSpheres(std::vector<Sphere>& sphereList,
 
                 getStringAttribute(tempMaterialName, "value", *sphereParameter);
 
-                for (const BSDF& currentMaterial : materialList)
+                for (BSDF& currentMaterial : materialList)
                 {
-                    if (currentMaterial.name == tempMaterialName)
-                        tempSphere.material = currentMaterial;
+                    if (currentMaterial.getName() == tempMaterialName)
+                        tempSphere.setMaterial(currentMaterial);
                 }
             }
         }
@@ -110,6 +110,13 @@ void XMLScene::loadSpheres(std::vector<Sphere>& sphereList,
 
 
 void XMLScene::loadMeshes(std::vector<Mesh>& meshList,
+    std::vector<BSDF> &materialList)
+{
+
+}
+
+
+void XMLScene::loadLights(std::vector<GeoLight>& lightLight,
     std::vector<BSDF> &materialList)
 {
 
@@ -134,7 +141,7 @@ void XMLScene::loadCamera(cameraData& sceneCamera)
             getFloatAttribute(sceneCamera.pitch, "value", *cameraParameter);
 
         else if (cameraParameter->Value() == std::string("fov"))
-            getFloatAttribute(sceneCamera.fov, "value", *cameraParameter);
+            getFloatAttribute(sceneCamera.FOV, "value", *cameraParameter);
 
         else if (cameraParameter->Value() == std::string("apertureRadius"))
             getFloatAttribute(sceneCamera.apertureRadius, "value", *cameraParameter);

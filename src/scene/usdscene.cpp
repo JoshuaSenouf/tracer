@@ -24,7 +24,7 @@ void USDScene::loadMaterials(std::vector<BSDF>& materialList)
     {
         BSDF tempMaterial;
 
-        tempMaterial.name = usdMaterial.GetName();
+        tempMaterial.setName(usdMaterial.GetName());
 
         for(const pxr::UsdAttribute& usdAttr : usdMaterial.GetAttributes())
         {
@@ -33,29 +33,29 @@ void USDScene::loadMaterials(std::vector<BSDF>& materialList)
             if (usdAttr.GetName() == std::string("color"))
             {
                 usdAttr.Get(&usdVec3f);
-                tempMaterial.color = Vector3(usdVec3f);
+                tempMaterial.setColor(Vector3(usdVec3f));
             }
             else if (usdAttr.GetName() == std::string("emissiveColor"))
             {
                 usdAttr.Get(&usdVec3f);
-                tempMaterial.emissiveColor = Vector3(usdVec3f);
+                tempMaterial.setEmissiveColor(Vector3(usdVec3f));
             }
             else if (usdAttr.GetName() == std::string("fresnelColor"))
             {
                 usdAttr.Get(&usdVec3f);
-                tempMaterial.fresnelColor = Vector3(usdVec3f);
+                tempMaterial.setFresnelColor(Vector3(usdVec3f));
             }
             else if (usdAttr.GetName() == std::string("roughness"))
-                usdAttr.Get(&tempMaterial.roughness);
+                usdAttr.Get(&tempMaterial.getRoughness());
 
             else if (usdAttr.GetName() == std::string("metalness"))
-                usdAttr.Get(&tempMaterial.metalness);
+                usdAttr.Get(&tempMaterial.getMetalness());
 
             else if (usdAttr.GetName() == std::string("transmittance"))
-                usdAttr.Get(&tempMaterial.transmittance);
+                usdAttr.Get(&tempMaterial.getTransmittance());
 
             else if (usdAttr.GetName() == std::string("ior"))
-                usdAttr.Get(&tempMaterial.ior);
+                usdAttr.Get(&tempMaterial.getIOR());
         }
 
         materialList.push_back(tempMaterial);
@@ -74,29 +74,29 @@ void USDScene::loadSpheres(std::vector<Sphere>& sphereList,
     {
         Sphere tempSphere;
 
-        tempSphere.name = usdSphere.GetName();
+        tempSphere.setName(usdSphere.GetName());
 
         for(const pxr::UsdAttribute& usdAttr : usdSphere.GetAttributes())
         {
             pxr::GfVec3f usdVec3f;
 
             if (usdAttr.GetName() == std::string("radius"))
-                usdAttr.Get(&tempSphere.radius);
+                usdAttr.Get(&tempSphere.getRadius());
 
             else if (usdAttr.GetName() == std::string("position"))
             {
                 usdAttr.Get(&usdVec3f);
-                tempSphere.position = Vector3(usdVec3f);
+                tempSphere.setPosition(Vector3(usdVec3f));
             }
             else if (usdAttr.GetName() == std::string("material"))
             {
                 std::string tempMaterialName;
                 usdAttr.Get(&tempMaterialName);
 
-                for (const BSDF& currentMaterial : materialList)
+                for (BSDF& currentMaterial : materialList)
                 {
-                    if (currentMaterial.name == tempMaterialName)
-                        tempSphere.material = currentMaterial;
+                    if (currentMaterial.getName() == tempMaterialName)
+                        tempSphere.setMaterial(currentMaterial);
                 }
             }
         }
@@ -107,6 +107,13 @@ void USDScene::loadSpheres(std::vector<Sphere>& sphereList,
 
 
 void USDScene::loadMeshes(std::vector<Mesh>& meshList,
+    std::vector<BSDF> &materialList)
+{
+
+}
+
+
+void USDScene::loadLights(std::vector<GeoLight>& lightList,
     std::vector<BSDF> &materialList)
 {
 
@@ -133,7 +140,7 @@ void USDScene::loadCamera(cameraData& sceneCamera)
         else if (usdAttr.GetName() == std::string("pitch"))
             usdAttr.Get(&sceneCamera.pitch);
         else if (usdAttr.GetName() == std::string("fov"))
-            usdAttr.Get(&sceneCamera.fov);
+            usdAttr.Get(&sceneCamera.FOV);
         else if (usdAttr.GetName() == std::string("apertureRadius"))
             usdAttr.Get(&sceneCamera.apertureRadius);
         else if (usdAttr.GetName() == std::string("focalDistance"))

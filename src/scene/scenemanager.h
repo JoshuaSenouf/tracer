@@ -11,7 +11,7 @@
 #include "vector.h"
 #include "sphere.h"
 #include "mesh.h"
-#include "light.h"
+#include "geolight.h"
 #include "material.h"
 #include "render_helper.h"
 #include "xmlscene.h"
@@ -44,14 +44,13 @@ class SceneManager
         const std::vector<BSDF>& getMaterialList();
         const std::vector<Sphere>& getSphereList();
         const std::vector<Mesh>& getMeshList();
-        const std::vector<Light>& getLightList();
+        const std::vector<GeoLight>& getLightList();
         const cameraData& getCamera();
         const settingsData& getSettings();
-
         const XMLScene& getXMLScene();
         const USDScene& getUSDScene();
 
-        bool isIntersected(const Ray& ray,
+        bool isIntersected(Ray& ray,
             float& closestSphereDist,
             int& closestSphereID);
 
@@ -62,7 +61,7 @@ class SceneManager
         std::vector<BSDF> materialList;
         std::vector<Sphere> sphereList;
         std::vector<Mesh> meshList;
-        std::vector<Light> lightList;
+        std::vector<GeoLight> lightList;
         cameraData sceneCamera;
         settingsData sceneSettings;
 };

@@ -1,5 +1,5 @@
-#ifndef INTEGRATOR_H
-#define INTEGRATOR_H
+#ifndef PATHTRACER_H
+#define PATHTRACER_H
 
 #include "vector.h"
 #include "randomizer.h"
@@ -23,4 +23,4 @@ class PathTracer
 };
 
 
-#endif // INTEGRATOR_H
+#endif // PATHTRACER_H

@@ -39,13 +39,13 @@ Features
     * **TODO :** Physically-based BSDF (Probably a simplified version of the Disney principled BSDF)
 
 * Light sources:
-    * Mesh light
+    * Geometry light
     * Sky light
 
 * Primitives:
     * Sphere
-    * **TODO :** Plane
-    * **TODO :** Box
+    * **TODO :** Quad
+    * **TODO :** Cube
     * **TODO :** Triangle
 
 * Acceleration structure:

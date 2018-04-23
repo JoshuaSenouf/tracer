@@ -24,59 +24,56 @@ class Camera
         Camera();
 
         void initCameraData(const cameraData sceneCameraData);
-
-        void setCameraResolution(Vector2 tempResolution);
-        void setCameraPosition(Vector3 tempPosition);
-        void setCameraFront(Vector3 tempForward);
-        void setCameraUp(Vector3 tempUp);
-        void setCameraRight(Vector3 tempRight);
-        void setCameraFOV(float tempFOV);
-        void setCameraYaw(float tempYaw);
-        void setCameraPitch(float tempPitch);
-        void setCameraSpeed(float tempSpeed);
-        void setCameraSensitivity(float tempSensisivity);
-        void setCameraApertureRadius(float tempAperture);
-        void setCameraFocalDistance(float tempFocal);
-
-        Vector2 getCameraResolution();
-        Vector3 getCameraPosition();
-        Vector3 getCameraFront();
-        Vector3 getCameraUp();
-        Vector3 getCameraRight();
-        Vector2 getCameraFOV();
-        float getCameraYaw();
-        float getCameraPitch();
-        float getCameraSpeed();
-        float getCameraSensitivity();
-        float getCameraApertureRadius();
-        float getCameraFocalDistance();
-
         void keyboardCall(cameraMovement direction,
             GLfloat deltaTime);
         void mouseCall(GLfloat xoffset,
             GLfloat yoffset,
             GLboolean constrainPitch);
-
+        void updateCameraVectors();
         Ray getCameraRay(int posX,
             int posY,
             Randomizer& randEngine);
 
+        Vector2& getResolution();
+        Vector3& getPosition();
+        Vector3& getFront();
+        Vector3& getUp();
+        Vector3& getRight();
+        Vector2& getFOV();
+        float& getYaw();
+        float& getPitch();
+        float& getSpeed();
+        float& getSensitivity();
+        float& getApertureRadius();
+        float& getFocalDistance();
+
+        void setResolution(Vector2 tempResolution);
+        void setPosition(Vector3 tempPosition);
+        void setFront(Vector3 tempForward);
+        void setUp(Vector3 tempUp);
+        void setRight(Vector3 tempRight);
+        void setFOV(float tempFOV);
+        void setYaw(float tempYaw);
+        void setPitch(float tempPitch);
+        void setSpeed(float tempSpeed);
+        void setSensitivity(float tempSensisivity);
+        void setApertureRadius(float tempAperture);
+        void setFocalDistance(float tempFocal);
+
     private:
-        void updateCameraVectors();
+        Vector2 resolution;
+        Vector3 position;
+        Vector3 front;
+        Vector3 up;
+        Vector3 right;
+        Vector2 FOV;
 
-        Vector2 cameraResolution;
-        Vector3 cameraPosition;
-        Vector3 cameraFront;
-        Vector3 cameraUp;
-        Vector3 cameraRight;
-        Vector2 cameraFOV;
-
-        float cameraYaw;
-        float cameraPitch;
-        float cameraSpeed;
-        float cameraSensitivity;
-        float cameraApertureRadius;
-        float cameraFocalDistance;
+        float yaw;
+        float pitch;
+        float speed;
+        float sensitivity;
+        float apertureRadius;
+        float focalDistance;
 };
 
 #endif // CAMERA_H

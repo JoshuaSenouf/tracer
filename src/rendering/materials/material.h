@@ -8,16 +8,6 @@
 class BSDF
 {
     public:
-        std::string name;
-        Vector3 color;
-        Vector3 emissiveColor;
-        Vector3 fresnelColor;
-        float roughness;
-        float metalness;
-        float transmittance;
-        float ior;
-        float fresnelR0;
-
         BSDF();
 
         void materialSetup();
@@ -38,8 +28,36 @@ class BSDF
         const Vector3 computeReflectedRay(const Vector3& rayDirection,
             const Vector3& hitNormal);
 
-    private:
+        std::string& getName();
+        Vector3& getColor();
+        Vector3& getEmissiveColor();
+        Vector3& getFresnelColor();
+        float& getRoughness();
+        float& getMetalness();
+        float& getTransmittance();
+        float& getIOR();
+        float& getFresnelR0();
 
+        void setName(const std::string& tempName);
+        void setColor(const Vector3& tempColor);
+        void setEmissiveColor(const Vector3& tempEmissiveColor);
+        void setFresnelColor(const Vector3& tempFresnelColor);
+        void setRoughness(float tempRoughness);
+        void setMetalness(float tempMetalness);
+        void setTransmittance(float tempTransmittance);
+        void setIOR(float tempIOR);
+        void setFresnelR0(float tempFresnelR0);
+
+    private:
+        std::string name;
+        Vector3 color;
+        Vector3 emissiveColor;
+        Vector3 fresnelColor;
+        float roughness;
+        float metalness;
+        float transmittance;
+        float IOR;
+        float fresnelR0;
 };
 
 

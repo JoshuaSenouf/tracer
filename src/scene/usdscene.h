@@ -15,9 +15,9 @@
 #include "vector.h"
 #include "sphere.h"
 #include "mesh.h"
+#include "geolight.h"
 #include "material.h"
 #include "render_helper.h"
-
 
 
 class USDScene
@@ -32,7 +32,7 @@ class USDScene
             std::vector<BSDF>& materialList);
         void loadMeshes(std::vector<Mesh> &meshList,
             std::vector<BSDF>& materialList);
-        void loadLights(std::vector<Sphere> &sphereList,
+        void loadLights(std::vector<GeoLight> &lightList,
             std::vector<BSDF>& materialList);
         void loadCamera(cameraData &sceneCamera);
         void loadSettings(settingsData &sceneSettings);

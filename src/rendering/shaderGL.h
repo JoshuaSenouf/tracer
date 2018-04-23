@@ -12,14 +12,15 @@
 class ShaderGL
 {
     public:
-        GLuint Program;
-
         ShaderGL();
         ~ShaderGL();
 
         void setShader(std::string vertexPath,
             std::string fragmentPath);
         void useShader();
+    
+    private:
+        GLuint Program;
 };
 
 #endif // SHADERGL_H

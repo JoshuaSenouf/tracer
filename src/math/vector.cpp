@@ -210,15 +210,31 @@ bool Vector3::operator<(const Vector3 &tempVec3) const
 /////////////////////////////////////////////////////////////
 
 
-Vector2::Vector2() : x(0.0f), y(0.0f)
+Vector2::Vector2() : x(0.0f),
+    y(0.0f)
 {
 
 }
+
+
+Vector2::Vector2(float tempXY)
+{
+    this->x = tempXY;
+    this->y = tempXY;
+}
+
 
 Vector2::Vector2(float tempX, float tempY)
 {
     this->x = tempX;
     this->y = tempY;
+}
+
+
+Vector2::Vector2(const pxr::GfVec2f &usdVec2f)
+{
+    this->x = usdVec2f[0];
+    this->y = usdVec2f[1];
 }
 
 

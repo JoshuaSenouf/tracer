@@ -25,12 +25,13 @@ int SceneManager::loadScene(const std::string& scenePath)
         xmlScene.loadMaterials(materialList);
         xmlScene.loadSpheres(sphereList, materialList);
         xmlScene.loadMeshes(meshList, materialList);
+        xmlScene.loadLights(lightList, materialList);
         xmlScene.loadCamera(sceneCamera);
         xmlScene.loadSettings(sceneSettings);
     }
     else if (std::size_t(scenePath.rfind(std::string(".usd")) != std::string::npos)
-             || std::size_t(scenePath.rfind(std::string(".usda")) != std::string::npos)
-             || std::size_t(scenePath.rfind(std::string(".usdc")) != std::string::npos))
+                || std::size_t(scenePath.rfind(std::string(".usda")) != std::string::npos)
+                || std::size_t(scenePath.rfind(std::string(".usdc")) != std::string::npos))
     {
         if (!usdScene.loadSceneFile(scenePath))
             return false;
@@ -38,6 +39,7 @@ int SceneManager::loadScene(const std::string& scenePath)
         usdScene.loadMaterials(materialList);
         usdScene.loadSpheres(sphereList, materialList);
         usdScene.loadMeshes(meshList, materialList);
+        usdScene.loadLights(lightList, materialList);
         usdScene.loadCamera(sceneCamera);
         usdScene.loadSettings(sceneSettings);
     }
@@ -56,20 +58,20 @@ void SceneManager::printMaterialData()
 
     for(unsigned int i = 0; i < materialList.size(); ++i)
     {
-        std::cout << "NAME : " << materialList[i].name << std::endl;
-        std::cout << "COL X : " << materialList[i].color.x <<
-            " COL Y : " << materialList[i].color.y <<
-            " COL Z : " << materialList[i].color.z << std::endl;
-        std::cout << "EMI X : " << materialList[i].emissiveColor.x <<
-            " EMI Y : " << materialList[i].emissiveColor.y <<
-            " EMI Z : " << materialList[i].emissiveColor.z << std::endl;
-        std::cout << "FRESNEL X : " << materialList[i].fresnelColor.x <<
-            " FRESNEL Y : " << materialList[i].fresnelColor.y <<
-            " FRESNEL Z : " << materialList[i].fresnelColor.z << std::endl;
-        std::cout << "ROUGHNESS : " << materialList[i].roughness << std::endl;
-        std::cout << "METALNESS : " << materialList[i].metalness << std::endl;
-        std::cout << "TRANSMITTANCE : " << materialList[i].transmittance << std::endl;
-        std::cout << "IOR : " << materialList[i].ior << std::endl;
+        std::cout << "NAME : " << materialList[i].getName() << std::endl;
+        std::cout << "COL X : " << materialList[i].getColor().x <<
+            " COL Y : " << materialList[i].getColor().y <<
+            " COL Z : " << materialList[i].getColor().z << std::endl;
+        std::cout << "EMI X : " << materialList[i].getEmissiveColor().x <<
+            " EMI Y : " << materialList[i].getEmissiveColor().y <<
+            " EMI Z : " << materialList[i].getEmissiveColor().z << std::endl;
+        std::cout << "FRESNEL X : " << materialList[i].getFresnelColor().x <<
+            " FRESNEL Y : " << materialList[i].getFresnelColor().y <<
+            " FRESNEL Z : " << materialList[i].getFresnelColor().z << std::endl;
+        std::cout << "ROUGHNESS : " << materialList[i].getRoughness() << std::endl;
+        std::cout << "METALNESS : " << materialList[i].getMetalness() << std::endl;
+        std::cout << "TRANSMITTANCE : " << materialList[i].getTransmittance() << std::endl;
+        std::cout << "IOR : " << materialList[i].getIOR() << std::endl;
 
         std::cout << "\n///////////////\n" << std::endl;
     }
@@ -83,14 +85,26 @@ void SceneManager::printSphereData()
 
     for(unsigned int i = 0; i < sphereList.size(); ++i)
     {
-        std::cout << "NAME : " << sphereList[i].name << std::endl;
-        std::cout << "RADIUS : " << sphereList[i].radius << std::endl;
-        std::cout << "POS X : " << sphereList[i].position.x <<
-            " POS Y : " << sphereList[i].position.y <<
-            " POS Z : " << sphereList[i].position.z << std::endl;
-        std::cout << "MAT NAME : " << sphereList[i].material.name << std::endl;
+        std::cout << "NAME : " << sphereList[i].getName() << std::endl;
+        std::cout << "RADIUS : " << sphereList[i].getRadius() << std::endl;
+        std::cout << "POS X : " << sphereList[i].getPosition().x <<
+            " POS Y : " << sphereList[i].getPosition().y <<
+            " POS Z : " << sphereList[i].getPosition().z << std::endl;
+        std::cout << "MAT NAME : " << sphereList[i].getMaterial().getName() << std::endl;
         std::cout << "\n///////////////\n" << std::endl;
     }
+}
+
+
+void SceneManager::printMeshData()
+{
+    
+}
+
+
+void SceneManager::printLightData()
+{
+    
 }
 
 
@@ -102,7 +116,7 @@ void SceneManager::printCameraData()
         " POS Z : " << sceneCamera.position.z << std::endl;
     std::cout << "YAW : " << sceneCamera.yaw << std::endl;
     std::cout << "PITCH : " << sceneCamera.pitch << std::endl;
-    std::cout << "FOV : " << sceneCamera.fov << std::endl;
+    std::cout << "FOV : " << sceneCamera.FOV << std::endl;
     std::cout << "APERTURE RADIUS : " << sceneCamera.apertureRadius << std::endl;
     std::cout << "FOCAL DISTANCE : " << sceneCamera.focalDistance << std::endl;
     std::cout << "\n///////////////\n" << std::endl;
@@ -148,6 +162,13 @@ void SceneManager::cleanMeshList()
 }
 
 
+void SceneManager::cleanLightList()
+{
+    sphereList.clear();
+    sphereList.shrink_to_fit();
+}
+
+
 const std::vector<BSDF>& SceneManager::getMaterialList()
 {
     return materialList;
@@ -163,6 +184,12 @@ const std::vector<Sphere>& SceneManager::getSphereList()
 const std::vector<Mesh>& SceneManager::getMeshList()
 {
     return meshList;
+}
+
+
+const std::vector<GeoLight>& SceneManager::getLightList()
+{
+    return lightList;
 }
 
 
@@ -190,7 +217,7 @@ const USDScene& SceneManager::getUSDScene()
 }
 
 
-bool SceneManager::isIntersected(const Ray& ray,
+bool SceneManager::isIntersected(Ray& ray,
     float& closestSphereDist,
     int& closestSphereID)
 {
