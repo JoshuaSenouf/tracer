@@ -1,0 +1,179 @@
+#usda 1.0
+
+def Group "world"
+{
+    def Group "geometry"
+    {
+        def Group "primitives"
+        {
+            def Group "spheres"
+            {
+                def Sphere "plasticSphere"
+                {
+                    double radius = 1
+                    float3 position = (-1.5, 0.6, 0)
+                    string material = "redPlastic"
+
+                    float3[] extent = [(-1, -1, -1), (1, 1, 1)]
+                    double3 xformOp:translate = (-1.5, 0.6, 0)
+                    uniform token[] xformOpOrder = ["xformOp:translate"]
+                }
+
+                def Sphere "mirrorSphere"
+                {
+                    double radius = 1
+                    float3 position = (-4.5, 0.6, 0)
+                    string material = "mirror"
+
+                    float3[] extent = [(-1, -1, -1), (1, 1, 1)]
+                    double3 xformOp:translate = (-4.5, 0.6, 0)
+                    uniform token[] xformOpOrder = ["xformOp:translate"]
+                }
+
+                def Sphere "metalSphere"
+                {
+                    double radius = 1
+                    float3 position = (1.5, 0.6, 0)
+                    string material = "metal"
+
+                    float3[] extent = [(-1, -1, -1), (1, 1, 1)]
+                    double3 xformOp:translate = (1.5, 0.6, 0)
+                    uniform token[] xformOpOrder = ["xformOp:translate"]
+                }
+
+                def Sphere "paintSphere"
+                {
+                    double radius = 1
+                    float3 position = (4.5, 0.6, 0)
+                    string material = "bluePaint"
+
+                    float3[] extent = [(-1, -1, -1), (1, 1, 1)]
+                    double3 xformOp:translate = (4.5, 0.6, 0)
+                    uniform token[] xformOpOrder = ["xformOp:translate"]
+                }
+
+                def Sphere "ground"
+                {
+                    double radius = 1000
+                    float3 position = (0, -1000.4, 0)
+                    string material = "ground"
+
+                    float3[] extent = [(-1000, -1000, -1000), (1000, 1000, 1000)]
+                    double3 xformOp:translate = (0, -1000.4, 0)
+                    uniform token[] xformOpOrder = ["xformOp:translate"]
+                }
+
+                def Sphere "lightSource"
+                {
+                    double radius = 1
+                    float3 position = (0, 4, -7)
+
+                    float3[] extent = [(-1, -1, -1), (1, 1, 1)]
+                    double3 xformOp:translate = (0, 4, -7)
+                    uniform token[] xformOpOrder = ["xformOp:translate"]
+                }
+            }
+        }
+
+        def Group "meshes"
+        {
+
+        }
+    }
+
+    def Group "lights"
+    {
+        def GeoLight "sphereLight"
+        {
+            string geometry = "lightSource"
+            string material = "light"
+        }
+    }
+
+    def Group "materials"
+    {
+        def Material "redPlastic"
+        {
+            float3 color = (1.0, 0.1, 0.1)
+            float3 emissiveColor = (0, 0, 0)
+            float3 fresnelColor = (0.04, 0.04, 0.04)
+            float roughness = 0.3
+            float metalness = 0
+            float transmittance = 0
+            float ior = 1
+        }
+
+        def Material "mirror"
+        {
+            float3 color = (0.0, 0.0, 0.0)
+            float3 emissiveColor = (0, 0, 0)
+            float3 fresnelColor = (1, 0.9, 0.8)
+            float roughness = 0
+            float metalness = 1
+            float transmittance = 0
+            float ior = 1
+        }
+
+        def Material "metal"
+        {
+            float3 color = (0.0, 0.0, 0.0)
+            float3 emissiveColor = (0, 0, 0)
+            float3 fresnelColor = (0.9, 0.85, 0.8)
+            float roughness = 0.3
+            float metalness = 1
+            float transmittance = 0
+            float ior = 1
+        }
+
+        def Material "bluePaint"
+        {
+            float3 color = (0.1, 0.1, 0.9)
+            float3 emissiveColor = (0, 0, 0)
+            float3 fresnelColor = (0.04, 0.04, 0.04)
+            float roughness = 0.6
+            float metalness = 0
+            float transmittance = 0
+            float ior = 1
+        }
+
+        def Material "ground"
+        {
+            float3 color = (0.5, 0.5, 0.5)
+            float3 emissiveColor = (0, 0, 0)
+            float3 fresnelColor = (0.04, 0.04, 0.04)
+            float roughness = 0.9
+            float metalness = 0
+            float transmittance = 0
+            float ior = 1
+        }
+
+        def Material "light"
+        {
+            float3 color = (0, 0, 0)
+            float3 emissiveColor = (4, 3.6, 3.2)
+            float3 fresnelColor = (0.04, 0.04, 0.04)
+            float roughness = 1
+            float metalness = 0
+            float transmittance = 0
+            float ior = 1
+        }
+    }
+
+    def Camera "sceneCamera"
+    {
+        float3 position = (0, 4, 15)
+        float yaw = 90
+        float pitch = 6
+        float fov = 45
+        float apertureRadius = 0
+        float focalDistance = 4
+
+        float3 xformOp:translate = (0, 4, 15)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+
+    def Settings "settings"
+    {
+        float3 skyColor = (0.7, 0.8, 0.9)
+    }
+}

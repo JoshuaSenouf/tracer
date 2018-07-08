@@ -15,6 +15,7 @@
 #include "material.h"
 #include "render_helper.h"
 #include "xmlscene.h"
+#include "usdscene.h"
 
 
 class SceneManager
@@ -47,6 +48,7 @@ class SceneManager
         cameraData& getCamera();
         settingsData& getSettings();
         XMLScene& getXMLScene();
+        USDScene& getUSDScene();
 
         bool isIntersected(Ray& ray,
             float& closestGeoDist,
@@ -55,6 +57,7 @@ class SceneManager
 
     private:
         XMLScene xmlScene;
+        USDScene usdScene;
 
         std::vector<BSDF> materialList;
         std::vector<Sphere> sphereList;

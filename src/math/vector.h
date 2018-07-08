@@ -4,6 +4,11 @@
 #include <iostream>
 #include <cmath>
 
+#include <pxr/usd/usd/stage.h>
+#include <pxr/usd/usd/prim.h>
+#include <pxr/usd/usd/attribute.h>
+#include <pxr/base/vt/array.h>
+
 
 class Vector3
 {
@@ -15,6 +20,7 @@ class Vector3
         Vector3();
         Vector3(float tempXYZ);
         Vector3(float tempX, float tempY, float tempZ);
+        Vector3(const pxr::GfVec3f& usdVec3f);
 
         float length() const;
         Vector3 normalize() const;
@@ -56,6 +62,7 @@ class Vector2
         Vector2();
         Vector2(float tempXY);
         Vector2(float tempX, float tempY);
+        Vector2(const pxr::GfVec2f& usdVec2f);
 
         float length() const;
         Vector2 normalize() const;

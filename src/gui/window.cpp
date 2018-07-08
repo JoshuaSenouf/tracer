@@ -26,7 +26,7 @@ int Window::renderWindow()
 
     ImGui_ImplGlfwGL3_Init(window, true);
 
-    renderScene.loadScene("res/scenes/xml/monoSphere.xml");
+    renderScene.loadScene("res/scenes/usd/monoSphere.usda");
 
     renderCamera.setResolution(Vector2(progressiveWidth, progressiveHeight));
     renderCamera.initCameraData(renderScene.getCamera());
@@ -180,6 +180,12 @@ void Window::renderConfigWindow(bool& guiOpen)
 }
 
 
+void Window::shaderGraphWindow(bool& guiOpen)
+{
+    showShaderGraph(guiOpen);
+}
+
+
 void Window::setupGUI()
 {
     ImGui_ImplGlfwGL3_NewFrame();
@@ -190,6 +196,8 @@ void Window::setupGUI()
         aboutWindow(aboutBool);
     if (renderConfigBool)
         renderConfigWindow(renderConfigBool);
+    if (shaderGraphBool)
+        shaderGraphWindow(shaderGraphBool);
 
     if (ImGui::BeginMainMenuBar())
     {
@@ -258,6 +266,7 @@ void Window::setupGUI()
                 ImGui::Separator();
             }
 
+            ImGui::MenuItem("Shader Graph", NULL, &shaderGraphBool);
             ImGui::MenuItem("Config", NULL, &renderConfigBool);
 
             ImGui::EndMenu();
@@ -267,6 +276,35 @@ void Window::setupGUI()
         {
             if (ImGui::BeginMenu("Load..."))
             {
+                if (ImGui::BeginMenu("USD"))
+                {
+                    if (ImGui::MenuItem("Mono Sphere"))
+                    {
+                        renderScene.loadScene("res/scenes/usd/monoSphere.usda");
+                        renderCamera.initCameraData(renderScene.getCamera());
+
+                        renderReset = true;
+                    }
+
+                    if (ImGui::MenuItem("Material Test"))
+                    {
+                        renderScene.loadScene("res/scenes/usd/materialTest.usda");
+                        renderCamera.initCameraData(renderScene.getCamera());
+
+                        renderReset = true;
+                    }
+
+                    if (ImGui::MenuItem("Cornell Box"))
+                    {
+                        renderScene.loadScene("res/scenes/usd/cornell.usda");
+                        renderCamera.initCameraData(renderScene.getCamera());
+
+                        renderReset = true;
+                    }
+
+                    ImGui::EndMenu();
+                }
+
                 if (ImGui::BeginMenu("XML"))
                 {
                     if (ImGui::MenuItem("Mono Sphere"))

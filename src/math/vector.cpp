@@ -25,6 +25,14 @@ Vector3::Vector3(float tempX, float tempY, float tempZ)
 }
 
 
+Vector3::Vector3(const pxr::GfVec3f &usdVec3f)
+{
+    this->x = usdVec3f[0];
+    this->y = usdVec3f[1];
+    this->z = usdVec3f[2];
+}
+
+
 float Vector3::length() const
 {
     return std::sqrt(this->x * this->x + this->y * this->y + this->z * this->z);
@@ -220,6 +228,13 @@ Vector2::Vector2(float tempX, float tempY)
 {
     this->x = tempX;
     this->y = tempY;
+}
+
+
+Vector2::Vector2(const pxr::GfVec2f &usdVec2f)
+{
+    this->x = usdVec2f[0];
+    this->y = usdVec2f[1];
 }
 
 
