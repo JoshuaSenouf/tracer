@@ -29,23 +29,9 @@ int SceneManager::loadScene(const std::string& scenePath)
         xmlScene.loadCamera(sceneCamera);
         xmlScene.loadSettings(sceneSettings);
     }
-    else if (std::size_t(scenePath.rfind(std::string(".usd")) != std::string::npos)
-                || std::size_t(scenePath.rfind(std::string(".usda")) != std::string::npos)
-                || std::size_t(scenePath.rfind(std::string(".usdc")) != std::string::npos))
-    {
-        if (!usdScene.loadSceneFile(scenePath))
-            return false;
-
-        usdScene.loadMaterials(materialList);
-        usdScene.loadSpheres(sphereList, materialList);
-        usdScene.loadMeshes(meshList, materialList);
-        usdScene.loadLights(lightList, sphereList, materialList);
-        usdScene.loadCamera(sceneCamera);
-        usdScene.loadSettings(sceneSettings);
-    }
     else
     {
-        std::cout << "ERROR - The following file is neither a XML or an USD scene: " << scenePath << std::endl;
+        std::cout << "ERROR - The following file is not a XML scene: " << scenePath << std::endl;
         return false;
     }
 }
@@ -218,12 +204,6 @@ settingsData &SceneManager::getSettings()
 XMLScene& SceneManager::getXMLScene()
 {
     return xmlScene;
-}
-
-
-USDScene& SceneManager::getUSDScene()
-{
-    return usdScene;
 }
 
 

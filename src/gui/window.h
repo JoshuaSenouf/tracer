@@ -15,7 +15,6 @@
 #include "camera.h"
 #include "buffer.h"
 #include "scenemanager.h"
-#include "shadergraph.h"
 
 
 class Window
@@ -30,7 +29,6 @@ class Window
         void stopGUI();
 
         void renderConfigWindow(bool &guiOpen);
-        void shaderGraphWindow(bool &guiOpen);
         void fpsWindow(bool& guiOpen);
         void aboutWindow(bool &guiOpen);
 
@@ -44,7 +42,6 @@ class Window
         bool guiIsOpen = true;
         bool renderReset = false;
         bool renderConfigBool = false;
-        bool shaderGraphBool = false;
 
         bool fpsBool = true;
         bool aboutBool = false;

@@ -53,9 +53,8 @@ Features
     * **TODO :** KD-Tree
 
 * Scene:
-    * Formats:
-        * Pixar USD
-        * XML
+    * **TODO :** Custom JSON format
+    * **TODO :** Scene Graph
     * Material loading
     * Primitives loading:
         * Sphere
@@ -85,15 +84,16 @@ Download the source, build the project structure using CMake 3.x, open the proje
     * Use the "+" and "-" buttons on the keypad control the aperture radius
     * Hold LeftCtrl and "+" or "-" to control the focal distance
 
-Dependencies (included, aside from OpenMP, as well as Pixar USD and its own dependencies)
+Dependencies (included, aside from Intel Embree and Intel TBB)
 ------
 
 - Window & Input system : GLFW
 - OpenGL Function Loader : GLAD
 - GUI system : dear imgui
-- Multithreading : OpenMP
-- XML handling : TinyXML2
 - EXR handling : tinyexr
 - Mesh loading : tinyobjloader
 - Image loading : stb
-- Scene loading : Pixar USD
+
+-  **TODO :** JSON handling : ???
+-  **TODO :** Multithreading : Intel TBB
+-  **TODO :** Raytracing kernels: Intel Embree

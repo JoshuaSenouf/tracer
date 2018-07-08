@@ -8,23 +8,8 @@ option(GLFW_BUILD_EXAMPLES OFF)
 option(GLFW_BUILD_TESTS OFF)
 add_subdirectory(api/glfw)
 
-find_package(USD REQUIRED)
-find_package(PythonLibs 2.7 REQUIRED)
-find_package(
-    Boost REQUIRED
-    COMPONENTS regex system filesystem thread date_time atomic python)
+# FIND_PACKAGE(embree 3.0 REQUIRED)
 
-set(USD_LIBS
-    ${USD_LIBRARIES}
-    ${PYTHON_LIBRARIES}
-    ${Boost_ATOMIC_LIBRARY}
-    ${Boost_CHRONO_LIBRARY}
-    ${Boost_DATE_TIME_LIBRARY}
-    ${Boost_FILESYSTEM_LIBRARY}
-    ${Boost_PYTHON_LIBRARY}
-    ${Boost_SYSTEM_LIBRARY}
-    ${Boost_THREAD_LIBRARY}
-    ${Boost_REGEX_LIBRARY})
 
 if(MSVC)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /W4 /O2 /openmp")
@@ -52,9 +37,8 @@ include_directories(api/glad/include/
                     src/rendering/integrators/
                     src/rendering/materials/
                     src/scene/
-                    src/utility/
-                    ${USD_INCLUDE_DIR}
-                    ${PYTHON_INCLUDE_PATH})
+                    src/utility/)
+                    # ${EMBREE_INCLUDE_DIRS})
 
 file(GLOB API_SOURCES api/glad/src/glad.c
                       api/imgui/*.cpp
@@ -90,10 +74,7 @@ file(GLOB PROJECT_SHADERS res/shaders/*.frag
                           res/shaders/*.glsl
                           res/shaders/*.vert)
 
-file(GLOB PROJECT_SCENES res/scenes/usd/*.usd
-                         res/scenes/usd/*.usda
-                         res/scenes/usd/*.usdc
-                         res/scenes/xml/*.xml)
+file(GLOB PROJECT_SCENES res/scenes/xml/*.xml)
 
 file(GLOB PROJECT_CONFIGS CMakeLists.txt
                           README.md
@@ -116,8 +97,8 @@ add_executable(${PROJECT_NAME} ${API_SOURCES} ${PROJECT_SOURCES}
                                ${PROJECT_SCENES} ${PROJECT_CONFIGS})
 
 target_link_libraries(${PROJECT_NAME} glfw
-                      ${GLFW_LIBRARIES} ${GLAD_LIBRARIES}
-                      ${USD_LIBS})
+                      ${GLFW_LIBRARIES} ${GLAD_LIBRARIES})
+                    #   ${EMBREE_LIBRARY})
 
 set_target_properties(${PROJECT_NAME} PROPERTIES
     RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/${PROJECT_NAME})
