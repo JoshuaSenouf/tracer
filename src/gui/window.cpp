@@ -180,12 +180,6 @@ void Window::renderConfigWindow(bool& guiOpen)
 }
 
 
-void Window::shaderGraphWindow(bool& guiOpen)
-{
-    showShaderGraph(guiOpen);
-}
-
-
 void Window::setupGUI()
 {
     ImGui_ImplGlfwGL3_NewFrame();
@@ -196,8 +190,6 @@ void Window::setupGUI()
         aboutWindow(aboutBool);
     if (renderConfigBool)
         renderConfigWindow(renderConfigBool);
-    if (shaderGraphBool)
-        shaderGraphWindow(shaderGraphBool);
 
     if (ImGui::BeginMainMenuBar())
     {
@@ -266,7 +258,6 @@ void Window::setupGUI()
                 ImGui::Separator();
             }
 
-            ImGui::MenuItem("Shader Graph", NULL, &shaderGraphBool);
             ImGui::MenuItem("Config", NULL, &renderConfigBool);
 
             ImGui::EndMenu();
@@ -276,62 +267,28 @@ void Window::setupGUI()
         {
             if (ImGui::BeginMenu("Load..."))
             {
-                if (ImGui::BeginMenu("USD"))
+                if (ImGui::MenuItem("Mono Sphere"))
                 {
-                    if (ImGui::MenuItem("Mono Sphere"))
-                    {
-                        renderScene.loadScene("res/scenes/usd/monoSphere.usda");
-                        renderCamera.initCameraData(renderScene.getCamera());
+                    renderScene.loadScene("res/scenes/usd/monoSphere.usda");
+                    renderCamera.initCameraData(renderScene.getCamera());
 
-                        renderReset = true;
-                    }
-
-                    if (ImGui::MenuItem("Material Test"))
-                    {
-                        renderScene.loadScene("res/scenes/usd/materialTest.usda");
-                        renderCamera.initCameraData(renderScene.getCamera());
-
-                        renderReset = true;
-                    }
-
-                    if (ImGui::MenuItem("Cornell Box"))
-                    {
-                        renderScene.loadScene("res/scenes/usd/cornell.usda");
-                        renderCamera.initCameraData(renderScene.getCamera());
-
-                        renderReset = true;
-                    }
-
-                    ImGui::EndMenu();
+                    renderReset = true;
                 }
 
-                if (ImGui::BeginMenu("XML"))
+                if (ImGui::MenuItem("Material Test"))
                 {
-                    if (ImGui::MenuItem("Mono Sphere"))
-                    {
-                        renderScene.loadScene("res/scenes/xml/monoSphere.xml");
-                        renderCamera.initCameraData(renderScene.getCamera());
+                    renderScene.loadScene("res/scenes/usd/materialTest.usda");
+                    renderCamera.initCameraData(renderScene.getCamera());
 
-                        renderReset = true;
-                    }
+                    renderReset = true;
+                }
 
-                    if (ImGui::MenuItem("Material Test"))
-                    {
-                        renderScene.loadScene("res/scenes/xml/materialTest.xml");
-                        renderCamera.initCameraData(renderScene.getCamera());
+                if (ImGui::MenuItem("Cornell Box"))
+                {
+                    renderScene.loadScene("res/scenes/usd/cornell.usda");
+                    renderCamera.initCameraData(renderScene.getCamera());
 
-                        renderReset = true;
-                    }
-
-                    if (ImGui::MenuItem("Cornell Box"))
-                    {
-                        renderScene.loadScene("res/scenes/xml/cornell.xml");
-                        renderCamera.initCameraData(renderScene.getCamera());
-
-                        renderReset = true;
-                    }
-
-                    ImGui::EndMenu();
+                    renderReset = true;
                 }
 
                 ImGui::EndMenu();

@@ -53,9 +53,8 @@ Features
     * **TODO :** KD-Tree
 
 * Scene:
-    * Formats:
+    * Format:
         * Pixar USD
-        * XML
     * Material loading
     * Primitives loading:
         * Sphere
@@ -92,7 +91,6 @@ Dependencies (included, aside from OpenMP, as well as Pixar USD and its own depe
 - OpenGL Function Loader : GLAD
 - GUI system : dear imgui
 - Multithreading : OpenMP
-- XML handling : TinyXML2
 - EXR handling : tinyexr
 - Mesh loading : tinyobjloader
 - Image loading : stb

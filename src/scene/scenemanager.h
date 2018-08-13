@@ -14,7 +14,6 @@
 #include "geolight.h"
 #include "material.h"
 #include "render_helper.h"
-#include "xmlscene.h"
 #include "usdscene.h"
 
 
@@ -47,7 +46,6 @@ class SceneManager
         std::vector<GeoLight>& getLightList();
         cameraData& getCamera();
         settingsData& getSettings();
-        XMLScene& getXMLScene();
         USDScene& getUSDScene();
 
         bool isIntersected(Ray& ray,
@@ -56,7 +54,6 @@ class SceneManager
             bool& isLightSource);
 
     private:
-        XMLScene xmlScene;
         USDScene usdScene;
 
         std::vector<BSDF> materialList;

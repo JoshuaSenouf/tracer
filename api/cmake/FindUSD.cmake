@@ -25,7 +25,7 @@ set (_usd_components
     usdGeom
     usd
     usdUtils
-    tracelite
+    trace
     pcp
     sdf
     plug

@@ -15,7 +15,10 @@
 #include "camera.h"
 #include "buffer.h"
 #include "scenemanager.h"
-#include "shadergraph.h"
+
+#define DEFAULT_WIDTH 640
+#define DEFAULT_HEIGHT 480
+
 
 
 class Window
@@ -30,7 +33,6 @@ class Window
         void stopGUI();
 
         void renderConfigWindow(bool &guiOpen);
-        void shaderGraphWindow(bool &guiOpen);
         void fpsWindow(bool& guiOpen);
         void aboutWindow(bool &guiOpen);
 
@@ -44,7 +46,6 @@ class Window
         bool guiIsOpen = true;
         bool renderReset = false;
         bool renderConfigBool = false;
-        bool shaderGraphBool = false;
 
         bool fpsBool = true;
         bool aboutBool = false;
@@ -53,12 +54,12 @@ class Window
 
         int frameCounter = 0;
 
-        int progressiveWidth = 800;
-        int progressiveHeight = 600;
+        int progressiveWidth = DEFAULT_WIDTH;
+        int progressiveHeight = DEFAULT_HEIGHT;
         int progressiveSamples = 1;
         int progressiveDepth = 4;
-        int outputWidth = 800;
-        int outputHeight = 600;
+        int outputWidth = DEFAULT_WIDTH;
+        int outputHeight = DEFAULT_HEIGHT;
         int outputSamples = 32;
         int outputDepth = 4;
 
