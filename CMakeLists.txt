@@ -40,7 +40,6 @@ include_directories(api/glad/include/
                     api/stb/
                     api/imgui/
                     api/tinyobjloader/
-                    api/tinyxml2/
                     api/tinyexr/
                     src/camera/
                     src/gui/
@@ -57,8 +56,7 @@ include_directories(api/glad/include/
                     ${PYTHON_INCLUDE_PATH})
 
 file(GLOB API_SOURCES api/glad/src/glad.c
-                      api/imgui/*.cpp
-                      api/tinyxml2/*.cpp)
+                      api/imgui/*.cpp)
 
 file(GLOB PROJECT_HEADERS src/camera/*.h
                           src/gui/*.h
@@ -92,8 +90,7 @@ file(GLOB PROJECT_SHADERS res/shaders/*.frag
 
 file(GLOB PROJECT_SCENES res/scenes/usd/*.usd
                          res/scenes/usd/*.usda
-                         res/scenes/usd/*.usdc
-                         res/scenes/xml/*.xml)
+                         res/scenes/usd/*.usdc)
 
 file(GLOB PROJECT_CONFIGS CMakeLists.txt
                           README.md
