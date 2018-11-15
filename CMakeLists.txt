@@ -13,6 +13,7 @@ find_package(PythonLibs 2.7 REQUIRED)
 find_package(
     Boost REQUIRED
     COMPONENTS regex system filesystem thread date_time atomic python)
+find_package(embree 3.0 REQUIRED)
 
 set(USD_LIBS
     ${USD_LIBRARIES}
@@ -53,7 +54,8 @@ include_directories(api/glad/include/
                     src/scene/
                     src/utility/
                     ${USD_INCLUDE_DIR}
-                    ${PYTHON_INCLUDE_PATH})
+                    ${PYTHON_INCLUDE_PATH}
+                    ${EMBREE_INCLUDE_DIRS})
 
 file(GLOB API_SOURCES api/glad/src/glad.c
                       api/imgui/*.cpp)
@@ -88,9 +90,9 @@ file(GLOB PROJECT_SHADERS res/shaders/*.frag
                           res/shaders/*.glsl
                           res/shaders/*.vert)
 
-file(GLOB PROJECT_SCENES res/scenes/usd/*.usd
-                         res/scenes/usd/*.usda
-                         res/scenes/usd/*.usdc)
+file(GLOB PROJECT_SCENES res/scenes/*.usd
+                         res/scenes/*.usda
+                         res/scenes/*.usdc)
 
 file(GLOB PROJECT_CONFIGS CMakeLists.txt
                           README.md
@@ -108,13 +110,19 @@ source_group("Scenes" FILES ${PROJECT_SCENES})
 add_definitions(-DGLFW_INCLUDE_NONE
                 -DPROJECT_SOURCE_DIR=\"${PROJECT_SOURCE_DIR}\")
 
-add_executable(${PROJECT_NAME} ${API_SOURCES} ${PROJECT_SOURCES}
-                               ${PROJECT_HEADERS} ${PROJECT_SHADERS}
-                               ${PROJECT_SCENES} ${PROJECT_CONFIGS})
+add_executable(${PROJECT_NAME} ${API_SOURCES}
+                               ${PROJECT_SOURCES}
+                               ${PROJECT_HEADERS}
+                               ${PROJECT_SHADERS}
+                               ${PROJECT_SCENES}
+                               ${PROJECT_CONFIGS})
 
-target_link_libraries(${PROJECT_NAME} glfw
-                      ${GLFW_LIBRARIES} ${GLAD_LIBRARIES}
-                      ${USD_LIBS})
+target_link_libraries(${PROJECT_NAME}
+                      glfw
+                      ${GLFW_LIBRARIES}
+                      ${GLAD_LIBRARIES}
+                      ${USD_LIBS}
+                      ${EMBREE_LIBRARY})
 
 set_target_properties(${PROJECT_NAME} PROPERTIES
-    RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/${PROJECT_NAME})
+                      RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/${PROJECT_NAME})

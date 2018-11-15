@@ -8,6 +8,8 @@
 #include <algorithm>
 #include <vector>
 
+#include <embree3/rtcore.h>
+
 #include "vector.h"
 #include "sphere.h"
 #include "mesh.h"
@@ -55,6 +57,7 @@ class SceneManager
 
     private:
         USDScene usdScene;
+        // ??? embreeScene;
 
         std::vector<BSDF> materialList;
         std::vector<Sphere> sphereList;

@@ -12,6 +12,8 @@
 #include <pxr/usd/usd/attribute.h>
 #include <pxr/base/vt/array.h>
 
+#include <embree3/rtcore.h>
+
 #include "vector.h"
 #include "sphere.h"
 #include "mesh.h"
@@ -27,16 +29,7 @@ class USDScene
 
         int loadSceneFile(const std::string& scenePath);
 
-        void loadMaterials(std::vector<BSDF> &materialList);
-        void loadSpheres(std::vector<Sphere> &sphereList,
-            std::vector<BSDF>& materialList);
-        void loadMeshes(std::vector<Mesh> &meshList,
-            std::vector<BSDF>& materialList);
-        void loadLights(std::vector<GeoLight> &lightList,
-            std::vector<Sphere>& sphereList,
-            std::vector<BSDF>& materialList);
-        void loadCamera(cameraData &sceneCamera);
-        void loadSettings(settingsData &sceneSettings);
+        void loadMeshes();
 
         void getPrimFromType(const std::string &primType,
             const pxr::SdfPath &primPath,
@@ -44,6 +37,8 @@ class USDScene
 
     private:
         pxr::UsdStageRefPtr sceneStage;
+        RTCScene embreeScene = nullptr;
+        RTCDevice embreeDevice = nullptr;
 };
 
 

@@ -1,4 +1,4 @@
-// Tracer by Joshua Senouf - 2017
+// Tracer by Joshua Senouf - 2017-2018
 
 #define STB_IMAGE_IMPLEMENTATION
 #define TINYEXR_IMPLEMENTATION

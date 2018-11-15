@@ -22,23 +22,23 @@ Vector3 PathTracer::getRadiance(Ray& cameraRay,
         float closestGeoDist;
         int closestGeoID = 0;
 
-        if (!renderScene.isIntersected(cameraRay, closestGeoDist, closestGeoID, isLightSource))
-            return colorAccumulation += colorMask * renderScene.getSettings().skyColor; // If we hit no object, we return the sky color
+        // if (!renderScene.isIntersected(cameraRay, closestGeoDist, closestGeoID, isLightSource))
+        //     return colorAccumulation += colorMask * renderScene.getSettings().skyColor; // If we hit no object, we return the sky color
 
-        if(isLightSource)
-        {
-            return colorAccumulation += colorMask *
-                renderScene.getLightList()[closestGeoID].getMaterial().getEmissiveColor();
-        }
+        // if(isLightSource)
+        // {
+        //     return colorAccumulation += colorMask *
+        //         renderScene.getLightList()[closestGeoID].getMaterial().getEmissiveColor();
+        // }
 
-        Sphere hitGeo = renderScene.getSphereList()[closestGeoID];
+        // Sphere hitGeo = renderScene.getSphereList()[closestGeoID];
 
-        cameraRay.getOrigin() += cameraRay.getDirection() * closestGeoDist;
-        const Vector3 hitNormal = (cameraRay.getOrigin() - hitGeo.getPosition()).normalize();
+        // cameraRay.getOrigin() += cameraRay.getDirection() * closestGeoDist;
+        // const Vector3 hitNormal = (cameraRay.getOrigin() - hitGeo.getPosition()).normalize();
 
-        bsdfSampling = hitGeo.getMaterial().computeSampling(cameraRay.getDirection(), hitNormal, randEngine);
+        // bsdfSampling = hitGeo.getMaterial().computeSampling(cameraRay.getDirection(), hitNormal, randEngine);
 
-        colorMask *= bsdfSampling;
+        // colorMask *= bsdfSampling;
     }
 
     return colorAccumulation;

@@ -10,202 +10,55 @@ USDScene::USDScene()
 int USDScene::loadSceneFile(const std::string& scenePath)
 {
     sceneStage = pxr::UsdStage::Open(scenePath);
+    embreeScene = rtcNewScene(embreeDevice);
+
+    loadMeshes();
+
+    rtcCommitScene(embreeScene);
 
     return true;
 }
 
-void USDScene::loadMaterials(std::vector<BSDF>& materialList)
+void USDScene::loadMeshes()
 {
-    std::vector<pxr::UsdPrim> usdPrimMaterials;
+    std::vector<pxr::UsdPrim> usdMeshesVec;
 
-    getPrimFromType("Material", pxr::SdfPath("/world"), usdPrimMaterials);
+    getPrimFromType("Mesh", pxr::SdfPath("/"), usdMeshesVec);
 
-    for(const pxr::UsdPrim& usdMaterial: usdPrimMaterials)
-    {
-        BSDF tempMaterial;
-
-        tempMaterial.setName(usdMaterial.GetName());
-
-        for(const pxr::UsdAttribute& usdAttr : usdMaterial.GetAttributes())
+    for(const pxr::UsdPrim& usdMesh: usdMeshesVec)
         {
-            pxr::GfVec3f usdVec3f;
+            std::cout << "==========\nPRIM NAME: " << usdMesh.GetName() << std::endl;
 
-            if (usdAttr.GetName() == std::string("color"))
-            {
-                usdAttr.Get(&usdVec3f);
-                tempMaterial.setColor(Vector3(usdVec3f));
-            }
-            else if (usdAttr.GetName() == std::string("emissiveColor"))
-            {
-                usdAttr.Get(&usdVec3f);
-                tempMaterial.setEmissiveColor(Vector3(usdVec3f));
-            }
-            else if (usdAttr.GetName() == std::string("fresnelColor"))
-            {
-                usdAttr.Get(&usdVec3f);
-                tempMaterial.setFresnelColor(Vector3(usdVec3f));
-            }
-            else if (usdAttr.GetName() == std::string("roughness"))
-                usdAttr.Get(&tempMaterial.getRoughness());
+            pxr::VtArray<pxr::GfVec3f> usdPoints;
+            pxr::VtArray<int> usdIndices;
 
-            else if (usdAttr.GetName() == std::string("metalness"))
-                usdAttr.Get(&tempMaterial.getMetalness());
+            usdMesh.GetAttribute(pxr::TfToken("points")).Get(&usdPoints);
+            usdMesh.GetAttribute(pxr::TfToken("faceVertexIndices")).Get(&usdIndices);
 
-            else if (usdAttr.GetName() == std::string("transmittance"))
-                usdAttr.Get(&tempMaterial.getTransmittance());
+            std::cout << "POINTS SIZE: " << usdPoints.size() << std::endl;
+            std::cout << "INDICES SIZE: " << usdIndices.size() << std::endl;
 
-            else if (usdAttr.GetName() == std::string("ior"))
-                usdAttr.Get(&tempMaterial.getIOR());
+//            for(const pxr::UsdAttribute& usdAttr : usdMesh.GetAttributes())
+//            {
+//                pxr::VtArray<pxr::GfVec3f> usdPoints;
+//                pxr::VtArray<int> usdIndices;
+
+//                if (usdAttr.GetName() == std::string("points"))
+//                {
+//                    usdAttr.Get(&usdPoints);
+//                    std::cout << "OK POINTS!" << std::endl;
+//                    std::cout << "POINTS SIZE: " << usdPoints.size() << std::endl;
+//                }
+
+//                if (usdAttr.GetName() == std::string("faceVertexIndices"))
+//                {
+//                    usdAttr.Get(&usdIndices);
+//                    std::cout << "OK INDICES!" << std::endl;
+//                    std::cout << "INDICES SIZE: " << usdIndices.size() << std::endl;
+//                }
+//            }
         }
-
-        materialList.push_back(tempMaterial);
-    }
 }
-
-
-void USDScene::loadSpheres(std::vector<Sphere>& sphereList,
-    std::vector<BSDF>& materialList)
-{
-    std::vector<pxr::UsdPrim> usdPrimSpheres;
-
-    getPrimFromType("Sphere", pxr::SdfPath("/world"), usdPrimSpheres);
-
-    for(const pxr::UsdPrim& usdSphere: usdPrimSpheres)
-    {
-        Sphere tempSphere;
-
-        tempSphere.setName(usdSphere.GetName());
-
-        for(const pxr::UsdAttribute& usdAttr : usdSphere.GetAttributes())
-        {
-            pxr::GfVec3f usdVec3f;
-
-            if (usdAttr.GetName() == std::string("radius"))
-                usdAttr.Get(&tempSphere.getRadius());
-
-            else if (usdAttr.GetName() == std::string("position"))
-            {
-                usdAttr.Get(&usdVec3f);
-                tempSphere.setPosition(Vector3(usdVec3f));
-            }
-            else if (usdAttr.GetName() == std::string("material"))
-            {
-                std::string tempMaterialName;
-                usdAttr.Get(&tempMaterialName);
-
-                for (BSDF& currentMaterial: materialList)
-                {
-                    if (currentMaterial.getName() == tempMaterialName)
-                        tempSphere.setMaterial(currentMaterial);
-                }
-            }
-        }
-
-        sphereList.push_back(tempSphere);
-    }
-}
-
-
-void USDScene::loadMeshes(std::vector<Mesh>& meshList,
-    std::vector<BSDF> &materialList)
-{
-
-}
-
-
-void USDScene::loadLights(std::vector<GeoLight>& lightList,
-    std::vector<Sphere>& sphereList,
-    std::vector<BSDF> &materialList)
-{
-    std::vector<pxr::UsdPrim> usdPrimLights;
-
-    getPrimFromType("GeoLight", pxr::SdfPath("/world"), usdPrimLights);
-
-    for(const pxr::UsdPrim& usdGeoLight: usdPrimLights)
-    {
-        GeoLight tempLight;
-
-        tempLight.setName(usdGeoLight.GetName());
-
-        for(const pxr::UsdAttribute& usdAttr : usdGeoLight.GetAttributes())
-        {
-            if (usdAttr.GetName() == std::string("geometry"))
-            {
-                std::string tempGeometryName;
-                usdAttr.Get(&tempGeometryName);
-
-                for (Sphere& currentSphere: sphereList)
-                {
-                    if (currentSphere.getName() == tempGeometryName)
-                        tempLight.setGeometry(currentSphere);
-                }
-            }
-
-            else if (usdAttr.GetName() == std::string("material"))
-            {
-                std::string tempMaterialName;
-                usdAttr.Get(&tempMaterialName);
-
-                for (BSDF& currentMaterial: materialList)
-                {
-                    if (currentMaterial.getName() == tempMaterialName)
-                        tempLight.setMaterial(currentMaterial);
-                }
-            }
-        }
-
-        lightList.push_back(tempLight);
-    }
-}
-
-
-void USDScene::loadCamera(cameraData& sceneCamera)
-{
-    std::vector<pxr::UsdPrim> usdPrimCamera;
-
-    getPrimFromType("Camera", pxr::SdfPath("/world"), usdPrimCamera);
-
-    for(const pxr::UsdAttribute& usdAttr: usdPrimCamera[0].GetAttributes())
-    {
-        pxr::GfVec3f usdVec3f;
-
-        if (usdAttr.GetName() == std::string("position"))
-        {
-            usdAttr.Get(&usdVec3f);
-            sceneCamera.position = Vector3(usdVec3f);
-        }
-        else if (usdAttr.GetName() == std::string("yaw"))
-            usdAttr.Get(&sceneCamera.yaw);
-        else if (usdAttr.GetName() == std::string("pitch"))
-            usdAttr.Get(&sceneCamera.pitch);
-        else if (usdAttr.GetName() == std::string("fov"))
-            usdAttr.Get(&sceneCamera.FOV);
-        else if (usdAttr.GetName() == std::string("apertureRadius"))
-            usdAttr.Get(&sceneCamera.apertureRadius);
-        else if (usdAttr.GetName() == std::string("focalDistance"))
-            usdAttr.Get(&sceneCamera.focalDistance);
-    }
-}
-
-
-void USDScene::loadSettings(settingsData& sceneSettings)
-{
-    std::vector<pxr::UsdPrim> usdPrimSettings;
-
-    getPrimFromType("Settings", pxr::SdfPath("/world"), usdPrimSettings);
-
-    for(const pxr::UsdAttribute& usdAttr: usdPrimSettings[0].GetAttributes())
-    {
-        pxr::GfVec3f usdVec3f;
-
-        if (usdAttr.GetName() == std::string("skyColor"))
-        {
-            usdAttr.Get(&usdVec3f);
-            sceneSettings.skyColor = Vector3(usdVec3f);
-        }
-    }
-}
-
 
 void USDScene::getPrimFromType(const std::string& primType,
     const pxr::SdfPath& primPath,
@@ -217,9 +70,14 @@ void USDScene::getPrimFromType(const std::string& primType,
     for(const pxr::UsdPrim& prim: basePrim.GetChildren())
     {
         if (prim.GetTypeName() == primType)
+        {
             primVector.push_back(prim);
+        }
 
         if (prim.GetChildren())
+        {
             getPrimFromType(primType, prim.GetPath(), primVector);
+
+        }
     }
 }

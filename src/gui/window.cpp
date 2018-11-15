@@ -26,78 +26,78 @@ int Window::renderWindow()
 
     ImGui_ImplGlfwGL3_Init(window, true);
 
-    renderScene.loadScene("res/scenes/usd/monoSphere.usda");
+    renderScene.loadScene("res/scenes/cupAndSaucer.usdc");
 
-    renderCamera.setResolution(Vector2(progressiveWidth, progressiveHeight));
-    renderCamera.initCameraData(renderScene.getCamera());
+    // renderCamera.setResolution(Vector2(progressiveWidth, progressiveHeight));
+    // renderCamera.initCameraData(renderScene.getCamera());
 
-    frontBuffer.initBuffer(progressiveWidth, progressiveHeight);
-    backBuffer.initBuffer(progressiveWidth, progressiveHeight);
+    // frontBuffer.initBuffer(progressiveWidth, progressiveHeight);
+    // backBuffer.initBuffer(progressiveWidth, progressiveHeight);
 
-    tracerRenderer.initRender(progressiveWidth, progressiveHeight);
+    // tracerRenderer.initRender(progressiveWidth, progressiveHeight);
 
-    glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+    // glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 
-    while (!glfwWindowShouldClose(window))
-    {
-        GLfloat currentFrame = glfwGetTime();
-        deltaTime = currentFrame - lastFrame;
-        lastFrame = currentFrame;
+    // while (!glfwWindowShouldClose(window))
+    // {
+    //     GLfloat currentFrame = glfwGetTime();
+    //     deltaTime = currentFrame - lastFrame;
+    //     lastFrame = currentFrame;
 
-        glfwPollEvents();
+    //     glfwPollEvents();
 
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    //     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        //--------------
-        // GUI setting & callbacks
-        //--------------
-        setupGUI();
-        ImGuiIO guiIO = ImGui::GetIO();
+    //     //--------------
+    //     // GUI setting & callbacks
+    //     //--------------
+    //     setupGUI();
+    //     ImGuiIO guiIO = ImGui::GetIO();
 
-        keyboardCallback(guiIO);
+    //     keyboardCallback(guiIO);
 
-        ImVec2 currentMousePos = ImGui::GetMousePos();
+    //     ImVec2 currentMousePos = ImGui::GetMousePos();
 
-        if (lastPosX != currentMousePos.x || lastPosY != currentMousePos.y)
-            mouseCallback(guiIO, currentMousePos.x, currentMousePos.y);
+    //     if (lastPosX != currentMousePos.x || lastPosY != currentMousePos.y)
+    //         mouseCallback(guiIO, currentMousePos.x, currentMousePos.y);
 
-        //--------------
-        // CPU Rendering
-        //--------------
-        if (!pauseBool)
-        {
-            if (renderReset) // If anything in camera or scene data has changed, we flush the data and reinit them again
-                resetRenderer();
+    //     //--------------
+    //     // CPU Rendering
+    //     //--------------
+    //     if (!pauseBool)
+    //     {
+    //         if (renderReset) // If anything in camera or scene data has changed, we flush the data and reinit them again
+    //             resetRenderer();
 
-            frameCounter++;
+    //         frameCounter++;
 
-            tracerRenderer.traceLoop(progressiveWidth,
-                progressiveHeight,
-                progressiveSamples,
-                progressiveDepth,
-                frameCounter,
-                frontBuffer.getBufferData(),
-                renderCamera,
-                renderScene); // Progressive rendering
-            tracerRenderer.renderToTexture(progressiveWidth, progressiveHeight, frontBuffer.getBufferData());
-        }
+    //         tracerRenderer.traceLoop(progressiveWidth,
+    //             progressiveHeight,
+    //             progressiveSamples,
+    //             progressiveDepth,
+    //             frameCounter,
+    //             frontBuffer.getBufferData(),
+    //             renderCamera,
+    //             renderScene); // Progressive rendering
+    //         tracerRenderer.renderToTexture(progressiveWidth, progressiveHeight, frontBuffer.getBufferData());
+    //     }
 
-        tracerRenderer.displayGLBuffer();
+    //     tracerRenderer.displayGLBuffer();
 
-        //----------------
-        // GUI rendering
-        //----------------
-        renderGUI();
+    //     //----------------
+    //     // GUI rendering
+    //     //----------------
+    //     renderGUI();
 
-        glfwSwapBuffers(window);
-    }
+    //     glfwSwapBuffers(window);
+    // }
 
-    //---------
-    // Cleaning
-    //---------
-    stopGUI();
+    // //---------
+    // // Cleaning
+    // //---------
+    // stopGUI();
 
-    glfwTerminate();
+    // glfwTerminate();
 
     return 0;
 }
@@ -270,7 +270,7 @@ void Window::setupGUI()
                 if (ImGui::MenuItem("Mono Sphere"))
                 {
                     renderScene.loadScene("res/scenes/usd/monoSphere.usda");
-                    renderCamera.initCameraData(renderScene.getCamera());
+                    //renderCamera.initCameraData(renderScene.getCamera());
 
                     renderReset = true;
                 }
@@ -278,7 +278,7 @@ void Window::setupGUI()
                 if (ImGui::MenuItem("Material Test"))
                 {
                     renderScene.loadScene("res/scenes/usd/materialTest.usda");
-                    renderCamera.initCameraData(renderScene.getCamera());
+                    //renderCamera.initCameraData(renderScene.getCamera());
 
                     renderReset = true;
                 }
@@ -286,7 +286,7 @@ void Window::setupGUI()
                 if (ImGui::MenuItem("Cornell Box"))
                 {
                     renderScene.loadScene("res/scenes/usd/cornell.usda");
-                    renderCamera.initCameraData(renderScene.getCamera());
+                    //renderCamera.initCameraData(renderScene.getCamera());
 
                     renderReset = true;
                 }
