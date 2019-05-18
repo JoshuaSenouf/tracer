@@ -4,6 +4,8 @@
 
 #include "renderer.h"
 
+#include "tbb/parallel_for.h"
+
 
 Renderer::Renderer()
 {
@@ -69,36 +71,39 @@ void Renderer::traceLoop(int progressiveWidth,
     Camera& renderCamera,
     SceneManager &renderScene)
 {
-    #pragma omp parallel for schedule(dynamic, 1)
-    for (int pixelY = 0; pixelY < progressiveHeight; ++pixelY)
+    tbb::parallel_for(tbb::blocked_range<int>(0, progressiveHeight),
+        [&](tbb::blocked_range<int> parallel_range)
     {
-        Randomizer randEngine;
-
-        for (int pixelX = 0; pixelX < progressiveWidth; ++pixelX)
+        for (int pixelY = parallel_range.begin(); pixelY < parallel_range.end(); ++pixelY)
         {
-            int pixelIndex = pixelX + pixelY * progressiveWidth;
-            Vector3 radianceColor;
+            Randomizer randEngine;
 
-            for (int sample = 0; sample < progressiveSamples; ++sample)
+            for (int pixelX = 0; pixelX < progressiveWidth; ++pixelX)
             {
-                Ray cameraRay = renderCamera.getCameraRay(pixelX, pixelY, randEngine);
+                int pixelIndex = pixelX + pixelY * progressiveWidth;
+                Vector3 radianceColor;
 
-                radianceColor += (renderBuffer[pixelIndex] * (frameCounter - 1) +
-                    renderIntegrator.getRadiance(cameraRay,
-                    renderScene,
-                    randEngine,
-                    progressiveDepth)) / frameCounter * (1.0f / progressiveSamples);
+                for (int sample = 0; sample < progressiveSamples; ++sample)
+                {
+                    Ray cameraRay = renderCamera.getCameraRay(pixelX, pixelY, randEngine);
 
-                // Random noise test
-                // radianceColor += (renderBuffer[pixelIndex] * (frameCounter - 1) +
-                //     Vector3(randEngine.getRandomFloat(),
-                //     randEngine.getRandomFloat(),
-                //     randEngine.getRandomFloat())) / frameCounter * (1.0f / progressiveSamples);
+                    radianceColor += (renderBuffer[pixelIndex] * (frameCounter - 1) +
+                        renderIntegrator.getRadiance(cameraRay,
+                        renderScene,
+                        randEngine,
+                        progressiveDepth)) / frameCounter * (1.0f / progressiveSamples);
+
+                    // Random noise test
+                    // radianceColor += (renderBuffer[pixelIndex] * (frameCounter - 1) +
+                    //     Vector3(randEngine.getRandomFloat(),
+                    //     randEngine.getRandomFloat(),
+                    //     randEngine.getRandomFloat())) / frameCounter * (1.0f / progressiveSamples);
+                }
+
+                renderBuffer[pixelIndex] = radianceColor;
             }
-
-            renderBuffer[pixelIndex] = radianceColor;
         }
-    }
+    });
 }
 
 

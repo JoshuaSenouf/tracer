@@ -16,9 +16,8 @@
 #include "buffer.h"
 #include "scenemanager.h"
 
-#define DEFAULT_WIDTH 640
-#define DEFAULT_HEIGHT 480
-
+#define DEFAULT_WIDTH 800
+#define DEFAULT_HEIGHT 600
 
 
 class Window

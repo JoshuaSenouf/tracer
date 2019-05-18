@@ -14,6 +14,7 @@ find_package(
     Boost REQUIRED
     COMPONENTS regex system filesystem thread date_time atomic python)
 find_package(embree 3.0 REQUIRED)
+find_package(TBB REQUIRED)
 
 set(USD_LIBS
     ${USD_LIBRARIES}
@@ -55,7 +56,8 @@ include_directories(api/glad/include/
                     src/utility/
                     ${USD_INCLUDE_DIR}
                     ${PYTHON_INCLUDE_PATH}
-                    ${EMBREE_INCLUDE_DIRS})
+                    ${EMBREE_INCLUDE_DIRS}
+                    ${TBB_INCLUDE_DIRS})
 
 file(GLOB API_SOURCES api/glad/src/glad.c
                       api/imgui/*.cpp)
@@ -122,7 +124,8 @@ target_link_libraries(${PROJECT_NAME}
                       ${GLFW_LIBRARIES}
                       ${GLAD_LIBRARIES}
                       ${USD_LIBS}
-                      ${EMBREE_LIBRARY})
+                      ${EMBREE_LIBRARY}
+                      ${TBB_LIBRARIES})
 
 set_target_properties(${PROJECT_NAME} PROPERTIES
                       RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/${PROJECT_NAME})

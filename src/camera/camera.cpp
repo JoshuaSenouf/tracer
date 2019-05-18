@@ -9,14 +9,16 @@ Camera::Camera()
 }
 
 
-void Camera::initCameraData(const cameraData sceneCamera)
+void Camera::initCameraData()
 {
-    this->position = sceneCamera.position;
-    this->yaw = sceneCamera.yaw;
-    this->pitch = sceneCamera.pitch;
-    this->FOV.x = sceneCamera.FOV;
-    this->apertureRadius = sceneCamera.apertureRadius;
-    this->focalDistance = sceneCamera.focalDistance;
+    // TODO: Hardcoded information for now.
+    this->position = Vector3(0, 4, 15);
+    this->yaw = 90;
+    this->pitch = 6;
+    this->FOV.x = 45;
+    this->apertureRadius = 0;
+    this->focalDistance = 4;
+
     this->up = Vector3(0.0f, 1.0f, 0.0f).normalize();
     this->speed = 10.0f;
     this->sensitivity = 0.10f;
@@ -76,7 +78,9 @@ Ray Camera::getCameraRay(int posX,
     Vector3 rayOrigin = aperturePoint;
     Vector3 rayDirection = (pointOnPlane - aperturePoint).normalize();
 
-    return Ray(rayOrigin, rayDirection);
+    // return Ray(rayOrigin, rayDirection);
+    return Ray(embree::Vec3fa(rayOrigin.x, rayOrigin.y, rayOrigin.z),
+        embree::Vec3fa(rayDirection.x, rayDirection.y, rayDirection.z));
 }
 
 

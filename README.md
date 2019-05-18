@@ -32,39 +32,45 @@ Features
     * Depth of Field (using aperture radius and focal distance)
 
 * Material:
-    * Lambertian diffuse.
+    * Lambertian diffuse
     * Specular component:
-        * Roughness/metalness workflow.
-        * Still an empirical WIP before a switch to Beckmann or GGX.
+        * Roughness/metalness workflow
+        * Still an empirical WIP before a switch to Beckmann or GGX
     * **TODO :** Physically-based BSDF (Probably a simplified version of the Disney principled BSDF)
 
 * Light sources:
     * Geometry light
     * Sky light
 
-* Primitives:
-    * Sphere
-    * **TODO :** Quad
-    * **TODO :** Cube
-    * **TODO :** Triangle
+* Geometry types:
+    * Meshes
+        * Triangle-based
+        * Quad-based 
+        * **TODO :**  Subdivided
+    * **TODO :** Curves
+    * **TODO :** Primitives (sphere, cube...)
+    * Instances:
+        * Per-geometry single instancing
+        * **TODO :** Native, multiple instancing of geometry prototypes
 
 * Acceleration structure:
-    * **TODO :** BVH
-    * **TODO :** KD-Tree
+    * Intel Embree native BVH
+    * **TODO :** Custom-based
 
 * Scene:
     * Format:
         * Pixar USD
-    * Material loading
-    * Primitives loading:
-        * Sphere
-        * **TODO :** Quad
-        * **TODO :** Cube
-        * **TODO :** Triangle
-    * **TODO :** Mesh loading
-    * Light loading
-    * Camera loading
-    * Settings loading
+            *As "usd", "usda", "usdc" or "usdz"
+    * Ingested data:
+        * **TODO :** Materials
+        * **TODO :** Cameras
+        * Geometry:
+            * Meshes
+            * **TODO :** Curves
+            * **TODO :** Primitives
+            * **TODO :** Instances
+        * **TODO :** Light sources
+        * **TODO :** Settings loading
 
 * Utility:
     * GUI using ImGui
@@ -84,14 +90,15 @@ Download the source, build the project structure using CMake 3.x, open the proje
     * Use the "+" and "-" buttons on the keypad control the aperture radius
     * Hold LeftCtrl and "+" or "-" to control the focal distance
 
-Dependencies (included, aside from OpenMP, as well as Pixar USD and its own dependencies)
+Dependencies (included, aside from Pixar USD and its own dependencies)
 ------
 
-- Window & Input system : GLFW
-- OpenGL Function Loader : GLAD
-- GUI system : dear imgui
-- Multithreading : OpenMP
-- EXR handling : tinyexr
-- Mesh loading : tinyobjloader
-- Image loading : stb
-- Scene loading : Pixar USD
+- Window & Input system: GLFW
+- OpenGL Function Loader: GLAD
+- GUI system: dear imgui
+- Multithreading: Intel TBB
+- EXR handling: tinyexr
+- Mesh loading: tinyobjloader
+- Image loading: stb
+- Scene loading: Pixar USD
+- Ray tracing kernels: Intel Embree

@@ -4,8 +4,9 @@
 #include "vector.h"
 #include "randomizer.h"
 #include "ray.h"
-#include "sphere.h"
 #include "scenemanager.h"
+#include "embree_helper.h"
+#include "material.h"
 
 
 class PathTracer
@@ -19,6 +20,7 @@ class PathTracer
             int rayDepth);
 
     private:
+        BSDF testMaterial;
 
 };
 

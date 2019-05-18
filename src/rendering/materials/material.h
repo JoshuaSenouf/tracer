@@ -50,13 +50,14 @@ class BSDF
 
     private:
         std::string name;
-        Vector3 color;
-        Vector3 emissiveColor;
-        Vector3 fresnelColor;
-        float roughness;
-        float metalness;
-        float transmittance;
-        float IOR;
+        // TODO: Hardcoded values for now.
+        Vector3 color{1.0, 0.1, 0.1};
+        Vector3 emissiveColor{0, 0, 0};
+        Vector3 fresnelColor{0.04, 0.04, 0.04};
+        float roughness=0.3;
+        float metalness=0.0;
+        float transmittance=0;
+        float IOR=1;
         float fresnelR0;
 };
 

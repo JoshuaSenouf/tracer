@@ -7,16 +7,13 @@
 #include <string>
 #include <algorithm>
 #include <vector>
+#include <mutex>
 
-#include <embree3/rtcore.h>
-
-#include "vector.h"
-#include "sphere.h"
-#include "mesh.h"
-#include "geolight.h"
-#include "material.h"
+#include "usd_helper.h"
+#include "embree_helper.h"
 #include "render_helper.h"
-#include "usdscene.h"
+
+#include "geometry.h"
 
 
 class SceneManager
@@ -25,46 +22,27 @@ class SceneManager
         SceneManager();
         SceneManager(const std::string& scenePath);
 
-        int loadScene(const std::string& scenePath);
+        bool isSceneValid(const std::string& scenePath);
+        bool loadScene(const std::string& scenePath);
+        // bool loadCamera();
+        // bool loadMaterials();
+        bool loadGeometry();
+        bool loadMeshGeometry();
+        // bool loadCurveGeometry();
+        // bool loadPrimitiveGeometry();
 
-        void cleanScene();
-        void cleanMaterialList();
-        void cleanSphereList();
-        void cleanMeshList();
-        void cleanLightList();
-        void cleanCamera();
-        void cleanSettings();
-
-        void printMaterialData();
-        void printSphereData();
-        void printMeshData();
-        void printLightData();
-        void printCameraData();
-        void printSettingsData();
-
-        std::vector<BSDF>& getMaterialList();
-        std::vector<Sphere>& getSphereList();
-        std::vector<Mesh>& getMeshList();
-        std::vector<GeoLight>& getLightList();
-        cameraData& getCamera();
-        settingsData& getSettings();
-        USDScene& getUSDScene();
-
-        bool isIntersected(Ray& ray,
-            float& closestGeoDist,
-            int& closestGeoID,
-            bool& isLightSource);
+        const pxr::UsdStageRefPtr& getStage();
+        const RTCDevice& getDevice();
+        const RTCScene& getRootScene();
 
     private:
-        USDScene usdScene;
-        // ??? embreeScene;
+        pxr::UsdStageRefPtr stage = nullptr;
+        RTCDevice device = nullptr;
+        RTCScene rootScene = nullptr; // Contains the instanced (single or not) geometry objects. This is the scene we are tracing against.
 
-        std::vector<BSDF> materialList;
-        std::vector<Sphere> sphereList;
-        std::vector<Mesh> meshList;
-        std::vector<GeoLight> lightList;
-        cameraData sceneCamera;
-        settingsData sceneSettings;
+        std::mutex meshMutex;
+
+        std::vector<Geometry> sceneGeom;
 };
 
 #endif // SCENEMANAGER_H

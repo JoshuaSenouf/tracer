@@ -35,13 +35,13 @@ class Renderer
             int progressiveHeight);
         void initQuadRender();
         void traceLoop(int progressiveWidth,
-                       int progressiveHeight,
-                       int progressiveSamples,
-                       int progressiveDepth,
-                       int frameCounter,
-                       std::vector<Vector3>& renderBuffer,
-                       Camera& renderCamera,
-                       SceneManager& renderScene);
+            int progressiveHeight,
+            int progressiveSamples,
+            int progressiveDepth,
+            int frameCounter,
+            std::vector<Vector3>& renderBuffer,
+            Camera& renderCamera,
+            SceneManager& renderScene);
         void renderToTexture(int textureWidth,
             int textureHeight,
             const std::vector<Vector3>& renderBuffer);

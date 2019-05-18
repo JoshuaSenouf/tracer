@@ -7,6 +7,7 @@
 #include "ray.h"
 #include "randomizer.h"
 #include "render_helper.h"
+#include "embree_helper.h"
 
 
 enum cameraMovement
@@ -23,7 +24,7 @@ class Camera
     public:
         Camera();
 
-        void initCameraData(const cameraData sceneCameraData);
+        void initCameraData();
         void keyboardCall(cameraMovement direction,
             GLfloat deltaTime);
         void mouseCall(GLfloat xoffset,
