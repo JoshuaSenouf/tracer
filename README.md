@@ -6,18 +6,6 @@ Tracer is a C++ rendering engine that aimed to produce photorealistic images usi
 Screenshots
 ------
 
-* Glossy sphere and DoF (1280x720, 4 bounces, 1spp, after ~1.5 minutes on an i7-6700K) :
-
-![](https://image.ibb.co/bW14U6/mono_Sphere_Do_F_720p.png)
-
-* Low light material test (1280x720, 4 bounces, 1spp, after ~2 minutes on an i7-6700K) :
-
-![](https://image.ibb.co/cxF9wm/material_Test_720p.png)
-
-* Cornell Box (1280x720, 4 bounces, 1spp, after ~3 minutes on an i7-6700K) :
-
-![](https://image.ibb.co/nD0bbm/cornell_720p.png)
-
 Features
 ------
 
@@ -60,7 +48,7 @@ Features
 * Scene:
     * Format:
         * Pixar USD
-            *As "usd", "usda", "usdc" or "usdz"
+            * As .usd/usda/usdc/usdz
     * Ingested data:
         * **TODO :** Materials
         * **TODO :** Cameras
