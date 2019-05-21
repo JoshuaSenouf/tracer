@@ -61,7 +61,6 @@ void exportToPPM(int ppmWidth,
     fclose(ppmFile);
 }
 
-
 // Based on TinyEXR way of saving scanline EXR file
 void exportToEXR(int exrWidth,
     int exrHeight,

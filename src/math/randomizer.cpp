@@ -8,7 +8,6 @@ Randomizer::Randomizer(): intDistrib(),
 
 }
 
-
 unsigned Randomizer::getNewSeed()
 {
     std::uniform_int_distribution<unsigned> newRandSeed;
@@ -17,12 +16,10 @@ unsigned Randomizer::getNewSeed()
     return newRandSeed(rd);
 }
 
-
 int Randomizer::getRandomInt()
 {
     return intDistrib(mtEngine);
 }
-
 
 float Randomizer::getRandomFloat()
 {

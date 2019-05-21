@@ -16,7 +16,7 @@ int Window::renderWindow()
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
     glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
 
-    window = glfwCreateWindow(progressiveWidth, progressiveHeight, "Tracer", nullptr, nullptr);
+    window = glfwCreateWindow(width, height, "Tracer", nullptr, nullptr);
     glfwMakeContextCurrent(window);
 
     glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
@@ -26,15 +26,16 @@ int Window::renderWindow()
 
     ImGui_ImplGlfwGL3_Init(window, true);
 
-    renderScene.loadScene("res/scenes/cupandsaucer.usdz");
+    scene.loadScene("res/scenes/cupandsaucer.usdz");
 
-    renderCamera.setResolution(Vector2(progressiveWidth, progressiveHeight));
-    renderCamera.initCameraData();
+    camera.setResolution(Vector2(width, height));
+    camera.initCameraData();
 
-    frontBuffer.initBuffer(progressiveWidth, progressiveHeight);
-    backBuffer.initBuffer(progressiveWidth, progressiveHeight);
+    frontBuffer.initBuffer(width, height);
+    backBuffer.initBuffer(width, height);
 
-    tracerRenderer.initRender(progressiveWidth, progressiveHeight);
+    renderer.setupScreenQuad(width, height);
+    renderer.setupIntegrator(integratorID);
 
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 
@@ -62,30 +63,39 @@ int Window::renderWindow()
             lastPosY != currentMousePos.y)
             mouseCallback(guiIO, currentMousePos.x, currentMousePos.y);
 
+        // TODO: Will make use of Qt's callback system once the GUI will be revamped.
+        if (renderer.setupIntegrator(integratorID))
+        {
+            renderReset = true;
+        }
+
         //--------------
         // CPU Rendering
         //--------------
         if (!pauseBool)
         {
-            if (renderReset) // If anything in camera or scene data has changed, we flush the data and reinit them again
+            // If anything in camera or scene data has changed, we flush the data and reinit them again
+            if (renderReset)
                 resetRenderer();
 
-            frameCounter++;
+            frame++;
 
-            tracerRenderer.traceLoop(progressiveWidth,
-                progressiveHeight,
-                progressiveSamples,
-                progressiveDepth,
-                frameCounter,
+
+            // Progressive rendering
+            renderer.trace(width,
+                height,
+                samples,
+                depth,
+                frame,
                 frontBuffer.getBufferData(),
-                renderCamera,
-                renderScene); // Progressive rendering
-            tracerRenderer.renderToTexture(progressiveWidth,
-                progressiveHeight,
+                camera,
+                scene);
+            renderer.renderToScreenTexture(width,
+                height,
                 frontBuffer.getBufferData());
         }
 
-        tracerRenderer.displayGLBuffer();
+        renderer.drawScreenQuad();
 
         //----------------
         // GUI rendering
@@ -105,15 +115,13 @@ int Window::renderWindow()
     return 0;
 }
 
-
 void Window::resetRenderer()
 {
-    frameCounter = 0;
-    frontBuffer.cleanBufferData(progressiveWidth, progressiveHeight);
+    frame = 0;
+    frontBuffer.cleanBufferData(width, height);
 
     renderReset = false;
 }
-
 
 void Window::fpsWindow(bool& guiOpen)
 {
@@ -132,7 +140,6 @@ void Window::fpsWindow(bool& guiOpen)
     ImGui::End();
 }
 
-
 void Window::aboutWindow(bool& guiOpen)
 {
     ImGui::Begin("About", &guiOpen);
@@ -142,45 +149,36 @@ void Window::aboutWindow(bool& guiOpen)
     ImGui::End();
 }
 
-
 void Window::renderConfigWindow(bool& guiOpen)
 {
     ImGui::Begin("Render Config", &guiOpen);
 
-    ImGui::Text("Progressive configuration");
-    ImGui::InputInt("Progressive Width", &progressiveWidth);
-    ImGui::InputInt("Progressive Height", &progressiveHeight);
-    ImGui::InputInt("Progressive Samples", &progressiveSamples);
-    ImGui::InputInt("Progressive Depth", &progressiveDepth);
+    ImGui::InputInt("Width", &width);
+    ImGui::InputInt("Height", &height);
+    ImGui::InputInt("Samples", &samples);
+    ImGui::InputInt("Depth", &depth);
+
+    ImGui::Separator();
 
     if (!swapBool)
     {
         if (ImGui::Button("Save To Back Buffer"))
         {
-            backBuffer.cleanBufferData(progressiveWidth, progressiveHeight);
+            backBuffer.cleanBufferData(width, height);
             backBuffer.setBufferData(frontBuffer.getBufferData());
         }
     }
     if (ImGui::Button("Swap Buffers"))
     {
         frontBuffer.swapBufferData(backBuffer.getBufferData());
-        tracerRenderer.renderToTexture(progressiveWidth, progressiveHeight, frontBuffer.getBufferData());
+        renderer.renderToScreenTexture(width, height, frontBuffer.getBufferData());
 
         swapBool = !swapBool;
         pauseBool = true;
     }
 
-    ImGui::Separator();
-
-    ImGui::Text("Output configuration");
-    ImGui::InputInt("Output Width", &outputWidth);
-    ImGui::InputInt("Output Height", &outputHeight);
-    ImGui::InputInt("Output Samples", &outputSamples);
-    ImGui::InputInt("Output Depth", &outputDepth);
-
     ImGui::End();
 }
-
 
 void Window::setupGUI()
 {
@@ -195,42 +193,46 @@ void Window::setupGUI()
 
     if (ImGui::BeginMainMenuBar())
     {
-        if (ImGui::BeginMenu("Rendering"))
+        if (ImGui::BeginMenu("File"))
         {
             if (ImGui::BeginMenu("Render to..."))
             {
                 if (ImGui::MenuItem("PPM"))
                 {
-                    std::vector<Vector3> ppmBuffer;
+                    Buffer outputBuffer;
+                    outputBuffer.initBuffer(width, height);
 
-                    ppmBuffer.resize(outputWidth * outputHeight);
-                    tracerRenderer.traceLoop(outputWidth,
-                        outputHeight,
-                        outputSamples,
-                        outputDepth,
+                    renderer.trace(width,
+                        height,
+                        samples,
+                        depth,
                         1,
-                        ppmBuffer,
-                        renderCamera,
-                        renderScene);
+                        outputBuffer.getBufferData(),
+                        camera,
+                        scene);
 
-                    exportToPPM(outputWidth, outputHeight, ppmBuffer);
+                    exportToPPM(width,
+                        height,
+                        outputBuffer.getBufferData());
                 }
 
                 if (ImGui::MenuItem("EXR"))
                 {
-                    std::vector<Vector3> exrBuffer;
-
-                    exrBuffer.resize(outputWidth * outputHeight);
-                    tracerRenderer.traceLoop(outputWidth,
-                        outputHeight,
-                        outputSamples,
-                        outputDepth,
+                    Buffer outputBuffer;
+                    outputBuffer.initBuffer(width, height);
+                    
+                    renderer.trace(width,
+                        height,
+                        samples,
+                        depth,
                         1,
-                        exrBuffer,
-                        renderCamera,
-                        renderScene);
+                        outputBuffer.getBufferData(),
+                        camera,
+                        scene);
 
-                    exportToEXR(outputWidth, outputHeight, exrBuffer);
+                    exportToEXR(width,
+                        height,
+                        outputBuffer.getBufferData());
                 }
 
                 ImGui::EndMenu();
@@ -240,26 +242,39 @@ void Window::setupGUI()
             {
                 if (ImGui::MenuItem("PPM"))
                 {
-                    exportToPPM(progressiveWidth, progressiveHeight, frontBuffer.getBufferData());
+                    exportToPPM(width, height, frontBuffer.getBufferData());
                 }
 
                 if (ImGui::MenuItem("EXR"))
                 {
-                    exportToEXR(progressiveWidth, progressiveHeight, frontBuffer.getBufferData());
+                    exportToEXR(width, height, frontBuffer.getBufferData());
                 }
 
                 ImGui::EndMenu();
             }
 
-            ImGui::Separator();
+            ImGui::EndMenu();
+        }
 
-            if (!swapBool)
+        if (ImGui::BeginMenu("Rendering"))
+        {
+            if (ImGui::BeginMenu("Integrator"))
             {
-                ImGui::Checkbox("Pause Render", &pauseBool);
-                ImGui::Separator();
+                ImGui::RadioButton("UDPT", &integratorID, 0);
+                ImGui::RadioButton("Diffuse", &integratorID, 1);
+                ImGui::RadioButton("Occlusion", &integratorID, 2);
+                ImGui::RadioButton("Debug", &integratorID, 3);
+
+                ImGui::EndMenu();
             }
 
             ImGui::MenuItem("Config", NULL, &renderConfigBool);
+
+            if (!swapBool)
+            {
+                ImGui::Separator();
+                ImGui::Checkbox("Pause Render", &pauseBool);
+            }
 
             ImGui::EndMenu();
         }
@@ -270,16 +285,16 @@ void Window::setupGUI()
             {
                 if (ImGui::MenuItem("Cup and Saucer"))
                 {
-                    renderScene.loadScene("res/scenes/usd/cupandsaucer.usdz");
-                    renderCamera.initCameraData();
+                    scene.loadScene("res/scenes/usd/cupandsaucer.usdz");
+                    camera.initCameraData();
 
                     renderReset = true;
                 }
 
                 if (ImGui::MenuItem("Stormtroopers"))
                 {
-                    renderScene.loadScene("res/scenes/usd/stormtroopers.usdc");
-                    renderCamera.initCameraData();
+                    scene.loadScene("res/scenes/usd/stormtroopers.usdc");
+                    camera.initCameraData();
 
                     renderReset = true;
                 }
@@ -303,18 +318,15 @@ void Window::setupGUI()
     }
 }
 
-
 void Window::renderGUI()
 {
     ImGui::Render();
 }
 
-
 void Window::stopGUI()
 {
     ImGui_ImplGlfwGL3_Shutdown();
 }
-
 
 void Window::keyboardCallback(ImGuiIO& guiIO)
 {
@@ -324,30 +336,30 @@ void Window::keyboardCallback(ImGuiIO& guiIO)
     }
     if (guiIO.KeysDown[GLFW_KEY_W])
     {
-        renderCamera.keyboardCall(FORWARD, deltaTime);
+        camera.keyboardCall(FORWARD, deltaTime);
         renderReset = true;
     }
     if (guiIO.KeysDown[GLFW_KEY_S])
     {
-        renderCamera.keyboardCall(BACKWARD, deltaTime);
+        camera.keyboardCall(BACKWARD, deltaTime);
         renderReset = true;
     }
     if (guiIO.KeysDown[GLFW_KEY_A])
     {
-        renderCamera.keyboardCall(LEFT, deltaTime);
+        camera.keyboardCall(LEFT, deltaTime);
         renderReset = true;
     }
     if (guiIO.KeysDown[GLFW_KEY_D])
     {
-        renderCamera.keyboardCall(RIGHT, deltaTime);
+        camera.keyboardCall(RIGHT, deltaTime);
         renderReset = true;
     }
     if (guiIO.KeysDown[GLFW_KEY_KP_ADD])
     {
         if (guiIO.KeysDown[GLFW_KEY_LEFT_CONTROL])
-            renderCamera.setFocalDistance(renderCamera.getFocalDistance() + 0.1f);
+            camera.setFocalDistance(camera.getFocalDistance() + 0.1f);
         else
-            renderCamera.setApertureRadius(renderCamera.getApertureRadius() + 0.005f);
+            camera.setApertureRadius(camera.getApertureRadius() + 0.005f);
 
         renderReset = true;
     }
@@ -355,16 +367,15 @@ void Window::keyboardCallback(ImGuiIO& guiIO)
     {
         if (guiIO.KeysDown[GLFW_KEY_LEFT_CONTROL])
         {
-            renderCamera.setFocalDistance(renderCamera.getFocalDistance() - 0.1f);
+            camera.setFocalDistance(camera.getFocalDistance() - 0.1f);
         }
         else
         {
-            renderCamera.setApertureRadius(renderCamera.getApertureRadius() - 0.005f);
+            camera.setApertureRadius(camera.getApertureRadius() - 0.005f);
         }
         renderReset = true;
     }
 }
-
 
 void Window::mouseCallback(ImGuiIO& guiIO,
     float mousePosX,
@@ -387,7 +398,7 @@ void Window::mouseCallback(ImGuiIO& guiIO,
     {
         if (offsetX != 0 || offsetY != 0)
         {
-            renderCamera.mouseCall(offsetX, offsetY, true);
+            camera.mouseCall(offsetX, offsetY, true);
             renderReset = true;
         }
     }

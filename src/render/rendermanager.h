@@ -1,0 +1,78 @@
+#ifndef RENDERMANAGER_H
+#define RENDERMANAGER_H
+
+#include <iostream>
+#include <fstream>
+#include <vector>
+#include <iterator>
+#include <memory>
+
+#include <glad/glad.h>
+#include "stb_image.h"
+
+#include "vector.h"
+#include "camera.h"
+#include "scenemanager.h"
+#include "integrator.h"
+#include "glshader.h"
+#include "render_helper.h"
+
+#include "udpt.h"
+#include "diffuse.h"
+#include "occlusion.h"
+#include "debug.h"
+
+
+static const GLfloat screenQuadVertices[] =
+{
+    -1.0f,  1.0f, 0.0f, 0.0f, 1.0f,
+    -1.0f, -1.0f, 0.0f, 0.0f, 0.0f,
+    1.0f,  1.0f, 0.0f, 1.0f, 1.0f,
+    1.0f, -1.0f, 0.0f, 1.0f, 0.0f,
+};
+
+
+class RenderManager
+{
+    public:
+        RenderManager();
+        ~RenderManager();
+
+        void setupScreenQuad(int width,
+            int height);
+        void trace(int width,
+            int height,
+            int samples,
+            int depth,
+            int frame,
+            std::vector<Vector3>& buffer,
+            Camera& camera,
+            SceneManager& scene);
+        void renderToScreenTexture(int width,
+            int height,
+            const std::vector<Vector3>& buffer);
+        void cleanScreenQuad();
+        void drawScreenQuad();
+        bool setupIntegrator(int id);
+
+    private:
+        GLuint screenQuadVAO;
+        GLuint screenQuadVBO;
+        GLuint screenTextureID;
+
+        GLShader screenQuadShader;
+
+        unsigned int integratorID = DEBUG;
+
+        std::unique_ptr<UDPTIntegrator> udptIntegrator = std::make_unique<UDPTIntegrator>();
+        std::unique_ptr<DiffuseIntegrator> diffuseIntegrator = std::make_unique<DiffuseIntegrator>();
+        std::unique_ptr<OcclusionIntegrator> occlusionIntegrator = std::make_unique<OcclusionIntegrator>();
+        std::unique_ptr<DebugIntegrator> debugIntegrator = std::make_unique<DebugIntegrator>();
+
+        std::vector<Integrator*> integrators {udptIntegrator.get(),
+            diffuseIntegrator.get(),
+            occlusionIntegrator.get(),
+            debugIntegrator.get()};
+};
+
+#endif // RENDERMANAGER_H

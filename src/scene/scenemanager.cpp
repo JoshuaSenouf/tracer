@@ -57,55 +57,51 @@ bool SceneManager::loadGeometry()
 
 bool SceneManager::loadMeshGeometry()
 {
-    std::vector<pxr::UsdPrim> primMeshVec;
+    std::vector<pxr::UsdPrim> meshPrims;
 
-    getPrimFromType("Mesh", stage, pxr::SdfPath("/"), primMeshVec);
+    getPrimFromType("Mesh", stage, pxr::SdfPath("/"), meshPrims);
 
-    // tbb::parallel_for_each(primMeshVec.begin(), primMeshVec.end(), [&](pxr::UsdPrim& primMesh)
-    for(const pxr::UsdPrim& primMesh: primMeshVec)
+    // tbb::parallel_for_each(meshPrims.begin(), meshPrims.end(), [&](pxr::UsdPrim& prim)
+    for(const pxr::UsdPrim& prim: meshPrims)
     {
-        const pxr::TfToken primName = primMesh.GetName();
-        const pxr::SdfPath primPath = primMesh.GetPrimPath();
+        const pxr::TfToken primName = prim.GetName();
+        const pxr::SdfPath primPath = prim.GetPrimPath();
 
-        pxr::UsdGeomMesh geomMesh = pxr::UsdGeomMesh::Get(stage, primPath);
+        pxr::UsdGeomMesh usdGeom = pxr::UsdGeomMesh::Get(stage, primPath);
 
-        pxr::VtArray<pxr::GfVec3f> meshPoints;
-        pxr::VtArray<int> meshVertexCounts;
-        pxr::VtArray<int> meshVertexIndices;
+        pxr::VtArray<pxr::GfVec3f> points;
+        pxr::VtArray<int> indicesCounts;
+        pxr::VtArray<int> indices;
 
-        geomMesh.GetPointsAttr().Get(&meshPoints);
-        geomMesh.GetFaceVertexCountsAttr().Get(&meshVertexCounts);
-        geomMesh.GetFaceVertexIndicesAttr().Get(&meshVertexIndices);
+        usdGeom.GetPointsAttr().Get(&points);
+        usdGeom.GetFaceVertexIndicesAttr().Get(&indices);
+        usdGeom.GetFaceVertexCountsAttr().Get(&indicesCounts);
 
-        bool isTriangleMesh = (static_cast<float>(meshVertexIndices.size()) /
-            static_cast<float>(meshVertexCounts.size()) == 3.0f) ? true : false;
-        bool isQuadMesh = (static_cast<float>(meshVertexIndices.size()) /
-            static_cast<float>(meshVertexCounts.size()) == 4.0f) ? true : false;
+        bool isTriangleMesh = (static_cast<float>(indices.size()) /
+            static_cast<float>(indicesCounts.size()) == 3.0f) ? true : false;
+        bool isQuadMesh = (static_cast<float>(indices.size()) /
+            static_cast<float>(indicesCounts.size()) == 4.0f) ? true : false;
         bool needTriangulate = (!isTriangleMesh && !isQuadMesh) ? true : false;
 
         if (isTriangleMesh)
         {
-            TriangleMesh triangleMesh(primMesh,
-                geomMesh,
-                meshPoints,
-                meshVertexIndices
+            TriangleMesh triangleMesh(prim,
+                usdGeom,
+                points,
+                indices
             );
-
-            triangleMesh.create(device);
-            triangleMesh.instance(device, rootScene);
+            triangleMesh.create(device, rootScene);
 
             sceneGeom.push_back(triangleMesh);
         }
         else if (isQuadMesh)
         {
-            QuadMesh quadMesh(primMesh,
-                geomMesh,
-                meshPoints,
-                meshVertexIndices
+            QuadMesh quadMesh(prim,
+                usdGeom,
+                points,
+                indices
             );
-
-            quadMesh.create(device);
-            quadMesh.instance(device, rootScene);
+            quadMesh.create(device, rootScene);
 
             sceneGeom.push_back(quadMesh);
         }
@@ -113,11 +109,11 @@ bool SceneManager::loadMeshGeometry()
         {
             // pxr::VtArray<int> meshHoleIndices;
             // pxr::TfToken meshOrientation;
-            // geomMesh.GetHoleIndicesAttr().Get(&meshHoleIndices);
-            // geomMesh.GetOrientationAttr().Get(&meshOrientation);
+            // usdGeom.GetHoleIndicesAttr().Get(&meshHoleIndices);
+            // usdGeom.GetOrientationAttr().Get(&meshOrientation);
 
-            // pxr::VtVec3iArray meshTriangulatedIndices = triangulateMeshIndices(meshVertexCounts,
-            //     meshVertexIndices,
+            // pxr::VtVec3iArray meshTriangulatedIndices = triangulateMeshIndices(indicesCounts,
+            //     indices,
             //     meshHoleIndices,
             //     meshOrientation);
             

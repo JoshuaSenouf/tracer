@@ -1,73 +1,55 @@
 #ifndef RENDER_HELPER_H
 #define RENDER_HELPER_H
 
-#define EPSILON 0.001f
-
 #include "vector.h"
 
 
-struct cameraData
-{
-    Vector3 position;
-    float yaw;
-    float pitch;
-    float FOV;
-    float apertureRadius;
-    float focalDistance;
+enum INTEGRATOR_ID {
+    UDPT,
+    DIFFUSE,
+    OCCLUSION,
+    DEBUG,
 };
 
-struct settingsData
+inline float clamp(float colorChannel)
 {
-    Vector3 skyColor;
-};
-
-
-inline float clamp(float x)
-{
-    return x < 0.0f ? 0.0f : x > 1.0f ? 1.0f : x;
+    return colorChannel < 0.0f ? 0.0f : colorChannel > 1.0f ? 1.0f : colorChannel;
 }
 
-
-inline Vector3 clamp(const Vector3 &tempVector)
+inline Vector3 clamp(const Vector3 &color)
 {
-    return Vector3(clamp(tempVector.x),
-        clamp(tempVector.y),
-        clamp(tempVector.z));
+    return Vector3(clamp(color.x),
+        clamp(color.y),
+        clamp(color.z));
 }
 
-
-inline float convertToSRGB(float x)
+inline float convertToSRGB(float colorChannel)
 {
-    return std::pow(x, 1.0f / 2.2f);
+    return std::pow(colorChannel, 1.0f / 2.2f);
 }
 
-
-inline Vector3 convertToSRGB(const Vector3 &tempVector)
+inline Vector3 convertToSRGB(const Vector3 &color)
 {
-    return Vector3(convertToSRGB(tempVector.x),
-        convertToSRGB(tempVector.y),
-        convertToSRGB(tempVector.z));
+    return Vector3(convertToSRGB(color.x),
+        convertToSRGB(color.y),
+        convertToSRGB(color.z));
 }
 
-
-inline float convertToLinear(float x)
+inline float convertToLinear(float colorChannel)
 {
-    return std::pow(x, 2.2f);
+    return std::pow(colorChannel, 2.2f);
 }
 
-
-inline Vector3 convertToLinear(const Vector3 &tempVector)
+inline Vector3 convertToLinear(const Vector3 &color)
 {
-    return Vector3(convertToLinear(tempVector.x),
-        convertToLinear(tempVector.y),
-        convertToLinear(tempVector.z));
+    return Vector3(convertToLinear(color.x),
+        convertToLinear(color.y),
+        convertToLinear(color.z));
 }
 
-
-inline int convertToRGB(float x)
+inline int convertToRGB(float colorChannel)
 {
-    return int(clamp(x) * 255);
+    return int(clamp(colorChannel) * 255);
 }
-
 
 #endif // RENDER_HELPER_H

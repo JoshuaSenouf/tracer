@@ -14,7 +14,6 @@ inline float degreesToRadians(float degreesAngle)
     return degreesAngle * (M_PI / 180.0f);
 }
 
-
 inline float radiansToDegrees(float radiansAngle)
 {
     return radiansAngle * (180.0f / M_PI);

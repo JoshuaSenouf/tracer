@@ -31,7 +31,7 @@ set(USD_LIBS
 if(MSVC)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /W4 /O2 /openmp")
 else()
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O3 -Wall -Wextra -Wpedantic -std=c++11 -fopenmp")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O3 -Wall -Wextra -Wpedantic -std=c++14 -fopenmp")
     if(NOT WIN32)
         set(GLAD_LIBRARIES dl)
     endif()
@@ -44,14 +44,13 @@ include_directories(api/glad/include/
                     api/tinyobjloader/
                     api/tinyexr/
                     src/camera/
+                    src/geometry/
                     src/gui/
+                    src/integrator/
+                    src/material/
                     src/math/
-                    src/objects/
-                    src/objects/geometry/
-                    src/objects/lights/
-                    src/rendering/
-                    src/rendering/integrators/
-                    src/rendering/materials/
+                    src/opengl/
+                    src/render/
                     src/scene/
                     src/utility/
                     ${USD_INCLUDE_DIR}
@@ -63,27 +62,25 @@ file(GLOB API_SOURCES api/glad/src/glad.c
                       api/imgui/*.cpp)
 
 file(GLOB PROJECT_HEADERS src/camera/*.h
+                          src/geometry/*.h
                           src/gui/*.h
+                          src/integrator/*.h
+                          src/material/*.h
                           src/math/*.h
-                          src/objects/*.h
-                          src/objects/geometry/*.h
-                          src/objects/lights/*.h
-                          src/rendering/*.h
-                          src/rendering/integrators/*.h
-                          src/rendering/materials/*.h
+                          src/opengl/*.h
+                          src/render/*.h
                           src/scene/*.h
                           src/utility/*.h
                           src/*.h)
 
 file(GLOB PROJECT_SOURCES src/camera/*.cpp
+                          src/geometry/*.cpp
                           src/gui/*.cpp
+                          src/integrator/*.cpp
+                          src/material/*.cpp
                           src/math/*.cpp
-                          src/objects/*.cpp
-                          src/objects/geometry/*.cpp
-                          src/objects/lights/*.cpp
-                          src/rendering/*.cpp
-                          src/rendering/integrators/*.cpp
-                          src/rendering/materials/*.cpp
+                          src/opengl/*.cpp
+                          src/render/*.cpp
                           src/scene/*.cpp
                           src/utility/*.cpp
                           src/*.cpp)
@@ -94,7 +91,8 @@ file(GLOB PROJECT_SHADERS res/shaders/*.frag
 
 file(GLOB PROJECT_SCENES res/scenes/*.usd
                          res/scenes/*.usda
-                         res/scenes/*.usdc)
+                         res/scenes/*.usdc
+                         res/scenes/*.usdz)
 
 file(GLOB PROJECT_CONFIGS CMakeLists.txt
                           README.md

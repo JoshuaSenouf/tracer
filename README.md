@@ -6,6 +6,10 @@ Tracer is a C++ rendering engine that aimed to produce photorealistic images usi
 Screenshots
 ------
 
+* USD Kitchen, using the Debug integrator, showing equivalent of Pixar USD's primID on the geometry:
+
+![](https://i.ibb.co/XsHRpqn/primId1.png)
+
 Features
 ------
 
@@ -19,6 +23,13 @@ Features
     * Subpixel jitter antialiasing
     * Depth of Field (using aperture radius and focal distance)
 
+* Integrator:
+    * **TODO :** UDPT (Unidirectional Path Tracing)
+    * **TODO :** Diffuse
+    * **TODO :** Occlusion
+    * Debug
+        * Render the equivalent of USD primID on the geometry
+
 * Material:
     * Lambertian diffuse
     * Specular component:
@@ -27,8 +38,8 @@ Features
     * **TODO :** Physically-based BSDF (Probably a simplified version of the Disney principled BSDF)
 
 * Light sources:
-    * Geometry light
-    * Sky light
+    * **TODO :** Geometry light
+    * **TODO :** Sky light
 
 * Geometry types:
     * Meshes
@@ -38,7 +49,7 @@ Features
     * **TODO :** Curves
     * **TODO :** Primitives (sphere, cube...)
     * Instances:
-        * Per-geometry single instancing
+        * Per-geometry instancing ("Everything is an instance" philosophy)
         * **TODO :** Native, multiple instancing of geometry prototypes
 
 * Acceleration structure:
@@ -69,7 +80,7 @@ Features
 How to use
 ------
 
-Tracer was written using Linux, QtCreator as the IDE, CMake as the building tool, and a C++11 compiler in mind.
+Tracer was written using Linux, VSCode as the IDE, CMake as the building tool, and a C++14 compiler in mind.
 
 Download the source, build the project structure using CMake 3.x, open the project using your favorite IDE (tested on QtCreator), build the project, and everything should be ready to use.
 
@@ -81,12 +92,11 @@ Download the source, build the project structure using CMake 3.x, open the proje
 Dependencies (included, aside from Pixar USD and its own dependencies)
 ------
 
-- Window & Input system: GLFW
-- OpenGL Function Loader: GLAD
-- GUI system: dear imgui
+- Window&Input System: GLFW
+- OpenGL Functions Loader: GLAD
+- GUI System: dear imgui
+- EXR Handling: tinyexr
+- Image Loading: stb
+- Scene Loading: Pixar USD
+- Ray Tracing Kernels: Intel Embree
 - Multithreading: Intel TBB
-- EXR handling: tinyexr
-- Mesh loading: tinyobjloader
-- Image loading: stb
-- Scene loading: Pixar USD
-- Ray tracing kernels: Intel Embree

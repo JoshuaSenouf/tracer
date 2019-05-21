@@ -38,5 +38,4 @@ void exportToEXR(int exrWidth,
     int exrHeight,
     const std::vector<Vector3>& exportBuffer);
 
-
 #endif // BUFFER_H

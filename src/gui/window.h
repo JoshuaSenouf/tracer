@@ -11,10 +11,11 @@
 #include <imgui.h>
 #include <imgui_impl_glfw_gl3.h>
 
-#include "renderer.h"
 #include "camera.h"
 #include "buffer.h"
 #include "scenemanager.h"
+#include "rendermanager.h"
+#include "render_helper.h"
 
 #define DEFAULT_WIDTH 800
 #define DEFAULT_HEIGHT 600
@@ -51,32 +52,27 @@ class Window
         bool pauseBool = false;
         bool swapBool = false;
 
-        int frameCounter = 0;
+        int frame = 0;
 
-        int progressiveWidth = DEFAULT_WIDTH;
-        int progressiveHeight = DEFAULT_HEIGHT;
-        int progressiveSamples = 1;
-        int progressiveDepth = 4;
-        int outputWidth = DEFAULT_WIDTH;
-        int outputHeight = DEFAULT_HEIGHT;
-        int outputSamples = 32;
-        int outputDepth = 4;
+        int width = DEFAULT_WIDTH;
+        int height = DEFAULT_HEIGHT;
+        int samples = 1;
+        int depth = 4;
+        int integratorID = DEBUG;
 
         GLfloat deltaTime = 0.0f;
         GLfloat lastFrame = 0.0f;
-        GLfloat lastPosX = progressiveWidth / 2.0f;
-        GLfloat lastPosY = progressiveHeight / 2.0f;
+        GLfloat lastPosX = width / 2.0f;
+        GLfloat lastPosY = height / 2.0f;
 
         GLFWwindow* window;
 
-        Camera renderCamera;
-
-        Renderer tracerRenderer;
+        Camera camera;
+        RenderManager renderer;
+        SceneManager scene;
 
         Buffer frontBuffer;
         Buffer backBuffer;
-
-        SceneManager renderScene;
 };
 
 

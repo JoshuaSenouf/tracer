@@ -94,5 +94,4 @@ class Vector2
 std::ostream& operator<<(std::ostream &os, const Vector3 &tempVec3);
 std::ostream& operator<<(std::ostream &os, const Vector2 &tempVec2);
 
-
 #endif // VECTOR_H
