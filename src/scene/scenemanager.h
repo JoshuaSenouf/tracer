@@ -40,9 +40,9 @@ class SceneManager
         RTCDevice device = nullptr;
         RTCScene rootScene = nullptr; // Contains the instanced (single or not) geometry objects. This is the scene we are tracing against.
 
-        std::mutex meshMutex;
+        std::mutex geometryMutex;
 
-        std::vector<Geometry> sceneGeom;
+        std::vector<std::shared_ptr<Geometry>> sceneGeometry;
 };
 
 #endif // SCENEMANAGER_H

@@ -9,7 +9,15 @@
 
 RenderManager::RenderManager()
 {
+    std::shared_ptr<UDPTIntegrator> udptIntegrator = std::make_shared<UDPTIntegrator>();
+    std::shared_ptr<DiffuseIntegrator> diffuseIntegrator = std::make_shared<DiffuseIntegrator>();
+    std::shared_ptr<OcclusionIntegrator> occlusionIntegrator = std::make_shared<OcclusionIntegrator>();
+    std::shared_ptr<DebugIntegrator> debugIntegrator = std::make_shared<DebugIntegrator>();
 
+    integrators.push_back(udptIntegrator);
+    integrators.push_back(diffuseIntegrator);
+    integrators.push_back(occlusionIntegrator);
+    integrators.push_back(debugIntegrator);
 }
 
 RenderManager::~RenderManager()
@@ -61,7 +69,7 @@ void RenderManager::trace(int width,
     int samples,
     int depth,
     int frame,
-    std::vector<Vector3>& buffer,
+    Buffer& buffer,
     Camera& camera,
     SceneManager &scene)
 {
@@ -81,7 +89,7 @@ void RenderManager::trace(int width,
                 {
                     Ray cameraRay = camera.getCameraRay(pixelX, pixelY, randEngine);
 
-                    pixelColor += (buffer[pixelIndex] * (frame - 1) +
+                    pixelColor += (buffer._pixelData[pixelIndex] * (frame - 1) +
                         integrators[integratorID]->getPixelColor(cameraRay,
                             scene,
                             randEngine,
@@ -89,13 +97,13 @@ void RenderManager::trace(int width,
                         / frame * (1.0f / samples);
 
                     // Random noise test
-                    // pixelColor += (buffer[pixelIndex] * (frame - 1) +
+                    // pixelColor += (buffer._pixelData[pixelIndex] * (frame - 1) +
                     //     Vector3(randEngine.getRandomFloat(),
                     //     randEngine.getRandomFloat(),
                     //     randEngine.getRandomFloat())) / frame * (1.0f / samples);
                 }
 
-                buffer[pixelIndex] = pixelColor;
+                buffer._pixelData[pixelIndex] = pixelColor;
             }
         }
     });
@@ -103,10 +111,10 @@ void RenderManager::trace(int width,
 
 void RenderManager::renderToScreenTexture(int width,
     int height,
-    const std::vector<Vector3>& buffer)
+    Buffer& buffer)
 {
     glBindTexture(GL_TEXTURE_2D, screenTextureID);
-    glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, width, height, GL_RGB, GL_FLOAT, buffer.data());
+    glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, width, height, GL_RGB, GL_FLOAT, buffer._pixelData.data());
 
     screenQuadShader.use();
 

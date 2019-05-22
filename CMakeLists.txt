@@ -29,9 +29,9 @@ set(USD_LIBS
     ${Boost_REGEX_LIBRARY})
 
 if(MSVC)
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /W4 /O2 /openmp")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /W4 /O2")
 else()
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O3 -Wall -Wextra -Wpedantic -std=c++14 -fopenmp")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O3 -Wall -Wextra -Wpedantic -std=c++14")
     if(NOT WIN32)
         set(GLAD_LIBRARIES dl)
     endif()
@@ -44,11 +44,11 @@ include_directories(api/glad/include/
                     api/tinyobjloader/
                     api/tinyexr/
                     src/camera/
-                    src/geometry/
                     src/gui/
                     src/integrator/
                     src/material/
                     src/math/
+                    src/object/
                     src/opengl/
                     src/render/
                     src/scene/
@@ -62,11 +62,11 @@ file(GLOB API_SOURCES api/glad/src/glad.c
                       api/imgui/*.cpp)
 
 file(GLOB PROJECT_HEADERS src/camera/*.h
-                          src/geometry/*.h
                           src/gui/*.h
                           src/integrator/*.h
                           src/material/*.h
                           src/math/*.h
+                          src/object/*.h
                           src/opengl/*.h
                           src/render/*.h
                           src/scene/*.h
@@ -74,11 +74,11 @@ file(GLOB PROJECT_HEADERS src/camera/*.h
                           src/*.h)
 
 file(GLOB PROJECT_SOURCES src/camera/*.cpp
-                          src/geometry/*.cpp
                           src/gui/*.cpp
                           src/integrator/*.cpp
                           src/material/*.cpp
                           src/math/*.cpp
+                          src/object/*.cpp
                           src/opengl/*.cpp
                           src/render/*.cpp
                           src/scene/*.cpp

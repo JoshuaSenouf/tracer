@@ -6,7 +6,7 @@ Tracer is a C++ rendering engine that aimed to produce photorealistic images usi
 Screenshots
 ------
 
-* USD Kitchen, using the Debug integrator, showing equivalent of Pixar USD's primID on the geometry:
+* USD Kitchen, using the Debug integrator, displaying the equivalent of Pixar USD's primID on the geometry:
 
 ![](https://i.ibb.co/XsHRpqn/primId1.png)
 

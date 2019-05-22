@@ -61,8 +61,7 @@ bool SceneManager::loadMeshGeometry()
 
     getPrimFromType("Mesh", stage, pxr::SdfPath("/"), meshPrims);
 
-    // tbb::parallel_for_each(meshPrims.begin(), meshPrims.end(), [&](pxr::UsdPrim& prim)
-    for(const pxr::UsdPrim& prim: meshPrims)
+    tbb::parallel_for_each(meshPrims.begin(), meshPrims.end(), [&](pxr::UsdPrim& prim)    
     {
         const pxr::TfToken primName = prim.GetName();
         const pxr::SdfPath primPath = prim.GetPrimPath();
@@ -85,25 +84,27 @@ bool SceneManager::loadMeshGeometry()
 
         if (isTriangleMesh)
         {
-            TriangleMesh triangleMesh(prim,
+            std::shared_ptr<TriangleMesh> triangleMesh = std::make_shared<TriangleMesh>(prim,
                 usdGeom,
                 points,
-                indices
-            );
-            triangleMesh.create(device, rootScene);
+                indices);
+            triangleMesh->create(device, rootScene);
 
-            sceneGeom.push_back(triangleMesh);
+            geometryMutex.lock();
+            sceneGeometry.push_back(triangleMesh);
+            geometryMutex.unlock();
         }
         else if (isQuadMesh)
         {
-            QuadMesh quadMesh(prim,
+            std::shared_ptr<QuadMesh> quadMesh = std::make_shared<QuadMesh>(prim,
                 usdGeom,
                 points,
-                indices
-            );
-            quadMesh.create(device, rootScene);
-
-            sceneGeom.push_back(quadMesh);
+                indices);
+            quadMesh->create(device, rootScene);
+        
+            geometryMutex.lock();
+            sceneGeometry.push_back(quadMesh);
+            geometryMutex.unlock();
         }
         else if (needTriangulate)
         {
@@ -124,15 +125,15 @@ bool SceneManager::loadMeshGeometry()
             // TODO
         }
 
-        // meshMutex.lock();
+        geometryMutex.lock();
         std::cout << "===================" << std::endl;
         std::cout << "PRIM NAME: " << primName << std::endl;
         std::cout << "PRIM PATH: " << primPath << std::endl;
         std::cout << "ISTRIANGLEMESH: " << isTriangleMesh << std::endl;
         std::cout << "ISQUADMESH: " << isQuadMesh << std::endl;
         std::cout << "NEEDTRIANGULATE: " << needTriangulate << std::endl;
-        // meshMutex.unlock();
-    }
+        geometryMutex.unlock();
+    });
 
     return true;
 }

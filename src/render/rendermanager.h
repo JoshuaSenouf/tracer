@@ -12,6 +12,7 @@
 
 #include "vector.h"
 #include "camera.h"
+#include "buffer.h"
 #include "scenemanager.h"
 #include "integrator.h"
 #include "glshader.h"
@@ -45,12 +46,12 @@ class RenderManager
             int samples,
             int depth,
             int frame,
-            std::vector<Vector3>& buffer,
+            Buffer& buffer,
             Camera& camera,
             SceneManager& scene);
         void renderToScreenTexture(int width,
             int height,
-            const std::vector<Vector3>& buffer);
+            Buffer& buffer);
         void cleanScreenQuad();
         void drawScreenQuad();
         bool setupIntegrator(int id);
@@ -64,15 +65,7 @@ class RenderManager
 
         unsigned int integratorID = DEBUG;
 
-        std::unique_ptr<UDPTIntegrator> udptIntegrator = std::make_unique<UDPTIntegrator>();
-        std::unique_ptr<DiffuseIntegrator> diffuseIntegrator = std::make_unique<DiffuseIntegrator>();
-        std::unique_ptr<OcclusionIntegrator> occlusionIntegrator = std::make_unique<OcclusionIntegrator>();
-        std::unique_ptr<DebugIntegrator> debugIntegrator = std::make_unique<DebugIntegrator>();
-
-        std::vector<Integrator*> integrators {udptIntegrator.get(),
-            diffuseIntegrator.get(),
-            occlusionIntegrator.get(),
-            debugIntegrator.get()};
+        std::vector<std::shared_ptr<Integrator>> integrators;
 };
 
 #endif // RENDERMANAGER_H

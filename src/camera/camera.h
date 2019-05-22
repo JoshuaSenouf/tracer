@@ -6,75 +6,41 @@
 #include "vector.h"
 #include "ray.h"
 #include "randomizer.h"
+#include "camera_helper.h"
 #include "render_helper.h"
 #include "embree_helper.h"
 
 
-enum cameraMovement
+struct Camera
 {
-    FORWARD,
-    BACKWARD,
-    LEFT,
-    RIGHT
-};
+    Camera();
 
+    void init();
+    void keyboardCallback(CAMERA_MOVEMENTS direction,
+        GLfloat deltaTime);
+    void mouseCallback(GLfloat offsetX,
+        GLfloat offsetY,
+        GLboolean constrainPitch);
+    void updateVectors();
+    Ray getCameraRay(int posX,
+        int posY,
+        Randomizer& randEngine);
 
-class Camera
-{
-    public:
-        Camera();
+    void setupFOV();
 
-        void initCameraData();
-        void keyboardCall(cameraMovement direction,
-            GLfloat deltaTime);
-        void mouseCall(GLfloat xoffset,
-            GLfloat yoffset,
-            GLboolean constrainPitch);
-        void updateCameraVectors();
-        Ray getCameraRay(int posX,
-            int posY,
-            Randomizer& randEngine);
+    Vector2 _resolution;
+    Vector3 _position;
+    Vector3 _front;
+    Vector3 _up;
+    Vector3 _right;
+    Vector2 _fov;
 
-        Vector2& getResolution();
-        Vector3& getPosition();
-        Vector3& getFront();
-        Vector3& getUp();
-        Vector3& getRight();
-        Vector2& getFOV();
-        float& getYaw();
-        float& getPitch();
-        float& getSpeed();
-        float& getSensitivity();
-        float& getApertureRadius();
-        float& getFocalDistance();
-
-        void setResolution(Vector2 tempResolution);
-        void setPosition(Vector3 tempPosition);
-        void setFront(Vector3 tempForward);
-        void setUp(Vector3 tempUp);
-        void setRight(Vector3 tempRight);
-        void setFOV(float tempFOV);
-        void setYaw(float tempYaw);
-        void setPitch(float tempPitch);
-        void setSpeed(float tempSpeed);
-        void setSensitivity(float tempSensisivity);
-        void setApertureRadius(float tempAperture);
-        void setFocalDistance(float tempFocal);
-
-    private:
-        Vector2 resolution;
-        Vector3 position;
-        Vector3 front;
-        Vector3 up;
-        Vector3 right;
-        Vector2 FOV;
-
-        float yaw;
-        float pitch;
-        float speed;
-        float sensitivity;
-        float apertureRadius;
-        float focalDistance;
+    float _yaw;
+    float _pitch;
+    float _speed;
+    float _sensitivity;
+    float _apertureRadius;
+    float _focalDistance;
 };
 
 #endif // CAMERA_H

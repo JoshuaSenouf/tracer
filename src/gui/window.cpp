@@ -1,11 +1,12 @@
 #include "window.h"
 
+#include "output_helper.h"
+
 
 Window::Window()
 {
     
 }
-
 
 int Window::renderWindow()
 {
@@ -28,11 +29,11 @@ int Window::renderWindow()
 
     scene.loadScene("res/scenes/cupandsaucer.usdz");
 
-    camera.setResolution(Vector2(width, height));
-    camera.initCameraData();
+    camera._resolution = Vector2(width, height);
+    camera.init();
 
-    frontBuffer.initBuffer(width, height);
-    backBuffer.initBuffer(width, height);
+    frontBuffer.init(width, height);
+    backBuffer.init(width, height);
 
     renderer.setupScreenQuad(width, height);
     renderer.setupIntegrator(integratorID);
@@ -87,12 +88,12 @@ int Window::renderWindow()
                 samples,
                 depth,
                 frame,
-                frontBuffer.getBufferData(),
+                frontBuffer,
                 camera,
                 scene);
             renderer.renderToScreenTexture(width,
                 height,
-                frontBuffer.getBufferData());
+                frontBuffer);
         }
 
         renderer.drawScreenQuad();
@@ -118,7 +119,7 @@ int Window::renderWindow()
 void Window::resetRenderer()
 {
     frame = 0;
-    frontBuffer.cleanBufferData(width, height);
+    frontBuffer.clean(width, height);
 
     renderReset = false;
 }
@@ -164,14 +165,14 @@ void Window::renderConfigWindow(bool& guiOpen)
     {
         if (ImGui::Button("Save To Back Buffer"))
         {
-            backBuffer.cleanBufferData(width, height);
-            backBuffer.setBufferData(frontBuffer.getBufferData());
+            backBuffer.clean(width, height);
+            backBuffer._pixelData = frontBuffer._pixelData;
         }
     }
     if (ImGui::Button("Swap Buffers"))
     {
-        frontBuffer.swapBufferData(backBuffer.getBufferData());
-        renderer.renderToScreenTexture(width, height, frontBuffer.getBufferData());
+        frontBuffer.swap(backBuffer);
+        renderer.renderToScreenTexture(width, height, frontBuffer);
 
         swapBool = !swapBool;
         pauseBool = true;
@@ -200,39 +201,39 @@ void Window::setupGUI()
                 if (ImGui::MenuItem("PPM"))
                 {
                     Buffer outputBuffer;
-                    outputBuffer.initBuffer(width, height);
+                    outputBuffer.init(width, height);
 
                     renderer.trace(width,
                         height,
                         samples,
                         depth,
                         1,
-                        outputBuffer.getBufferData(),
+                        outputBuffer,
                         camera,
                         scene);
 
                     exportToPPM(width,
                         height,
-                        outputBuffer.getBufferData());
+                        outputBuffer);
                 }
 
                 if (ImGui::MenuItem("EXR"))
                 {
                     Buffer outputBuffer;
-                    outputBuffer.initBuffer(width, height);
+                    outputBuffer.init(width, height);
                     
                     renderer.trace(width,
                         height,
                         samples,
                         depth,
                         1,
-                        outputBuffer.getBufferData(),
+                        outputBuffer,
                         camera,
                         scene);
 
                     exportToEXR(width,
                         height,
-                        outputBuffer.getBufferData());
+                        outputBuffer);
                 }
 
                 ImGui::EndMenu();
@@ -242,12 +243,16 @@ void Window::setupGUI()
             {
                 if (ImGui::MenuItem("PPM"))
                 {
-                    exportToPPM(width, height, frontBuffer.getBufferData());
+                    exportToPPM(width,
+                        height,
+                        frontBuffer);
                 }
 
                 if (ImGui::MenuItem("EXR"))
                 {
-                    exportToEXR(width, height, frontBuffer.getBufferData());
+                    exportToEXR(width,
+                        height,
+                        frontBuffer);
                 }
 
                 ImGui::EndMenu();
@@ -286,7 +291,7 @@ void Window::setupGUI()
                 if (ImGui::MenuItem("Cup and Saucer"))
                 {
                     scene.loadScene("res/scenes/usd/cupandsaucer.usdz");
-                    camera.initCameraData();
+                    camera.init();
 
                     renderReset = true;
                 }
@@ -294,7 +299,7 @@ void Window::setupGUI()
                 if (ImGui::MenuItem("Stormtroopers"))
                 {
                     scene.loadScene("res/scenes/usd/stormtroopers.usdc");
-                    camera.initCameraData();
+                    camera.init();
 
                     renderReset = true;
                 }
@@ -336,30 +341,30 @@ void Window::keyboardCallback(ImGuiIO& guiIO)
     }
     if (guiIO.KeysDown[GLFW_KEY_W])
     {
-        camera.keyboardCall(FORWARD, deltaTime);
+        camera.keyboardCallback(FORWARD, deltaTime);
         renderReset = true;
     }
     if (guiIO.KeysDown[GLFW_KEY_S])
     {
-        camera.keyboardCall(BACKWARD, deltaTime);
+        camera.keyboardCallback(BACKWARD, deltaTime);
         renderReset = true;
     }
     if (guiIO.KeysDown[GLFW_KEY_A])
     {
-        camera.keyboardCall(LEFT, deltaTime);
+        camera.keyboardCallback(LEFT, deltaTime);
         renderReset = true;
     }
     if (guiIO.KeysDown[GLFW_KEY_D])
     {
-        camera.keyboardCall(RIGHT, deltaTime);
+        camera.keyboardCallback(RIGHT, deltaTime);
         renderReset = true;
     }
     if (guiIO.KeysDown[GLFW_KEY_KP_ADD])
     {
         if (guiIO.KeysDown[GLFW_KEY_LEFT_CONTROL])
-            camera.setFocalDistance(camera.getFocalDistance() + 0.1f);
+            camera._focalDistance = camera._focalDistance + 0.1f;
         else
-            camera.setApertureRadius(camera.getApertureRadius() + 0.005f);
+            camera._apertureRadius = camera._apertureRadius + 0.005f;
 
         renderReset = true;
     }
@@ -367,11 +372,11 @@ void Window::keyboardCallback(ImGuiIO& guiIO)
     {
         if (guiIO.KeysDown[GLFW_KEY_LEFT_CONTROL])
         {
-            camera.setFocalDistance(camera.getFocalDistance() - 0.1f);
+            camera._focalDistance = camera._focalDistance - 0.1f;
         }
         else
         {
-            camera.setApertureRadius(camera.getApertureRadius() - 0.005f);
+            camera._apertureRadius = camera._apertureRadius - 0.005f;
         }
         renderReset = true;
     }
@@ -398,7 +403,7 @@ void Window::mouseCallback(ImGuiIO& guiIO,
     {
         if (offsetX != 0 || offsetY != 0)
         {
-            camera.mouseCall(offsetX, offsetY, true);
+            camera.mouseCallback(offsetX, offsetY, true);
             renderReset = true;
         }
     }
