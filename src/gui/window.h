@@ -18,8 +18,8 @@
 #include "embree_helper.h"
 #include "render_helper.h"
 
-#define DEFAULT_WIDTH 1280
-#define DEFAULT_HEIGHT 720
+#define DEFAULT_WIDTH 800
+#define DEFAULT_HEIGHT 600
 
 
 class Window

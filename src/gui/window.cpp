@@ -27,7 +27,7 @@ int Window::renderWindow()
 
     ImGui_ImplGlfwGL3_Init(window, true);
 
-    scene.loadScene("/home/jsenouf/workspace/assets/usd/kitchen_custom.usdc");
+    scene.loadScene("res/scenes/cupandsaucer.usdz");
 
     camera._resolution = embree::Vec2fa(width, height);
     camera.init();
