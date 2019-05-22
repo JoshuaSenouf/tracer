@@ -27,9 +27,9 @@ int Window::renderWindow()
 
     ImGui_ImplGlfwGL3_Init(window, true);
 
-    scene.loadScene("res/scenes/cupandsaucer.usdz");
+    scene.loadScene("/home/jsenouf/workspace/assets/usd/kitchen_custom.usdc");
 
-    camera._resolution = Vector2(width, height);
+    camera._resolution = embree::Vec2fa(width, height);
     camera.init();
 
     frontBuffer.init(width, height);
@@ -42,7 +42,7 @@ int Window::renderWindow()
 
     while (!glfwWindowShouldClose(window))
     {
-        GLfloat currentFrame = glfwGetTime();
+        GLfloat currentFrame(glfwGetTime());
         deltaTime = currentFrame - lastFrame;
         lastFrame = currentFrame;
 
@@ -54,11 +54,11 @@ int Window::renderWindow()
         // GUI setting & callbacks
         //--------------
         setupGUI();
-        ImGuiIO guiIO = ImGui::GetIO();
+        ImGuiIO guiIO(ImGui::GetIO());
 
         keyboardCallback(guiIO);
 
-        ImVec2 currentMousePos = ImGui::GetMousePos();
+        ImVec2 currentMousePos(ImGui::GetMousePos());
 
         if (lastPosX != currentMousePos.x ||
             lastPosY != currentMousePos.y)
@@ -69,6 +69,11 @@ int Window::renderWindow()
         {
             renderReset = true;
         }
+        if (camera._doJitter != cameraJitter)
+        {
+            cameraJitter = camera._doJitter;
+            renderReset = true;
+        }
 
         //--------------
         // CPU Rendering
@@ -77,10 +82,11 @@ int Window::renderWindow()
         {
             // If anything in camera or scene data has changed, we flush the data and reinit them again
             if (renderReset)
+            {
                 resetRenderer();
+            }
 
             frame++;
-
 
             // Progressive rendering
             renderer.trace(width,
@@ -212,7 +218,7 @@ void Window::setupGUI()
                         camera,
                         scene);
 
-                    exportToPPM(width,
+                    toPPM(width,
                         height,
                         outputBuffer);
                 }
@@ -231,7 +237,7 @@ void Window::setupGUI()
                         camera,
                         scene);
 
-                    exportToEXR(width,
+                    toEXR(width,
                         height,
                         outputBuffer);
                 }
@@ -243,14 +249,14 @@ void Window::setupGUI()
             {
                 if (ImGui::MenuItem("PPM"))
                 {
-                    exportToPPM(width,
+                    toPPM(width,
                         height,
                         frontBuffer);
                 }
 
                 if (ImGui::MenuItem("EXR"))
                 {
-                    exportToEXR(width,
+                    toEXR(width,
                         height,
                         frontBuffer);
                 }
@@ -280,6 +286,13 @@ void Window::setupGUI()
                 ImGui::Separator();
                 ImGui::Checkbox("Pause Render", &pauseBool);
             }
+
+            ImGui::EndMenu();
+        }
+
+        if (ImGui::BeginMenu("Camera"))
+        {
+            ImGui::Checkbox("Jitter Rays", &camera._doJitter);
 
             ImGui::EndMenu();
         }
@@ -362,9 +375,13 @@ void Window::keyboardCallback(ImGuiIO& guiIO)
     if (guiIO.KeysDown[GLFW_KEY_KP_ADD])
     {
         if (guiIO.KeysDown[GLFW_KEY_LEFT_CONTROL])
+        {
             camera._focalDistance = camera._focalDistance + 0.1f;
+        }
         else
+        {
             camera._apertureRadius = camera._apertureRadius + 0.005f;
+        }
 
         renderReset = true;
     }
@@ -393,8 +410,8 @@ void Window::mouseCallback(ImGuiIO& guiIO,
         firstMouse = false;
     }
 
-    float offsetX = mousePosX - lastPosX;
-    float offsetY = mousePosY - lastPosY;
+    float offsetX(mousePosX - lastPosX);
+    float offsetY(mousePosY - lastPosY);
 
     lastPosX = mousePosX;
     lastPosY = mousePosY;

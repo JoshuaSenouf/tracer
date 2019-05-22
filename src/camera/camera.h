@@ -3,12 +3,10 @@
 
 #include <glad/glad.h>
 
-#include "vector.h"
-#include "ray.h"
-#include "randomizer.h"
 #include "camera_helper.h"
 #include "render_helper.h"
 #include "embree_helper.h"
+#include "math_helper.h"
 
 
 struct Camera
@@ -16,24 +14,20 @@ struct Camera
     Camera();
 
     void init();
+    void updateVectors();
+    void setupFOV();
     void keyboardCallback(CAMERA_MOVEMENTS direction,
         GLfloat deltaTime);
     void mouseCallback(GLfloat offsetX,
         GLfloat offsetY,
         GLboolean constrainPitch);
-    void updateVectors();
-    Ray getCameraRay(int posX,
-        int posY,
-        Randomizer& randEngine);
 
-    void setupFOV();
-
-    Vector2 _resolution;
-    Vector3 _position;
-    Vector3 _front;
-    Vector3 _up;
-    Vector3 _right;
-    Vector2 _fov;
+    embree::Vec2fa _resolution;
+    embree::Vec2fa _fov;
+    embree::Vec3fa _position;
+    embree::Vec3fa _front;
+    embree::Vec3fa _up;
+    embree::Vec3fa _right;
 
     float _yaw;
     float _pitch;
@@ -41,6 +35,8 @@ struct Camera
     float _sensitivity;
     float _apertureRadius;
     float _focalDistance;
+
+    bool _doJitter = true;
 };
 
 #endif // CAMERA_H

@@ -6,7 +6,7 @@ DebugIntegrator::DebugIntegrator()
     handle = "Debug";
 }
 
-Vector3 DebugIntegrator::getPixelColor(Ray& ray,
+embree::Vec3f DebugIntegrator::getPixelColor(Ray& ray,
     SceneManager &scene,
     Randomizer& randEngine,
     int rayDepth)
@@ -19,7 +19,7 @@ Vector3 DebugIntegrator::getPixelColor(Ray& ray,
     if (ray.geomID == RTC_INVALID_GEOMETRY_ID)
     {
         // TODO: Hardcoded sky value for now.
-        return Vector3(0.7, 0.8, 0.9);
+        return embree::Vec3f(0.7, 0.8, 0.9);
     }
 
     // We return a color based on the "instID" of the intersected geometry.
@@ -29,7 +29,9 @@ Vector3 DebugIntegrator::getPixelColor(Ray& ray,
     // In the case of Tracer, as we adopted the "everything is an instance" philosophy, we are using
     // the "instID" instead of the "geomID", as the root/top-level scene we are tracing against contains only instances,
     // and no actual geometry prototypes.
-    return Vector3((static_cast<float>((ray.instID & 0x000000ff) >>  0)) / 255.0f,
+    // TODO: Using a "parallel_for_each" loop in the SceneManager means that the IDs will never be the same
+    // everytime we run Tracer.
+    return embree::Vec3f((static_cast<float>((ray.instID & 0x000000ff) >>  0)) / 255.0f,
         (static_cast<float>((ray.instID & 0x0000ff00) >>  8)) / 255.0f,
         (static_cast<float>((ray.instID & 0x00ff0000) >> 16)) / 255.0f);
 }

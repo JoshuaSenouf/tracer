@@ -1,17 +1,17 @@
 #ifndef INTEGRATOR_H
 #define INTEGRATOR_H
 
-#include "vector.h"
 #include "ray.h"
 #include "randomizer.h"
 #include "scenemanager.h"
+#include "embree_helper.h"
 
 
 struct Integrator
 {
     Integrator();
 
-    virtual Vector3 getPixelColor(Ray& ray,
+    virtual embree::Vec3f getPixelColor(Ray& ray,
         SceneManager &scene,
         Randomizer& randEngine,
         int rayDepth) = 0;

@@ -1,18 +1,20 @@
 #include "rendermanager.h"
 
-#include "tbb/parallel_for.h"
-
-#include "randomizer.h"
 #include "ray.h"
-#include "math_helper.h"
+#include "randomizer.h"
+#include "udpt.h"
+#include "diffuse.h"
+#include "occlusion.h"
+#include "debug.h"
+#include "tbb_helper.h"
 
 
 RenderManager::RenderManager()
 {
-    std::shared_ptr<UDPTIntegrator> udptIntegrator = std::make_shared<UDPTIntegrator>();
-    std::shared_ptr<DiffuseIntegrator> diffuseIntegrator = std::make_shared<DiffuseIntegrator>();
-    std::shared_ptr<OcclusionIntegrator> occlusionIntegrator = std::make_shared<OcclusionIntegrator>();
-    std::shared_ptr<DebugIntegrator> debugIntegrator = std::make_shared<DebugIntegrator>();
+    std::shared_ptr<UDPTIntegrator> udptIntegrator(std::make_shared<UDPTIntegrator>());
+    std::shared_ptr<DiffuseIntegrator> diffuseIntegrator(std::make_shared<DiffuseIntegrator>());
+    std::shared_ptr<OcclusionIntegrator> occlusionIntegrator(std::make_shared<OcclusionIntegrator>());
+    std::shared_ptr<DebugIntegrator> debugIntegrator(std::make_shared<DebugIntegrator>());
 
     integrators.push_back(udptIntegrator);
     integrators.push_back(diffuseIntegrator);
@@ -82,25 +84,24 @@ void RenderManager::trace(int width,
 
             for (int pixelX = 0; pixelX < width; ++pixelX)
             {
-                int pixelIndex = pixelX + pixelY * width;
-                Vector3 pixelColor;
+                int pixelIndex(pixelX + pixelY * width);
+                embree::Vec3f pixelColor(0.0f);
 
                 for (int sample = 0; sample < samples; ++sample)
                 {
-                    Ray cameraRay = camera.getCameraRay(pixelX, pixelY, randEngine);
+                    Ray primaryRay(camera, pixelX, pixelY, randEngine);
 
-                    pixelColor += (buffer._pixelData[pixelIndex] * (frame - 1) +
-                        integrators[integratorID]->getPixelColor(cameraRay,
+                    pixelColor += (embree::Vec3f(buffer._pixelData[pixelIndex] * (frame - 1)) +
+                        integrators[integratorID]->getPixelColor(primaryRay,
                             scene,
                             randEngine,
-                            depth))
-                        / frame * (1.0f / samples);
+                            depth)) / (frame * (1.0f / samples));
 
                     // Random noise test
-                    // pixelColor += (buffer._pixelData[pixelIndex] * (frame - 1) +
-                    //     Vector3(randEngine.getRandomFloat(),
+                    // pixelColor += (embree::Vec3f(buffer._pixelData[pixelIndex] * (frame - 1)) +
+                    //     embree::Vec3f(randEngine.getRandomFloat(),
                     //     randEngine.getRandomFloat(),
-                    //     randEngine.getRandomFloat())) / frame * (1.0f / samples);
+                    //     randEngine.getRandomFloat())) / (frame * (1.0f / samples));
                 }
 
                 buffer._pixelData[pixelIndex] = pixelColor;

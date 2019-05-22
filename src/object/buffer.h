@@ -7,7 +7,7 @@
 #include <iterator>
 #include <cstring>
 
-#include "vector.h"
+#include "embree_helper.h"
 
 
 struct Buffer
@@ -20,7 +20,7 @@ struct Buffer
         int height);
     void swap(Buffer& buffer);
 
-    std::vector<Vector3> _pixelData;
+    std::vector<embree::Vec3f> _pixelData;
 };
 
 #endif // BUFFER_H

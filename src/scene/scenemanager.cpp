@@ -1,10 +1,8 @@
 #include "scenemanager.h"
 
-#include "tbb/parallel_for.h"
-#include "tbb/parallel_for_each.h"
-
 #include "trianglemesh.h"
 #include "quadmesh.h"
+#include "tbb_helper.h"
 
 
 SceneManager::SceneManager()
@@ -63,10 +61,10 @@ bool SceneManager::loadMeshGeometry()
 
     tbb::parallel_for_each(meshPrims.begin(), meshPrims.end(), [&](pxr::UsdPrim& prim)    
     {
-        const pxr::TfToken primName = prim.GetName();
-        const pxr::SdfPath primPath = prim.GetPrimPath();
+        const pxr::TfToken primName(prim.GetName());
+        const pxr::SdfPath primPath(prim.GetPrimPath());
 
-        pxr::UsdGeomMesh usdGeom = pxr::UsdGeomMesh::Get(stage, primPath);
+        pxr::UsdGeomMesh usdGeom(pxr::UsdGeomMesh::Get(stage, primPath));
 
         pxr::VtArray<pxr::GfVec3f> points;
         pxr::VtArray<int> indicesCounts;
@@ -76,18 +74,18 @@ bool SceneManager::loadMeshGeometry()
         usdGeom.GetFaceVertexIndicesAttr().Get(&indices);
         usdGeom.GetFaceVertexCountsAttr().Get(&indicesCounts);
 
-        bool isTriangleMesh = (static_cast<float>(indices.size()) /
-            static_cast<float>(indicesCounts.size()) == 3.0f) ? true : false;
-        bool isQuadMesh = (static_cast<float>(indices.size()) /
-            static_cast<float>(indicesCounts.size()) == 4.0f) ? true : false;
-        bool needTriangulate = (!isTriangleMesh && !isQuadMesh) ? true : false;
+        bool isTriangleMesh((static_cast<float>(indices.size()) /
+            static_cast<float>(indicesCounts.size()) == 3.0f) ? true : false);
+        bool isQuadMesh((static_cast<float>(indices.size()) /
+            static_cast<float>(indicesCounts.size()) == 4.0f) ? true : false);
+        bool needTriangulate((!isTriangleMesh && !isQuadMesh) ? true : false);
 
         if (isTriangleMesh)
         {
-            std::shared_ptr<TriangleMesh> triangleMesh = std::make_shared<TriangleMesh>(prim,
+            std::shared_ptr<TriangleMesh> triangleMesh(std::make_shared<TriangleMesh>(prim,
                 usdGeom,
                 points,
-                indices);
+                indices));
             triangleMesh->create(device, rootScene);
 
             geometryMutex.lock();
@@ -96,10 +94,10 @@ bool SceneManager::loadMeshGeometry()
         }
         else if (isQuadMesh)
         {
-            std::shared_ptr<QuadMesh> quadMesh = std::make_shared<QuadMesh>(prim,
+            std::shared_ptr<QuadMesh> quadMesh(std::make_shared<QuadMesh>(prim,
                 usdGeom,
                 points,
-                indices);
+                indices));
             quadMesh->create(device, rootScene);
         
             geometryMutex.lock();
@@ -113,10 +111,10 @@ bool SceneManager::loadMeshGeometry()
             // usdGeom.GetHoleIndicesAttr().Get(&meshHoleIndices);
             // usdGeom.GetOrientationAttr().Get(&meshOrientation);
 
-            // pxr::VtVec3iArray meshTriangulatedIndices = triangulateMeshIndices(indicesCounts,
+            // pxr::VtVec3iArray meshTriangulatedIndices(triangulateMeshIndices(indicesCounts,
             //     indices,
             //     meshHoleIndices,
-            //     meshOrientation);
+            //     meshOrientation));
             
             // TODO
         }
@@ -125,14 +123,14 @@ bool SceneManager::loadMeshGeometry()
             // TODO
         }
 
-        geometryMutex.lock();
-        std::cout << "===================" << std::endl;
-        std::cout << "PRIM NAME: " << primName << std::endl;
-        std::cout << "PRIM PATH: " << primPath << std::endl;
-        std::cout << "ISTRIANGLEMESH: " << isTriangleMesh << std::endl;
-        std::cout << "ISQUADMESH: " << isQuadMesh << std::endl;
-        std::cout << "NEEDTRIANGULATE: " << needTriangulate << std::endl;
-        geometryMutex.unlock();
+        // geometryMutex.lock();
+        // std::cout << "===================" << std::endl;
+        // std::cout << "PRIM NAME: " << primName << std::endl;
+        // std::cout << "PRIM PATH: " << primPath << std::endl;
+        // std::cout << "ISTRIANGLEMESH: " << isTriangleMesh << std::endl;
+        // std::cout << "ISQUADMESH: " << isQuadMesh << std::endl;
+        // std::cout << "NEEDTRIANGULATE: " << needTriangulate << std::endl;
+        // geometryMutex.unlock();
     });
 
     return true;

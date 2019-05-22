@@ -1,5 +1,3 @@
-#include "render_helper.h"
-
 #include "buffer.h"
 
 

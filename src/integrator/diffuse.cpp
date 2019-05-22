@@ -6,12 +6,12 @@ DiffuseIntegrator::DiffuseIntegrator()
     handle = "Diffuse";
 }
 
-Vector3 DiffuseIntegrator::getPixelColor(Ray& ray,
+embree::Vec3f DiffuseIntegrator::getPixelColor(Ray& ray,
     SceneManager &scene,
     Randomizer& randEngine,
     int rayDepth)
 {
     // TODO
 
-    return Vector3(0.0f);
+    return embree::Vec3f(0.0f);
 }

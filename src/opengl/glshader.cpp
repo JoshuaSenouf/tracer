@@ -39,11 +39,11 @@ void GLShader::setup(std::string vertexShaderPath,
         std::cout << "ERROR - Could not read the vertex and/or fragment shaders on disk." << std::endl;
     }
 
-    const GLchar* vShaderCode = vertexShaderCode.c_str();
-    const GLchar* fShaderCode = fragmentShaderCode.c_str();
+    const GLchar* vShaderCode(vertexShaderCode.c_str());
+    const GLchar* fShaderCode(fragmentShaderCode.c_str());
 
-    int vShaderLength = vertexShaderCode.length();
-    int fShaderLength = fragmentShaderCode.length();
+    int vShaderLength(vertexShaderCode.length());
+    int fShaderLength(fragmentShaderCode.length());
 
     GLuint glVertexShaderID;
     GLuint glFragmentShaderID;
@@ -80,6 +80,7 @@ void GLShader::setup(std::string vertexShaderPath,
 
     // Link the compiled vertex and fragment shader to the programID
     programID = glCreateProgram();
+
     glAttachShader(programID, glVertexShaderID);
     glAttachShader(programID, glFragmentShaderID);
     glLinkProgram(programID);
@@ -88,13 +89,13 @@ void GLShader::setup(std::string vertexShaderPath,
     if (!glCompileStatus)
     {
         glGetProgramInfoLog(programID, 512, NULL, glOutputLog);
+
         std::cout << "ERROR - Could not compile the vertex and fragment shader to the GL Program:\n" << glOutputLog << std::endl;
     }
 
     glDeleteShader(glVertexShaderID);
     glDeleteShader(glFragmentShaderID);
 }
-
 
 void GLShader::use()
 {

@@ -1,7 +1,7 @@
 #ifndef RENDER_HELPER_H
 #define RENDER_HELPER_H
 
-#include "vector.h"
+#include "embree_helper.h"
 
 
 enum INTEGRATOR_ID {
@@ -16,40 +16,40 @@ inline float clamp(float colorChannel)
     return colorChannel < 0.0f ? 0.0f : colorChannel > 1.0f ? 1.0f : colorChannel;
 }
 
-inline Vector3 clamp(const Vector3 &color)
+inline embree::Vec3fa clamp(const embree::Vec3fa &color)
 {
-    return Vector3(clamp(color.x),
+    return embree::Vec3fa(clamp(color.x),
         clamp(color.y),
         clamp(color.z));
 }
 
-inline float convertToSRGB(float colorChannel)
+inline float toSRGB(float colorChannel)
 {
     return std::pow(colorChannel, 1.0f / 2.2f);
 }
 
-inline Vector3 convertToSRGB(const Vector3 &color)
+inline embree::Vec3fa toSRGB(const embree::Vec3fa &color)
 {
-    return Vector3(convertToSRGB(color.x),
-        convertToSRGB(color.y),
-        convertToSRGB(color.z));
+    return embree::Vec3fa(toSRGB(color.x),
+        toSRGB(color.y),
+        toSRGB(color.z));
 }
 
-inline float convertToLinear(float colorChannel)
+inline float toLinear(float colorChannel)
 {
     return std::pow(colorChannel, 2.2f);
 }
 
-inline Vector3 convertToLinear(const Vector3 &color)
+inline embree::Vec3fa toLinear(const embree::Vec3fa &color)
 {
-    return Vector3(convertToLinear(color.x),
-        convertToLinear(color.y),
-        convertToLinear(color.z));
+    return embree::Vec3fa(toLinear(color.x),
+        toLinear(color.y),
+        toLinear(color.z));
 }
 
-inline int convertToRGB(float colorChannel)
+inline int toRGB(float colorChannel)
 {
-    return int(clamp(colorChannel) * 255);
+    return static_cast<int>(clamp(colorChannel) * 255);
 }
 
 #endif // RENDER_HELPER_H

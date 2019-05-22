@@ -10,18 +10,12 @@
 #include <glad/glad.h>
 #include "stb_image.h"
 
-#include "vector.h"
 #include "camera.h"
 #include "buffer.h"
 #include "scenemanager.h"
 #include "integrator.h"
 #include "glshader.h"
 #include "render_helper.h"
-
-#include "udpt.h"
-#include "diffuse.h"
-#include "occlusion.h"
-#include "debug.h"
 
 
 static const GLfloat screenQuadVertices[] =

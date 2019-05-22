@@ -31,7 +31,7 @@ bool Geometry::createInstance(const RTCDevice& device,
     rtcSetGeometryInstancedScene(_geomInstance, _scene);
     rtcSetGeometryTimeStepCount(_geomInstance, 1);
 
-    pxr::GfMatrix4d usdTransform = _usdGeomXformCache.GetLocalToWorldTransform(_prim);
+    pxr::GfMatrix4d usdTransform(_usdGeomXformCache.GetLocalToWorldTransform(_prim));
     _transform = pxr::GfMatrix4f(usdTransform);
 
     rtcSetGeometryTransform(_geomInstance,
@@ -98,7 +98,7 @@ bool Geometry::updatePrototype()
 
 bool Geometry::updateInstance()
 {
-    pxr::GfMatrix4d usdTransform = _usdGeomXformCache.GetLocalToWorldTransform(_prim);
+    pxr::GfMatrix4d usdTransform(_usdGeomXformCache.GetLocalToWorldTransform(_prim));
     _transform = pxr::GfMatrix4f(usdTransform);
 
     rtcSetGeometryTransform(_geomInstance,

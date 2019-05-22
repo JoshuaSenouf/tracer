@@ -28,7 +28,7 @@ Features
     * **TODO :** Diffuse
     * **TODO :** Occlusion
     * Debug
-        * Render the equivalent of USD primID on the geometry
+        * Render the equivalent of Pixar USD's primID on the geometry
 
 * Material:
     * Lambertian diffuse
@@ -39,7 +39,7 @@ Features
 
 * Light sources:
     * **TODO :** Geometry light
-    * **TODO :** Sky light
+    * Sky light
 
 * Geometry types:
     * Meshes
@@ -69,7 +69,6 @@ Features
             * **TODO :** Primitives
             * **TODO :** Instances
         * **TODO :** Light sources
-        * **TODO :** Settings loading
 
 * Utility:
     * GUI using ImGui
@@ -89,7 +88,7 @@ Download the source, build the project structure using CMake 3.x, open the proje
     * Use the "+" and "-" buttons on the keypad control the aperture radius
     * Hold LeftCtrl and "+" or "-" to control the focal distance
 
-Dependencies (included, aside from Pixar USD and its own dependencies)
+Dependencies (included, aside from Intel Embree/TBB, as well as Pixar USD and its own dependencies)
 ------
 
 - Window&Input System: GLFW

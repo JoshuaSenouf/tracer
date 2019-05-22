@@ -37,11 +37,11 @@ else()
     endif()
 endif()
 
-include_directories(api/glad/include/
+include_directories(api/embree/include/
+                    api/glad/include/
                     api/glfw/include/
-                    api/stb/
                     api/imgui/
-                    api/tinyobjloader/
+                    api/stb/
                     api/tinyexr/
                     src/camera/
                     src/gui/

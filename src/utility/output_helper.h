@@ -5,31 +5,30 @@
 
 #include "tinyexr.h"
 
-#include "vector.h"
 #include "buffer.h"
 #include "render_helper.h"
 
 
-inline void exportToPPM(int width,
+inline void toPPM(int width,
     int height,
     const Buffer& buffer)
 {
-    FILE *ppmFile = fopen("tracerRender.ppm", "w");
+    FILE *ppmFile(fopen("tracerRender.ppm", "w"));
     fprintf(ppmFile, "P3\n%d %d\n%d\n", width, height, 255);
 
     for (unsigned int pixelIndex = 0; pixelIndex < (width * height); ++pixelIndex)
     {
         // A lot faster than using std::ofstream or std::ostream_iterator/std::copy, actually.
-        fprintf(ppmFile, "%d %d %d ", convertToRGB(convertToSRGB(buffer._pixelData[pixelIndex].x)),
-                convertToRGB(convertToSRGB(buffer._pixelData[pixelIndex].y)),
-                convertToRGB(convertToSRGB(buffer._pixelData[pixelIndex].z)));
+        fprintf(ppmFile, "%d %d %d ", toRGB(toSRGB(buffer._pixelData[pixelIndex].x)),
+            toRGB(toSRGB(buffer._pixelData[pixelIndex].y)),
+            toRGB(toSRGB(buffer._pixelData[pixelIndex].z)));
     }
 
     fclose(ppmFile);
 }
 
 // Based on TinyEXR way of saving a scanline EXR file
-inline void exportToEXR(int width,
+inline void toEXR(int width,
     int height,
     const Buffer& buffer)
 {
@@ -84,7 +83,7 @@ inline void exportToEXR(int width,
     }
 
     const char* exrError;
-    int exrResult = SaveEXRImageToFile(&exrImage, &exrHeader, "tracerRender.exr", &exrError);
+    int exrResult(SaveEXRImageToFile(&exrImage, &exrHeader, "tracerRender.exr", &exrError));
 
     if (exrResult != TINYEXR_SUCCESS)
     {
