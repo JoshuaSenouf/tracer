@@ -5,6 +5,8 @@
 #include "udpt.h"
 #include "diffuse.h"
 #include "occlusion.h"
+#include "position.h"
+#include "normal.h"
 #include "debug.h"
 #include "tbb_helper.h"
 
@@ -14,11 +16,15 @@ RenderManager::RenderManager()
     std::shared_ptr<UDPTIntegrator> udptIntegrator(std::make_shared<UDPTIntegrator>());
     std::shared_ptr<DiffuseIntegrator> diffuseIntegrator(std::make_shared<DiffuseIntegrator>());
     std::shared_ptr<OcclusionIntegrator> occlusionIntegrator(std::make_shared<OcclusionIntegrator>());
+    std::shared_ptr<PositionIntegrator> positionIntegrator(std::make_shared<PositionIntegrator>());
+    std::shared_ptr<NormalIntegrator> normalIntegrator(std::make_shared<NormalIntegrator>());
     std::shared_ptr<DebugIntegrator> debugIntegrator(std::make_shared<DebugIntegrator>());
 
     integrators.push_back(udptIntegrator);
     integrators.push_back(diffuseIntegrator);
     integrators.push_back(occlusionIntegrator);
+    integrators.push_back(positionIntegrator);
+    integrators.push_back(normalIntegrator);
     integrators.push_back(debugIntegrator);
 }
 
@@ -157,6 +163,12 @@ bool RenderManager::setupIntegrator(int id)
             break;
         case OCCLUSION:
             integratorID = OCCLUSION;
+            break;
+        case POSITION:
+            integratorID = POSITION;
+            break;
+        case NORMAL:
+            integratorID = NORMAL;
             break;
         case DEBUG:
             integratorID = DEBUG;

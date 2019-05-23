@@ -57,7 +57,7 @@ class RenderManager
 
         GLShader screenQuadShader;
 
-        unsigned int integratorID = DEBUG;
+        unsigned int integratorID = DIFFUSE;
 
         std::vector<std::shared_ptr<Integrator>> integrators;
 };

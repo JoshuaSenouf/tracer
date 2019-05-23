@@ -10,6 +10,10 @@ Screenshots
 
 ![](https://i.ibb.co/XsHRpqn/primId1.png)
 
+* Bressant, using the Diffuse, Position and Normal integrators:
+
+![](https://i.ibb.co/grk3sQP/bressant-diffuse.png) ![](https://i.ibb.co/nCFBCdX/bressant-position.png) ![](https://i.ibb.co/GJdScYs/bressant-normals.png)
+
 Features
 ------
 
@@ -25,16 +29,15 @@ Features
 
 * Integrator:
     * **TODO :** UDPT (Unidirectional Path Tracing)
-    * **TODO :** Diffuse
+    * Diffuse (WIP)
     * **TODO :** Occlusion
+    * Position
+    * Normal
     * Debug
         * Render the equivalent of Pixar USD's primID on the geometry
 
 * Material:
-    * Lambertian diffuse
-    * Specular component:
-        * Roughness/metalness workflow
-        * Still an empirical WIP before a switch to Beckmann or GGX
+    * **TODO :** Lambertian diffuse
     * **TODO :** Physically-based BSDF (Probably a simplified version of the Disney principled BSDF)
 
 * Light sources:

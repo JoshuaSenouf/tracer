@@ -2,6 +2,7 @@
 #define UPDT_H
 
 #include "integrator.h"
+#include "material.h"
 
 
 struct UDPTIntegrator : public Integrator

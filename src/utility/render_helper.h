@@ -8,6 +8,8 @@ enum INTEGRATOR_ID {
     UDPT,
     DIFFUSE,
     OCCLUSION,
+    POSITION,
+    NORMAL,
     DEBUG,
 };
 

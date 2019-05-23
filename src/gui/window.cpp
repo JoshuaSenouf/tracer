@@ -27,7 +27,8 @@ int Window::renderWindow()
 
     ImGui_ImplGlfwGL3_Init(window, true);
 
-    sceneManager.loadScene("res/scenes/cupandsaucer.usdz");
+    // sceneManager.loadScene("res/scenes/cupandsaucer.usdz");
+    sceneManager.loadScene("/home/jsenouf/workspace/assets/usd/bressant.usdc");
 
     camera._resolution = embree::Vec2fa(width, height);
     camera.init();
@@ -274,7 +275,9 @@ void Window::setupGUI()
                 ImGui::RadioButton("UDPT", &integratorID, 0);
                 ImGui::RadioButton("Diffuse", &integratorID, 1);
                 ImGui::RadioButton("Occlusion", &integratorID, 2);
-                ImGui::RadioButton("Debug", &integratorID, 3);
+                ImGui::RadioButton("Position", &integratorID, 3);
+                ImGui::RadioButton("Normal", &integratorID, 4);
+                ImGui::RadioButton("Debug", &integratorID, 5);
 
                 ImGui::EndMenu();
             }

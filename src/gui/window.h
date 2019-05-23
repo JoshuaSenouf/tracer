@@ -60,8 +60,8 @@ class Window
         int width = DEFAULT_WIDTH;
         int height = DEFAULT_HEIGHT;
         int samples = 1;
-        int depth = 4;
-        int integratorID = DEBUG;
+        int depth = 3;
+        int integratorID = DIFFUSE;
 
         GLfloat deltaTime = 0.0f;
         GLfloat lastFrame = 0.0f;
