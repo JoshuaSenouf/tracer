@@ -10,7 +10,7 @@ Screenshots
 
  <img src="https://i.ibb.co/XsHRpqn/primId1.png" width="640" height="320">
 
-* Bressant, using the Diffuse, Position and Normal integrators:
+* Bressant 3D Scan, using the Diffuse, Position and Normal integrators:
 
  <img src="https://i.ibb.co/grk3sQP/bressant-diffuse.png" width="180" height="320"><img src="https://i.ibb.co/nCFBCdX/bressant-position.png" width="180" height="320"><img src="https://i.ibb.co/GJdScYs/bressant-normals.png" width="180" height="320">
 
