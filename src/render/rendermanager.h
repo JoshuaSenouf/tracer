@@ -42,7 +42,7 @@ class RenderManager
             int frame,
             Buffer& buffer,
             Camera& camera,
-            SceneManager& scene);
+            SceneManager& sceneManager);
         void renderToScreenTexture(int width,
             int height,
             Buffer& buffer);

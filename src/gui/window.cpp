@@ -27,7 +27,7 @@ int Window::renderWindow()
 
     ImGui_ImplGlfwGL3_Init(window, true);
 
-    scene.loadScene("res/scenes/cupandsaucer.usdz");
+    sceneManager.loadScene("res/scenes/cupandsaucer.usdz");
 
     camera._resolution = embree::Vec2fa(width, height);
     camera.init();
@@ -35,8 +35,8 @@ int Window::renderWindow()
     frontBuffer.init(width, height);
     backBuffer.init(width, height);
 
-    renderer.setupScreenQuad(width, height);
-    renderer.setupIntegrator(integratorID);
+    renderManager.setupScreenQuad(width, height);
+    renderManager.setupIntegrator(integratorID);
 
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 
@@ -65,7 +65,7 @@ int Window::renderWindow()
             mouseCallback(guiIO, currentMousePos.x, currentMousePos.y);
 
         // TODO: Will make use of Qt's callback system once the GUI will be revamped.
-        if (renderer.setupIntegrator(integratorID))
+        if (renderManager.setupIntegrator(integratorID))
         {
             renderReset = true;
         }
@@ -89,20 +89,20 @@ int Window::renderWindow()
             frame++;
 
             // Progressive rendering
-            renderer.trace(width,
+            renderManager.trace(width,
                 height,
                 samples,
                 depth,
                 frame,
                 frontBuffer,
                 camera,
-                scene);
-            renderer.renderToScreenTexture(width,
+                sceneManager);
+            renderManager.renderToScreenTexture(width,
                 height,
                 frontBuffer);
         }
 
-        renderer.drawScreenQuad();
+        renderManager.drawScreenQuad();
 
         //----------------
         // GUI rendering
@@ -178,7 +178,7 @@ void Window::renderConfigWindow(bool& guiOpen)
     if (ImGui::Button("Swap Buffers"))
     {
         frontBuffer.swap(backBuffer);
-        renderer.renderToScreenTexture(width, height, frontBuffer);
+        renderManager.renderToScreenTexture(width, height, frontBuffer);
 
         swapBool = !swapBool;
         pauseBool = true;
@@ -209,14 +209,14 @@ void Window::setupGUI()
                     Buffer outputBuffer;
                     outputBuffer.init(width, height);
 
-                    renderer.trace(width,
+                    renderManager.trace(width,
                         height,
                         samples,
                         depth,
                         1,
                         outputBuffer,
                         camera,
-                        scene);
+                        sceneManager);
 
                     toPPM(width,
                         height,
@@ -228,14 +228,14 @@ void Window::setupGUI()
                     Buffer outputBuffer;
                     outputBuffer.init(width, height);
                     
-                    renderer.trace(width,
+                    renderManager.trace(width,
                         height,
                         samples,
                         depth,
                         1,
                         outputBuffer,
                         camera,
-                        scene);
+                        sceneManager);
 
                     toEXR(width,
                         height,
@@ -303,7 +303,7 @@ void Window::setupGUI()
             {
                 if (ImGui::MenuItem("Cup and Saucer"))
                 {
-                    scene.loadScene("res/scenes/usd/cupandsaucer.usdz");
+                    sceneManager.loadScene("res/scenes/usd/cupandsaucer.usdz");
                     camera.init();
 
                     renderReset = true;
@@ -311,7 +311,7 @@ void Window::setupGUI()
 
                 if (ImGui::MenuItem("Stormtroopers"))
                 {
-                    scene.loadScene("res/scenes/usd/stormtroopers.usdc");
+                    sceneManager.loadScene("res/scenes/usd/stormtroopers.usdc");
                     camera.init();
 
                     renderReset = true;

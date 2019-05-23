@@ -7,7 +7,7 @@ DiffuseIntegrator::DiffuseIntegrator()
 }
 
 embree::Vec3f DiffuseIntegrator::getPixelColor(Ray& ray,
-    SceneManager &scene,
+    SceneManager &sceneManager,
     Randomizer& randEngine,
     int rayDepth)
 {

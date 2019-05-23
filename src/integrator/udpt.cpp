@@ -7,7 +7,7 @@ UDPTIntegrator::UDPTIntegrator()
 }
 
 embree::Vec3f UDPTIntegrator::getPixelColor(Ray& ray,
-    SceneManager &scene,
+    SceneManager &sceneManager,
     Randomizer& randEngine,
     int rayDepth)
 {

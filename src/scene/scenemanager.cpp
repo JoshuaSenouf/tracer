@@ -31,15 +31,15 @@ bool SceneManager::loadScene(const std::string& scenePath)
         return false;
     }
 
-    stage = pxr::UsdStage::Open(scenePath);
-    device = rtcNewDevice("");
-    rootScene = rtcNewScene(device);
+    _stage = pxr::UsdStage::Open(scenePath);
+    _device = rtcNewDevice("");
+    _scene = rtcNewScene(_device);
 
     // loadCamera();
     // loadMaterials();
     loadGeometry();
 
-    rtcCommitScene(rootScene);
+    rtcCommitScene(_scene);
 
     return true;
 }
@@ -57,14 +57,15 @@ bool SceneManager::loadMeshGeometry()
 {
     std::vector<pxr::UsdPrim> meshPrims;
 
-    getPrimFromType("Mesh", stage, pxr::SdfPath("/"), meshPrims);
+    getPrimFromType("Mesh", _stage, pxr::SdfPath("/"), meshPrims);
 
-    tbb::parallel_for_each(meshPrims.begin(), meshPrims.end(), [&](pxr::UsdPrim& prim)    
+    // for(const pxr::UsdPrim& prim: meshPrims)
+    tbb::parallel_for_each(meshPrims.begin(), meshPrims.end(), [&](pxr::UsdPrim& prim)
     {
         const pxr::TfToken primName(prim.GetName());
         const pxr::SdfPath primPath(prim.GetPrimPath());
 
-        pxr::UsdGeomMesh usdGeom(pxr::UsdGeomMesh::Get(stage, primPath));
+        pxr::UsdGeomMesh usdGeom(pxr::UsdGeomMesh::Get(_stage, primPath));
 
         pxr::VtArray<pxr::GfVec3f> points;
         pxr::VtArray<int> indicesCounts;
@@ -86,11 +87,11 @@ bool SceneManager::loadMeshGeometry()
                 usdGeom,
                 points,
                 indices));
-            triangleMesh->create(device, rootScene);
+            triangleMesh->create(_device, _scene);
 
-            geometryMutex.lock();
-            sceneGeometry.push_back(triangleMesh);
-            geometryMutex.unlock();
+            _sceneMutex.lock();
+            _sceneGeom[triangleMesh.get()->_geomInstanceID] = triangleMesh;
+            _sceneMutex.unlock();
         }
         else if (isQuadMesh)
         {
@@ -98,11 +99,11 @@ bool SceneManager::loadMeshGeometry()
                 usdGeom,
                 points,
                 indices));
-            quadMesh->create(device, rootScene);
-        
-            geometryMutex.lock();
-            sceneGeometry.push_back(quadMesh);
-            geometryMutex.unlock();
+            quadMesh->create(_device, _scene);
+
+            _sceneMutex.lock();
+            _sceneGeom[quadMesh.get()->_geomInstanceID] = quadMesh;
+            _sceneMutex.unlock();
         }
         else if (needTriangulate)
         {
@@ -123,30 +124,16 @@ bool SceneManager::loadMeshGeometry()
             // TODO
         }
 
-        // geometryMutex.lock();
+        // _sceneMutex.lock();
         // std::cout << "===================" << std::endl;
         // std::cout << "PRIM NAME: " << primName << std::endl;
         // std::cout << "PRIM PATH: " << primPath << std::endl;
         // std::cout << "ISTRIANGLEMESH: " << isTriangleMesh << std::endl;
         // std::cout << "ISQUADMESH: " << isQuadMesh << std::endl;
         // std::cout << "NEEDTRIANGULATE: " << needTriangulate << std::endl;
-        // geometryMutex.unlock();
+        // _sceneMutex.unlock();
     });
+    // }
 
     return true;
-}
-
-const pxr::UsdStageRefPtr& SceneManager::getStage()
-{
-    return stage;
-}
-
-const RTCDevice& SceneManager::getDevice()
-{
-    return device;
-}
-
-const RTCScene& SceneManager::getRootScene()
-{
-    return rootScene;
 }

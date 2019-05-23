@@ -16,10 +16,10 @@ struct Geometry
     Geometry();
 
     virtual bool create(const RTCDevice& device,
-        const RTCScene& rootScene);
+        const RTCScene& topScene);
     virtual bool createPrototype(const RTCDevice& device);
     virtual bool createInstance(const RTCDevice& device,
-        const RTCScene& rootScene);
+        const RTCScene& topScene);
     virtual bool commit();
     virtual bool commitPrototype();
     virtual bool commitInstance();

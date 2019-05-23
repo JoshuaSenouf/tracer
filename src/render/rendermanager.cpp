@@ -73,7 +73,7 @@ void RenderManager::trace(int width,
     int frame,
     Buffer& buffer,
     Camera& camera,
-    SceneManager &scene)
+    SceneManager &sceneManager)
 {
     tbb::parallel_for(tbb::blocked_range<int>(0, height),
         [&](tbb::blocked_range<int> parallel_range)
@@ -93,7 +93,7 @@ void RenderManager::trace(int width,
 
                     pixelColor += (embree::Vec3f(buffer._pixelData[pixelIndex] * (frame - 1)) +
                         integrators[integratorID]->getPixelColor(primaryRay,
-                            scene,
+                            sceneManager,
                             randEngine,
                             depth)) / (frame * (1.0f / samples));
 

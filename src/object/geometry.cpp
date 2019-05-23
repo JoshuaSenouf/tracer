@@ -7,11 +7,11 @@ Geometry::Geometry()
 }
 
 bool Geometry::create(const RTCDevice& device,
-    const RTCScene& rootScene)
+    const RTCScene& topScene)
 {
     createPrototype(device);
     commitPrototype();
-    createInstance(device, rootScene);
+    createInstance(device, topScene);
     commitInstance();
 
     return true;
@@ -23,10 +23,10 @@ bool Geometry::createPrototype(const RTCDevice& device)
 }
 
 bool Geometry::createInstance(const RTCDevice& device,
-    const RTCScene& rootScene)
+    const RTCScene& topScene)
 {
     _geomInstance = rtcNewGeometry(device, RTC_GEOMETRY_TYPE_INSTANCE);
-    _geomInstanceID = rtcAttachGeometry(rootScene, _geomInstance);
+    _geomInstanceID = rtcAttachGeometry(topScene, _geomInstance);
 
     rtcSetGeometryInstancedScene(_geomInstance, _scene);
     rtcSetGeometryTimeStepCount(_geomInstance, 1);

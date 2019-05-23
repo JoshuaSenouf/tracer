@@ -71,8 +71,8 @@ class Window
         GLFWwindow* window;
 
         Camera camera;
-        RenderManager renderer;
-        SceneManager scene;
+        RenderManager renderManager;
+        SceneManager sceneManager;
 
         Buffer frontBuffer;
         Buffer backBuffer;

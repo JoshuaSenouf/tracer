@@ -7,7 +7,7 @@ OcclusionIntegrator::OcclusionIntegrator()
 }
 
 embree::Vec3f OcclusionIntegrator::getPixelColor(Ray& ray,
-    SceneManager &scene,
+    SceneManager &sceneManager,
     Randomizer& randEngine,
     int rayDepth)
 {

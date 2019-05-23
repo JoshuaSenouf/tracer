@@ -9,7 +9,7 @@ struct DiffuseIntegrator : public Integrator
     DiffuseIntegrator();
 
     virtual embree::Vec3f getPixelColor(Ray& ray,
-        SceneManager &scene,
+        SceneManager &sceneManager,
         Randomizer& randEngine,
         int rayDepth);
 };
