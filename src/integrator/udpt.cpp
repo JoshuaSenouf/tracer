@@ -20,12 +20,12 @@ embree::Vec3f UDPTIntegrator::getPixelColor(Ray& ray,
 
         if (ray.geomID == RTC_INVALID_GEOMETRY_ID)
         {
-            // TODO: Hardcoded sky value for now.
+            // TODO: Hardcoded sky color value for now.
             return embree::Vec3f(0.7, 0.8, 0.9);
         }
 
         embree::Vec3f position(ray.origin + ray.tfar * ray.direction);
-        embree::Vec3f normal(embree::normalize(-ray.Ng));
+        embree::Vec3f normal(embree::normalize(ray.Ng));
 
         // TODO
     }

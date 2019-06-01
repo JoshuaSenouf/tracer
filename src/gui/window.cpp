@@ -27,8 +27,7 @@ int Window::renderWindow()
 
     ImGui_ImplGlfwGL3_Init(window, true);
 
-    // sceneManager.loadScene("res/scenes/cupandsaucer.usdz");
-    sceneManager.loadScene("/home/jsenouf/workspace/assets/usd/bressant.usdc");
+    sceneManager.loadScene("res/scenes/cupandsaucer.usdz");
 
     camera._resolution = embree::Vec2fa(width, height);
     camera.init();
@@ -281,7 +280,8 @@ void Window::setupGUI()
 
                 ImGui::EndMenu();
             }
-
+            
+            ImGui::Separator();
             ImGui::MenuItem("Config", NULL, &renderConfigBool);
 
             if (!swapBool)

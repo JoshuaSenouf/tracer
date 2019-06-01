@@ -37,6 +37,7 @@ struct Geometry
     pxr::UsdGeomMesh _usdGeom;
     pxr::UsdGeomXformCache _usdGeomXformCache;
     pxr::GfMatrix4f _transform;
+    embree::Vec3f _color;
 };
 
 #endif // GEOMETRY_H

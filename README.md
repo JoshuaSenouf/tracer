@@ -6,13 +6,10 @@ Tracer is a C++ rendering engine that aimed to produce photorealistic images usi
 Screenshots
 ------
 
-* USD Kitchen, using the Debug integrator, displaying the equivalent of Pixar USD's primID on the geometry:
+* USD Kitchen, using the Diffuse, Position, Normal and Debug integrators:
 
- <img src="https://i.ibb.co/XsHRpqn/primId1.png" width="640" height="320">
-
-* Bressant 3D Scan, using the Diffuse, Position and Normal integrators:
-
- <img src="https://i.ibb.co/grk3sQP/bressant-diffuse.png" width="180" height="320"><img src="https://i.ibb.co/nCFBCdX/bressant-position.png" width="180" height="320"><img src="https://i.ibb.co/GJdScYs/bressant-normals.png" width="180" height="320">
+<img src="https://i.ibb.co/7nKCLBQ/kitchen-diffuse.png" width="320" height="180"><img src="https://i.ibb.co/M2XHf5f/kitchen-position.png" width="320" height="180">
+<img src="https://i.ibb.co/6y1MQx0/kitchen-normal.png" width="320" height="180"><img src="https://i.ibb.co/ZzJCsbn/kitchen-debug.png" width="320" height="180">
 
 Features
 ------
@@ -38,7 +35,7 @@ Features
 
 * Material:
     * **TODO :** Lambertian diffuse
-    * **TODO :** Physically-based BSDF (Probably a simplified version of the Disney principled BSDF)
+    * **TODO :** Physically-based BSDF (Probably the Disney principled BSDF)
 
 * Light sources:
     * **TODO :** Geometry light

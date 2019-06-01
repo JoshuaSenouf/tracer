@@ -9,6 +9,15 @@ Geometry::Geometry()
 bool Geometry::create(const RTCDevice& device,
     const RTCScene& topScene)
 {
+    pxr::VtArray<pxr::GfVec3f> displayColor;
+    _usdGeom.GetDisplayColorAttr().Get(&displayColor);
+
+    // TODO: Get the display color from the correct time value.
+    _color = (displayColor.empty() ? embree::Vec3f(0.5f) :
+        embree::Vec3f(displayColor[0][0],
+            displayColor[0][1],
+            displayColor[0][2]));
+
     createPrototype(device);
     commitPrototype();
     createInstance(device, topScene);

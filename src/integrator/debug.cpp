@@ -20,14 +20,14 @@ embree::Vec3f DebugIntegrator::getPixelColor(Ray& ray,
 
     if (ray.geomID == RTC_INVALID_GEOMETRY_ID)
     {
-        // TODO: Hardcoded sky value for now.
+        // TODO: Hardcoded sky color value for now.
         return embree::Vec3f(0.7, 0.8, 0.9);
     }
 
     // Creating a local copy of the Geometry pointer here will
     // decrease performance a bit, for obvious reasons, the solution being
     // to only reference the one from the geometry map from the SceneManager.
-    // auto intersectedGeomPtr(sceneManager._sceneGeom[ray.instID]);
+    // auto intersectedGeom(sceneManager._sceneGeom[ray.instID].get());
 
     // We return a color based on the "instID" of the intersected geometry.
     // In Embree, the "primID" correspond to a unique *piece* of geometry, such as a triangle,
