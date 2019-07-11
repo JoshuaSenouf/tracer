@@ -11,10 +11,10 @@ SceneManager::SceneManager()
 
 SceneManager::SceneManager(const std::string& scenePath)
 {
-    loadScene(scenePath);
+    LoadScene(scenePath);
 }
 
-bool SceneManager::isSceneValid(const std::string& scenePath)
+bool SceneManager::IsSceneValid(const std::string& scenePath)
 {
     return ((std::size_t(scenePath.rfind(std::string(".usd")) != std::string::npos) ||
         std::size_t(scenePath.rfind(std::string(".usda")) != std::string::npos) ||
@@ -22,9 +22,9 @@ bool SceneManager::isSceneValid(const std::string& scenePath)
         std::size_t(scenePath.rfind(std::string(".usdz")) != std::string::npos)) ? true : false);
 }
 
-bool SceneManager::loadScene(const std::string& scenePath)
+bool SceneManager::LoadScene(const std::string& scenePath)
 {
-    if (!isSceneValid(scenePath))
+    if (!IsSceneValid(scenePath))
     {
         std::cerr << "ERROR - The following file is not an USD scene: " << scenePath << std::endl;
 
@@ -35,31 +35,30 @@ bool SceneManager::loadScene(const std::string& scenePath)
     _device = rtcNewDevice("");
     _scene = rtcNewScene(_device);
 
-    // loadCamera();
-    // loadMaterials();
-    loadGeometry();
+    // LoadCamera();
+    // LoadMaterials();
+    LoadGeometry();
 
     rtcCommitScene(_scene);
 
     return true;
 }
 
-bool SceneManager::loadGeometry()
+bool SceneManager::LoadGeometry()
 {
-    loadMeshGeometry();
-    // loadCurveGeometry();
-    // loadPrimitiveGeometry();
+    LoadMeshGeometry();
+    // LoadCurveGeometry();
+    // LoadPrimitiveGeometry();
 
     return true;
 }
 
-bool SceneManager::loadMeshGeometry()
+bool SceneManager::LoadMeshGeometry()
 {
     std::vector<pxr::UsdPrim> meshPrims;
 
     getPrimFromType("Mesh", _stage, pxr::SdfPath("/"), meshPrims);
 
-    // for(const pxr::UsdPrim& prim: meshPrims)
     tbb::parallel_for_each(meshPrims.begin(), meshPrims.end(), [&](pxr::UsdPrim& prim)
     {
         const pxr::TfToken primName(prim.GetName());
@@ -87,7 +86,7 @@ bool SceneManager::loadMeshGeometry()
                 usdGeom,
                 points,
                 indices));
-            triangleMesh->create(_device, _scene);
+            triangleMesh->Create(_device, _scene);
 
             _sceneMutex.lock();
             _sceneGeom[triangleMesh.get()->_geomInstanceID] = triangleMesh;
@@ -99,7 +98,7 @@ bool SceneManager::loadMeshGeometry()
                 usdGeom,
                 points,
                 indices));
-            quadMesh->create(_device, _scene);
+            quadMesh->Create(_device, _scene);
 
             _sceneMutex.lock();
             _sceneGeom[quadMesh.get()->_geomInstanceID] = quadMesh;
@@ -123,17 +122,7 @@ bool SceneManager::loadMeshGeometry()
         {
             // TODO
         }
-
-        // _sceneMutex.lock();
-        // std::cout << "===================" << std::endl;
-        // std::cout << "PRIM NAME: " << primName << std::endl;
-        // std::cout << "PRIM PATH: " << primPath << std::endl;
-        // std::cout << "ISTRIANGLEMESH: " << isTriangleMesh << std::endl;
-        // std::cout << "ISQUADMESH: " << isQuadMesh << std::endl;
-        // std::cout << "NEEDTRIANGULATE: " << needTriangulate << std::endl;
-        // _sceneMutex.unlock();
     });
-    // }
 
     return true;
 }

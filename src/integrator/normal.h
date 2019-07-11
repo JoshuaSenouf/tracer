@@ -8,10 +8,10 @@ struct NormalIntegrator : public Integrator
 {
     NormalIntegrator();
 
-    virtual embree::Vec3f getPixelColor(Ray& ray,
+    virtual embree::Vec3f GetPixelColor(Ray& ray,
+        Sample& pixelSample,
         SceneManager &sceneManager,
-        Randomizer& randEngine,
-        int rayDepth) override;
+        const RenderGlobals& renderGlobals) override;
 };
 
 #endif // NORMAL_H

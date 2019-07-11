@@ -5,13 +5,13 @@
 
 DebugIntegrator::DebugIntegrator()
 {
-    handle = "Debug";
+    _handle = "Debug";
 }
 
-embree::Vec3f DebugIntegrator::getPixelColor(Ray& ray,
+embree::Vec3f DebugIntegrator::GetPixelColor(Ray& ray,
+    Sample& pixelSample,
     SceneManager &sceneManager,
-    Randomizer& randEngine,
-    int rayDepth)
+    const RenderGlobals& renderGlobals)
 {
     RTCIntersectContext intersectContext;
     rtcInitIntersectContext(&intersectContext);

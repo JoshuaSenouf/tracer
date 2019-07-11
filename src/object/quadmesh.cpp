@@ -16,7 +16,7 @@ QuadMesh::QuadMesh(const pxr::UsdPrim& prim,
     _indices = indices;
 }
 
-bool QuadMesh::createPrototype(const RTCDevice& device)
+bool QuadMesh::CreatePrototype(const RTCDevice& device)
 {
     _scene = rtcNewScene(device);
     _geom = rtcNewGeometry(device, RTC_GEOMETRY_TYPE_QUAD);
@@ -42,7 +42,7 @@ bool QuadMesh::createPrototype(const RTCDevice& device)
     return true;
 }
 
-bool QuadMesh::updatePrototype()
+bool QuadMesh::UpdatePrototype()
 {
     pxr::VtArray<pxr::GfVec3f> points;
     pxr::VtArray<int> indices;
@@ -75,10 +75,6 @@ bool QuadMesh::updatePrototype()
 
             indicesData = _indices.cdata();
         }
-    }
-    else
-    {
-        // TODO: Quadriangulation.
     }
 
     return true;

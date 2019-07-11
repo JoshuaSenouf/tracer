@@ -6,7 +6,7 @@ Camera::Camera()
 
 }
 
-void Camera::init()
+void Camera::Init()
 {
     // TODO: Hardcoded information for now.
     _position = embree::Vec3fa(0, 4, 15);
@@ -20,19 +20,18 @@ void Camera::init()
     _speed = 10.0f;
     _sensitivity = 0.10f;
 
-    setupFOV();
-
-    updateVectors();
+    SetupFov();
+    Update();
 }
 
-void Camera::setupFOV()
+void Camera::SetupFov()
 {
     _fov.y = (atan(tan(_fov.x * M_PI * M_1_180 * 0.5f)
         * ((float)_resolution.y / (float)_resolution.x)) * 2.0f)
         * 180.0f * M_1_PI;
 }
 
-void Camera::updateVectors()
+void Camera::Update()
 {
     embree::Vec3fa front(cos(degToRad(_yaw)) * cos(degToRad(_pitch)),
         sin(degToRad(_pitch)),
@@ -45,10 +44,10 @@ void Camera::updateVectors()
     _right = embree::normalize(embree::cross(_front, _up));
 }
 
-void Camera::keyboardCallback(CAMERA_MOVEMENTS direction,
-    GLfloat deltaTime)
+void Camera::KeyboardCallback(CAMERA_MOVEMENTS direction,
+    float deltaTime)
 {
-    GLfloat velocity(_speed * deltaTime);
+    float velocity(_speed * deltaTime);
 
     if (direction == FORWARD)
     {
@@ -68,26 +67,21 @@ void Camera::keyboardCallback(CAMERA_MOVEMENTS direction,
     }
 }
 
-void Camera::mouseCallback(GLfloat offsetX,
-    GLfloat offsetY,
-    GLboolean constrainPitch)
+void Camera::MouseCallback(embree::Vec2fa mouseOffset)
 {
-    offsetX *= _sensitivity;
-    offsetY *= _sensitivity;
-    _yaw += offsetX;
-    _pitch += offsetY;
+    mouseOffset *= _sensitivity;
 
-    if (constrainPitch)
+    _yaw += mouseOffset.x;
+    _pitch += mouseOffset.y;
+
+    if (_pitch > 89.0f)
     {
-        if (_pitch > 89.0f)
-        {
-            _pitch = 89.0f;
-        }
-        if (_pitch < -89.0f)
-        {
-            _pitch = -89.0f;
-        }
+        _pitch = 89.0f;
+    }
+    if (_pitch < -89.0f)
+    {
+        _pitch = -89.0f;
     }
 
-    updateVectors();
+    Update();
 }

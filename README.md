@@ -6,10 +6,11 @@ Tracer is a C++ rendering engine that aimed to produce photorealistic images usi
 Screenshots
 ------
 
-* USD Kitchen, using the Diffuse, Position, Normal and Debug integrators:
+* USD Kitchen, using the UDPT, Diffuse, Position, Normal and Debug integrators:
 
-<img src="https://i.ibb.co/7nKCLBQ/kitchen-diffuse.png" width="320" height="180"><img src="https://i.ibb.co/M2XHf5f/kitchen-position.png" width="320" height="180">
-<img src="https://i.ibb.co/6y1MQx0/kitchen-normal.png" width="320" height="180"><img src="https://i.ibb.co/ZzJCsbn/kitchen-debug.png" width="320" height="180">
+<img src="https://i.ibb.co/hch2YHf/tracer-render-udpt.png" width="320" height="180"> <img src="https://i.ibb.co/KDcwzGG/tracer-render-diffuse.png" width="320" height="180">
+<img src="https://i.ibb.co/209PjBG/tracer-render-position.png" width="320" height="180"> <img src="https://i.ibb.co/87sh556/tracer-render-normal.png" width="320" height="180">
+<img src="https://i.ibb.co/tCm78Z5/tracer-render-debug.png" width="320" height="180">
 
 Features
 ------
@@ -20,26 +21,54 @@ Features
     * Render/export to EXR
 
 * Camera:
-    * Movements
+    * Types:
+        * FPS
+        * **TODO: ** DCC-style
     * Subpixel jitter antialiasing
     * Depth of Field (using aperture radius and focal distance)
 
 * Integrator:
-    * **TODO :** UDPT (Unidirectional Path Tracing)
-    * Diffuse (WIP)
+    * UDPT (Unidirectional Path Tracing) (**WIP**)
+    * Diffuse (**WIP**)
     * **TODO :** Occlusion
     * Position
     * Normal
     * Debug
         * Render the equivalent of Pixar USD's primID on the geometry
 
+* Sampling:
+    * RNG:
+        * Uniform (jittered)
+        * Stratified (**WIP**)
+    * Methods:
+        * Hemisphere:
+            * Uniform
+            * Cosine weighted
+        * Sphere:
+            * Uniform
+
 * Material:
-    * **TODO :** Lambertian diffuse
-    * **TODO :** Physically-based BSDF (Probably the Disney principled BSDF)
+    * **TODO :** Default
+    * **TODO :** Diffuse
+    * **TODO :** Empirical (For experiment purposes)
+    * **TODO :** Disney (2012)
+
+* BSDF/Lobes:
+    * Diffuse:
+        * **TODO :** Lambert
+        * **TODO :** Oren-Nayar
+        * **TODO :** Burley
+        * **TODO :** Sheen
+        * **TODO :** Subsurface Scattering
+    * Specular:
+        * **TODO :** GGX
+        * **TODO :** Beckmann
+        * **TODO :** Clearcoat
+        * **TODO :** Thin Film
 
 * Light sources:
-    * **TODO :** Geometry light
     * Sky light
+    * **TODO :** Geometry light
 
 * Geometry types:
     * Meshes
@@ -60,7 +89,7 @@ Features
     * Format:
         * Pixar USD
             * As .usd/usda/usdc/usdz
-    * Ingested data:
+    * Ingested types:
         * **TODO :** Materials
         * **TODO :** Cameras
         * Geometry:

@@ -1,46 +1,83 @@
 #include "rendermanager.h"
 
-#include "ray.h"
-#include "randomizer.h"
-#include "udpt.h"
-#include "diffuse.h"
-#include "occlusion.h"
-#include "position.h"
-#include "normal.h"
-#include "debug.h"
-#include "tbb_helper.h"
-
 
 RenderManager::RenderManager()
 {
-    std::shared_ptr<UDPTIntegrator> udptIntegrator(std::make_shared<UDPTIntegrator>());
-    std::shared_ptr<DiffuseIntegrator> diffuseIntegrator(std::make_shared<DiffuseIntegrator>());
-    std::shared_ptr<OcclusionIntegrator> occlusionIntegrator(std::make_shared<OcclusionIntegrator>());
-    std::shared_ptr<PositionIntegrator> positionIntegrator(std::make_shared<PositionIntegrator>());
-    std::shared_ptr<NormalIntegrator> normalIntegrator(std::make_shared<NormalIntegrator>());
-    std::shared_ptr<DebugIntegrator> debugIntegrator(std::make_shared<DebugIntegrator>());
-
-    integrators.push_back(udptIntegrator);
-    integrators.push_back(diffuseIntegrator);
-    integrators.push_back(occlusionIntegrator);
-    integrators.push_back(positionIntegrator);
-    integrators.push_back(normalIntegrator);
-    integrators.push_back(debugIntegrator);
 }
 
 RenderManager::~RenderManager()
 {
-
 }
 
-void RenderManager::setupScreenQuad(int width,
+void RenderManager::Trace(const RenderGlobals& renderGlobals,
+    SceneManager &sceneManager,
+    Camera& camera,
+    Buffer& buffer,
+    int iterations)
+{
+    tbb::parallel_for(tbb::blocked_range<int>(0, renderGlobals.height),
+        [&](tbb::blocked_range<int> height_range)
+    {
+        for (int pixelY = height_range.begin(); pixelY < height_range.end(); ++pixelY)
+        {
+            Sampler sampler;
+
+            for (int pixelX = 0; pixelX < renderGlobals.width; ++pixelX)
+            {
+                Sample pixelSample(pixelX,
+                    pixelY,
+                    pixelX + pixelY * renderGlobals.width,
+                    0,
+                    renderGlobals.samples,
+                    sampler);
+
+                embree::Vec3f pixelColor(0.0f);
+
+                for (int Sample = 0; Sample < renderGlobals.samples; ++Sample)
+                {
+                    Ray primaryRay(camera, pixelSample);
+
+                    pixelColor += (embree::Vec3f(buffer._pixelData[pixelSample.pixelIdx] * (iterations - 1)) +
+                        integrators[renderGlobals.integratorID]->GetPixelColor(primaryRay,
+                            pixelSample,
+                            sceneManager,
+                            renderGlobals)) * (1.0f / renderGlobals.samples);
+
+                    // Random noise test
+                    // pixelColor += (embree::Vec3f(buffer._pixelData[pixelSample.pixelIdx] * (iterations - 1)) +
+                    //     embree::Vec3f(sampler.Uniform1D(),
+                    //         sampler.Uniform1D(),
+                    //         sampler.Uniform1D())) * (1.0f / renderGlobals.samples);
+
+                    pixelSample.sampleCount++;
+                }
+
+                buffer._pixelData[pixelSample.pixelIdx] = pixelColor / iterations;
+            }
+        }
+    });
+}
+
+void RenderManager::RenderToScreenTexture(int width,
+    int height,
+    Buffer& buffer)
+{
+    glBindTexture(GL_TEXTURE_2D, screenTextureID);
+
+    glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, width, height, GL_RGB, GL_FLOAT, buffer._pixelData.data());
+    screenQuadShader.Use();
+    glActiveTexture(GL_TEXTURE0);
+    
+    glBindTexture(GL_TEXTURE_2D, screenTextureID);
+}
+
+void RenderManager::SetupScreenQuad(int width,
     int height)
 {
     // Screen quad geometry.
     glGenVertexArrays(1, &screenQuadVAO);
     glGenBuffers(1, &screenQuadVBO);
     glBindBuffer(GL_ARRAY_BUFFER, screenQuadVBO);
-
     glBufferData(GL_ARRAY_BUFFER, sizeof(screenQuadVertices), screenQuadVertices, GL_STATIC_DRAW);
 
     glBindVertexArray(screenQuadVAO);
@@ -53,83 +90,25 @@ void RenderManager::setupScreenQuad(int width,
     glBindVertexArray(0);
 
     // Screen quad shader and texture.
-    screenQuadShader.setup("res/shaders/screenQuad.vert",
+    screenQuadShader.Setup("res/shaders/screenQuad.vert",
         "res/shaders/screenQuad.frag");
 
     glGenTextures(1, &screenTextureID);
     glActiveTexture(GL_TEXTURE0);
+
     glBindTexture(GL_TEXTURE_2D, screenTextureID);
 
     glTexStorage2D(GL_TEXTURE_2D, 1, GL_RGB32F, width, height);
-
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
     glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
     glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-
     glGenerateMipmap(GL_TEXTURE_2D);
 
     glBindTexture(GL_TEXTURE_2D, 0);
 }
 
-void RenderManager::trace(int width,
-    int height,
-    int samples,
-    int depth,
-    int frame,
-    Buffer& buffer,
-    Camera& camera,
-    SceneManager &sceneManager)
-{
-    tbb::parallel_for(tbb::blocked_range<int>(0, height),
-        [&](tbb::blocked_range<int> parallel_range)
-    {
-        for (int pixelY = parallel_range.begin(); pixelY < parallel_range.end(); ++pixelY)
-        {
-            Randomizer randEngine;
-
-            for (int pixelX = 0; pixelX < width; ++pixelX)
-            {
-                int pixelIndex(pixelX + pixelY * width);
-                embree::Vec3f pixelColor(0.0f);
-
-                for (int sample = 0; sample < samples; ++sample)
-                {
-                    Ray primaryRay(camera, pixelX, pixelY, randEngine);
-
-                    pixelColor += (embree::Vec3f(buffer._pixelData[pixelIndex] * (frame - 1)) +
-                        integrators[integratorID]->getPixelColor(primaryRay,
-                            sceneManager,
-                            randEngine,
-                            depth)) / (frame * (1.0f / samples));
-
-                    // Random noise test
-                    // pixelColor += (embree::Vec3f(buffer._pixelData[pixelIndex] * (frame - 1)) +
-                    //     embree::Vec3f(randEngine.getRandomFloat(),
-                    //     randEngine.getRandomFloat(),
-                    //     randEngine.getRandomFloat())) / (frame * (1.0f / samples));
-                }
-
-                buffer._pixelData[pixelIndex] = pixelColor;
-            }
-        }
-    });
-}
-
-void RenderManager::renderToScreenTexture(int width,
-    int height,
-    Buffer& buffer)
-{
-    glBindTexture(GL_TEXTURE_2D, screenTextureID);
-    glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, width, height, GL_RGB, GL_FLOAT, buffer._pixelData.data());
-
-    screenQuadShader.use();
-
-    glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, screenTextureID);
-}
-
-void RenderManager::cleanScreenQuad()
+void RenderManager::CleanScreenQuad()
 {
     glBindBuffer(GL_ARRAY_BUFFER, screenQuadVBO);
     glDeleteBuffers(1, &screenQuadVBO);
@@ -137,45 +116,11 @@ void RenderManager::cleanScreenQuad()
     screenQuadVBO = 0;
 }
 
-void RenderManager::drawScreenQuad()
+void RenderManager::DrawScreenQuad()
 {
     glBindVertexArray(screenQuadVAO);
 
     glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 
     glBindVertexArray(0);
-}
-
-bool RenderManager::setupIntegrator(int id)
-{
-    if (integratorID == id)
-    {
-        return false;    
-    }
-
-    switch(id)
-    {
-        case UDPT:
-            integratorID = UDPT;
-            break;
-        case DIFFUSE:
-            integratorID = DIFFUSE;
-            break;
-        case OCCLUSION:
-            integratorID = OCCLUSION;
-            break;
-        case POSITION:
-            integratorID = POSITION;
-            break;
-        case NORMAL:
-            integratorID = NORMAL;
-            break;
-        case DEBUG:
-            integratorID = DEBUG;
-            break;
-        default:
-            integratorID = DEBUG;
-    }
-
-    return true;
 }

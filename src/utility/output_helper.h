@@ -6,22 +6,23 @@
 #include "tinyexr.h"
 
 #include "buffer.h"
-#include "render_helper.h"
+
+#include "color_helper.h"
 
 
 inline void toPPM(int width,
     int height,
     const Buffer& buffer)
 {
-    FILE *ppmFile(fopen("tracerRender.ppm", "w"));
+    FILE *ppmFile(fopen("tracer_render.ppm", "w"));
     fprintf(ppmFile, "P3\n%d %d\n%d\n", width, height, 255);
 
-    for (unsigned int pixelIndex = 0; pixelIndex < (width * height); ++pixelIndex)
+    for (unsigned int pixelIdx = 0; pixelIdx < (width * height); ++pixelIdx)
     {
         // A lot faster than using std::ofstream or std::ostream_iterator/std::copy, actually.
-        fprintf(ppmFile, "%d %d %d ", toRGB(toSRGB(buffer._pixelData[pixelIndex].x)),
-            toRGB(toSRGB(buffer._pixelData[pixelIndex].y)),
-            toRGB(toSRGB(buffer._pixelData[pixelIndex].z)));
+        fprintf(ppmFile, "%d %d %d ", ToRgb(ToSrgb(buffer._pixelData[pixelIdx].x)),
+            ToRgb(ToSrgb(buffer._pixelData[pixelIdx].y)),
+            ToRgb(ToSrgb(buffer._pixelData[pixelIdx].z)));
     }
 
     fclose(ppmFile);
@@ -44,11 +45,11 @@ inline void toEXR(int width,
     channels[1].resize(width * height); // G channel
     channels[2].resize(width * height); // B channel
 
-    for (unsigned int pixelIndex = 0; pixelIndex < (width * height); ++pixelIndex)
+    for (unsigned int pixelIdx = 0; pixelIdx < (width * height); ++pixelIdx)
     {
-        channels[0][pixelIndex] = buffer._pixelData[pixelIndex].x;
-        channels[1][pixelIndex] = buffer._pixelData[pixelIndex].y;
-        channels[2][pixelIndex] = buffer._pixelData[pixelIndex].z;
+        channels[0][pixelIdx] = buffer._pixelData[pixelIdx].x;
+        channels[1][pixelIdx] = buffer._pixelData[pixelIdx].y;
+        channels[2][pixelIdx] = buffer._pixelData[pixelIdx].z;
     }
 
     // We are swapping the channel order to BGR as many EXR file viewers are expecting this specific order,
@@ -83,7 +84,7 @@ inline void toEXR(int width,
     }
 
     const char* exrError;
-    int exrResult(SaveEXRImageToFile(&exrImage, &exrHeader, "tracerRender.exr", &exrError));
+    int exrResult(SaveEXRImageToFile(&exrImage, &exrHeader, "tracer_render.exr", &exrError));
 
     if (exrResult != TINYEXR_SUCCESS)
     {

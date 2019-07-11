@@ -16,7 +16,7 @@ TriangleMesh::TriangleMesh(const pxr::UsdPrim& prim,
     _indices = indices;
 }
 
-bool TriangleMesh::createPrototype(const RTCDevice& device)
+bool TriangleMesh::CreatePrototype(const RTCDevice& device)
 {
     _scene = rtcNewScene(device);
     _geom = rtcNewGeometry(device, RTC_GEOMETRY_TYPE_TRIANGLE);
@@ -42,7 +42,7 @@ bool TriangleMesh::createPrototype(const RTCDevice& device)
     return true;
 }
 
-bool TriangleMesh::updatePrototype()
+bool TriangleMesh::UpdatePrototype()
 {
     pxr::VtArray<pxr::GfVec3f> points;
     pxr::VtArray<int> indices;

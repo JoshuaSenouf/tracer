@@ -6,7 +6,7 @@ GLShader::GLShader()
 
 }
 
-void GLShader::setup(std::string vertexShaderPath,
+void GLShader::Setup(std::string vertexShaderPath,
     std::string fragmentShaderPath)
 {
     // Reading the shaders on disk.
@@ -97,7 +97,7 @@ void GLShader::setup(std::string vertexShaderPath,
     glDeleteShader(glFragmentShaderID);
 }
 
-void GLShader::use()
+void GLShader::Use()
 {
     glUseProgram(programID);
 }

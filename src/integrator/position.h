@@ -8,10 +8,10 @@ struct PositionIntegrator : public Integrator
 {
     PositionIntegrator();
 
-    virtual embree::Vec3f getPixelColor(Ray& ray,
+    virtual embree::Vec3f GetPixelColor(Ray& ray,
+        Sample& pixelSample,
         SceneManager &sceneManager,
-        Randomizer& randEngine,
-        int rayDepth) override;
+        const RenderGlobals& renderGlobals) override;
 };
 
 #endif // POSITION_H

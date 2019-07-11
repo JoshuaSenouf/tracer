@@ -5,7 +5,6 @@
 #include <fstream>
 #include <sstream>
 #include <iostream>
-#include <string>
 
 #include <glad/glad.h>
 
@@ -15,9 +14,9 @@ class GLShader
     public:
         GLShader();
 
-        void setup(std::string vertexShaderPath,
+        void Setup(std::string vertexShaderPath,
             std::string fragmentShaderPath);
-        void use();
+        void Use();
         
     private:
         GLuint programID;

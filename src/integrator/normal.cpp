@@ -5,13 +5,13 @@
 
 NormalIntegrator::NormalIntegrator()
 {
-    handle = "Normal";
+    _handle = "Normal";
 }
 
-embree::Vec3f NormalIntegrator::getPixelColor(Ray& ray,
+embree::Vec3f NormalIntegrator::GetPixelColor(Ray& ray,
+    Sample& pixelSample,
     SceneManager &sceneManager,
-    Randomizer& randEngine,
-    int rayDepth)
+    const RenderGlobals& renderGlobals)
 {
     RTCIntersectContext intersectContext;
     rtcInitIntersectContext(&intersectContext);

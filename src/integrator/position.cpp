@@ -5,13 +5,13 @@
 
 PositionIntegrator::PositionIntegrator()
 {
-    handle = "Position";
+    _handle = "Position";
 }
 
-embree::Vec3f PositionIntegrator::getPixelColor(Ray& ray,
+embree::Vec3f PositionIntegrator::GetPixelColor(Ray& ray,
+    Sample& pixelSample,
     SceneManager &sceneManager,
-    Randomizer& randEngine,
-    int rayDepth)
+    const RenderGlobals& renderGlobals)
 {
     RTCIntersectContext intersectContext;
     rtcInitIntersectContext(&intersectContext);

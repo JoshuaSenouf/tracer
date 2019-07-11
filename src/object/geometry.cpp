@@ -6,32 +6,33 @@ Geometry::Geometry()
 
 }
 
-bool Geometry::create(const RTCDevice& device,
+bool Geometry::Create(const RTCDevice& device,
     const RTCScene& topScene)
 {
     pxr::VtArray<pxr::GfVec3f> displayColor;
     _usdGeom.GetDisplayColorAttr().Get(&displayColor);
 
+    _primName = _prim.GetName();
     // TODO: Get the display color from the correct time value.
-    _color = (displayColor.empty() ? embree::Vec3f(0.5f) :
+    _displayColor = (displayColor.empty() ? embree::Vec3f(0.5f) :
         embree::Vec3f(displayColor[0][0],
             displayColor[0][1],
             displayColor[0][2]));
 
-    createPrototype(device);
-    commitPrototype();
-    createInstance(device, topScene);
-    commitInstance();
+    CreatePrototype(device);
+    CommitPrototype();
+    CreateInstance(device, topScene);
+    CommitInstance();
 
     return true;
 }
 
-bool Geometry::createPrototype(const RTCDevice& device)
+bool Geometry::CreatePrototype(const RTCDevice& device)
 {        
     return true;
 }
 
-bool Geometry::createInstance(const RTCDevice& device,
+bool Geometry::CreateInstance(const RTCDevice& device,
     const RTCScene& topScene)
 {
     _geomInstance = rtcNewGeometry(device, RTC_GEOMETRY_TYPE_INSTANCE);
@@ -51,9 +52,9 @@ bool Geometry::createInstance(const RTCDevice& device,
     return true;
 }
 
-bool Geometry::commit()
+bool Geometry::Commit()
 {    
-    if (commitPrototype() && commitInstance())
+    if (CommitPrototype() && CommitInstance())
     {
         return true;
     }
@@ -63,7 +64,7 @@ bool Geometry::commit()
     }
 }
 
-bool Geometry::commitPrototype()
+bool Geometry::CommitPrototype()
 {
     rtcCommitGeometry(_geom);
     rtcReleaseGeometry(_geom);
@@ -73,7 +74,7 @@ bool Geometry::commitPrototype()
     return true;
 }
 
-bool Geometry::commitInstance()
+bool Geometry::CommitInstance()
 {
     rtcCommitGeometry(_geomInstance);
     rtcReleaseGeometry(_geomInstance);
@@ -81,11 +82,11 @@ bool Geometry::commitInstance()
     return true;
 }
 
-bool Geometry::update()
+bool Geometry::Update()
 {
-    if (updatePrototype() && updateInstance())
+    if (UpdatePrototype() && UpdateInstance())
     {
-        if (commit())
+        if (Commit())
         {
             return true;
         }
@@ -100,12 +101,12 @@ bool Geometry::update()
     }
 }
 
-bool Geometry::updatePrototype()
+bool Geometry::UpdatePrototype()
 {    
     return true;
 }
 
-bool Geometry::updateInstance()
+bool Geometry::UpdateInstance()
 {
     pxr::GfMatrix4d usdTransform(_usdGeomXformCache.GetLocalToWorldTransform(_prim));
     _transform = pxr::GfMatrix4f(usdTransform);
@@ -118,7 +119,7 @@ bool Geometry::updateInstance()
     return true;
 }
 
-bool Geometry::clean()
+bool Geometry::Clean()
 {
     return true;
 }

@@ -8,7 +8,7 @@
 int main()
 {
     Window mainWindow;
-    mainWindow.renderWindow();
+    mainWindow.RenderWindow();
 
     return 0;
 }

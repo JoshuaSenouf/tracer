@@ -5,10 +5,15 @@
 
 Window::Window()
 {
-    
+    renderGlobals = RenderGlobals(WIDTH,
+        HEIGHT,
+        DEPTH,
+        SAMPLES,
+        INTEGRATORID,
+        RAYJITTER);
 }
 
-int Window::renderWindow()
+int Window::RenderWindow()
 {
     glfwInit();
 
@@ -17,7 +22,7 @@ int Window::renderWindow()
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
     glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
 
-    window = glfwCreateWindow(width, height, "Tracer", nullptr, nullptr);
+    window = glfwCreateWindow(renderGlobals.width, renderGlobals.height, "Tracer", nullptr, nullptr);
     glfwMakeContextCurrent(window);
 
     glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
@@ -27,22 +32,21 @@ int Window::renderWindow()
 
     ImGui_ImplGlfwGL3_Init(window, true);
 
-    sceneManager.loadScene("res/scenes/cupandsaucer.usdz");
+    sceneManager.LoadScene("res/scenes/cupandsaucer.usdz");
 
-    camera._resolution = embree::Vec2fa(width, height);
-    camera.init();
+    camera._resolution = embree::Vec2fa(renderGlobals.width, renderGlobals.height);
+    camera.Init();
 
-    frontBuffer.init(width, height);
-    backBuffer.init(width, height);
+    frontBuffer.Init(renderGlobals.width, renderGlobals.height);
+    backBuffer.Init(renderGlobals.width, renderGlobals.height);
 
-    renderManager.setupScreenQuad(width, height);
-    renderManager.setupIntegrator(integratorID);
+    renderManager.SetupScreenQuad(renderGlobals.width, renderGlobals.height);
 
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 
     while (!glfwWindowShouldClose(window))
     {
-        GLfloat currentFrame(glfwGetTime());
+        float currentFrame(glfwGetTime());
         deltaTime = currentFrame - lastFrame;
         lastFrame = currentFrame;
 
@@ -53,61 +57,64 @@ int Window::renderWindow()
         //--------------
         // GUI setting & callbacks
         //--------------
-        setupGUI();
+        SetupGui();
         ImGuiIO guiIO(ImGui::GetIO());
 
-        keyboardCallback(guiIO);
+        KeyboardCallback(guiIO);
 
-        ImVec2 currentMousePos(ImGui::GetMousePos());
+        // ImVec2 mousePos(ImGui::GetMousePos());
+        embree::Vec2fa mousePos(ImGui::GetMousePos().x, ImGui::GetMousePos().y);
 
-        if (lastPosX != currentMousePos.x ||
-            lastPosY != currentMousePos.y)
-            mouseCallback(guiIO, currentMousePos.x, currentMousePos.y);
+        if (prevMousePos.x != mousePos.x ||
+            prevMousePos.y != mousePos.y)
+        {
+            MouseCallback(guiIO, mousePos);
+        }
 
         // TODO: Will make use of Qt's callback system once the GUI will be revamped.
-        if (renderManager.setupIntegrator(integratorID))
+        if (camera._jitter != renderGlobals.rayJitter)
         {
+            camera._jitter = renderGlobals.rayJitter;
+
             renderReset = true;
         }
-        if (camera._doJitter != cameraJitter)
+        if (renderManager.integratorID != renderGlobals.integratorID)
         {
-            cameraJitter = camera._doJitter;
+            renderManager.integratorID = renderGlobals.integratorID;
+
             renderReset = true;
         }
 
         //--------------
         // CPU Rendering
         //--------------
-        if (!pauseBool)
+        if (!pauseState)
         {
-            // If anything in camera or scene data has changed, we flush the data and reinit them again
+            // If anything changed in the camera, scene, settings, etc, we flush the rendered data and reinit them again
             if (renderReset)
             {
-                resetRenderer();
+                ResetRenderer();
             }
 
-            frame++;
+            iterations++;
 
             // Progressive rendering
-            renderManager.trace(width,
-                height,
-                samples,
-                depth,
-                frame,
-                frontBuffer,
+            renderManager.Trace(renderGlobals,
+                sceneManager,
                 camera,
-                sceneManager);
-            renderManager.renderToScreenTexture(width,
-                height,
+                frontBuffer,
+                iterations);
+            renderManager.RenderToScreenTexture(renderGlobals.width,
+                renderGlobals.height,
                 frontBuffer);
         }
 
-        renderManager.drawScreenQuad();
+        renderManager.DrawScreenQuad();
 
         //----------------
         // GUI rendering
         //----------------
-        renderGUI();
+        RenderGui();
 
         glfwSwapBuffers(window);
     }
@@ -115,88 +122,31 @@ int Window::renderWindow()
     //---------
     // Cleaning
     //---------
-    stopGUI();
+    StopGui();
 
     glfwTerminate();
 
     return 0;
 }
 
-void Window::resetRenderer()
+void Window::ResetRenderer()
 {
-    frame = 0;
-    frontBuffer.clean(width, height);
+    frontBuffer.Clean(renderGlobals.width, renderGlobals.height);
 
+    iterations = 0;
     renderReset = false;
 }
 
-void Window::fpsWindow(bool& guiOpen)
-{
-    ImGui::SetNextWindowPos(ImVec2(ImGui::GetIO().DisplaySize.x - 160, 30), 1);
-
-    ImGui::Begin("FPS Counter",
-        &guiOpen,
-        ImGuiWindowFlags_NoTitleBar
-        |ImGuiWindowFlags_NoResize
-        |ImGuiWindowFlags_AlwaysAutoResize
-        |ImGuiWindowFlags_NoMove
-        |ImGuiWindowFlags_NoSavedSettings);
-
-    ImGui::Text("Framerate %.2f FPS", ImGui::GetIO().Framerate, 1000.0f / ImGui::GetIO().Framerate);
-
-    ImGui::End();
-}
-
-void Window::aboutWindow(bool& guiOpen)
-{
-    ImGui::Begin("About", &guiOpen);
-
-    ImGui::Text("Tracer by Joshua Senouf\n\nEmail: joshua.senouf@gmail.com\nTwitter: @JoshuaSenouf");
-
-    ImGui::End();
-}
-
-void Window::renderConfigWindow(bool& guiOpen)
-{
-    ImGui::Begin("Render Config", &guiOpen);
-
-    ImGui::InputInt("Width", &width);
-    ImGui::InputInt("Height", &height);
-    ImGui::InputInt("Samples", &samples);
-    ImGui::InputInt("Depth", &depth);
-
-    ImGui::Separator();
-
-    if (!swapBool)
-    {
-        if (ImGui::Button("Save To Back Buffer"))
-        {
-            backBuffer.clean(width, height);
-            backBuffer._pixelData = frontBuffer._pixelData;
-        }
-    }
-    if (ImGui::Button("Swap Buffers"))
-    {
-        frontBuffer.swap(backBuffer);
-        renderManager.renderToScreenTexture(width, height, frontBuffer);
-
-        swapBool = !swapBool;
-        pauseBool = true;
-    }
-
-    ImGui::End();
-}
-
-void Window::setupGUI()
+void Window::SetupGui()
 {
     ImGui_ImplGlfwGL3_NewFrame();
 
-    if (fpsBool)
-        fpsWindow(fpsBool);
-    if (aboutBool)
-        aboutWindow(aboutBool);
-    if (renderConfigBool)
-        renderConfigWindow(renderConfigBool);
+    if (profilingState)
+        ProfilingWindow(profilingState);
+    if (aboutState)
+        AboutWindow(aboutState);
+    if (renderConfigState)
+        RenderConfigWindow(renderConfigState);
 
     if (ImGui::BeginMainMenuBar())
     {
@@ -207,38 +157,32 @@ void Window::setupGUI()
                 if (ImGui::MenuItem("PPM"))
                 {
                     Buffer outputBuffer;
-                    outputBuffer.init(width, height);
+                    outputBuffer.Init(renderGlobals.width, renderGlobals.height);
 
-                    renderManager.trace(width,
-                        height,
-                        samples,
-                        depth,
-                        1,
-                        outputBuffer,
+                    renderManager.Trace(renderGlobals,
+                        sceneManager,
                         camera,
-                        sceneManager);
+                        outputBuffer,
+                        1);
 
-                    toPPM(width,
-                        height,
+                    toPPM(renderGlobals.width,
+                        renderGlobals.height,
                         outputBuffer);
                 }
 
                 if (ImGui::MenuItem("EXR"))
                 {
                     Buffer outputBuffer;
-                    outputBuffer.init(width, height);
+                    outputBuffer.Init(renderGlobals.width, renderGlobals.height);
                     
-                    renderManager.trace(width,
-                        height,
-                        samples,
-                        depth,
-                        1,
-                        outputBuffer,
+                    renderManager.Trace(renderGlobals,
+                        sceneManager,
                         camera,
-                        sceneManager);
+                        outputBuffer,
+                        1);
 
-                    toEXR(width,
-                        height,
+                    toEXR(renderGlobals.width,
+                        renderGlobals.height,
                         outputBuffer);
                 }
 
@@ -249,15 +193,15 @@ void Window::setupGUI()
             {
                 if (ImGui::MenuItem("PPM"))
                 {
-                    toPPM(width,
-                        height,
+                    toPPM(renderGlobals.width,
+                        renderGlobals.height,
                         frontBuffer);
                 }
 
                 if (ImGui::MenuItem("EXR"))
                 {
-                    toEXR(width,
-                        height,
+                    toEXR(renderGlobals.width,
+                        renderGlobals.height,
                         frontBuffer);
                 }
 
@@ -271,23 +215,23 @@ void Window::setupGUI()
         {
             if (ImGui::BeginMenu("Integrator"))
             {
-                ImGui::RadioButton("UDPT", &integratorID, 0);
-                ImGui::RadioButton("Diffuse", &integratorID, 1);
-                ImGui::RadioButton("Occlusion", &integratorID, 2);
-                ImGui::RadioButton("Position", &integratorID, 3);
-                ImGui::RadioButton("Normal", &integratorID, 4);
-                ImGui::RadioButton("Debug", &integratorID, 5);
+                ImGui::RadioButton("UDPT", &renderGlobals.integratorID, 0);
+                ImGui::RadioButton("Diffuse", &renderGlobals.integratorID, 1);
+                ImGui::RadioButton("Occlusion", &renderGlobals.integratorID, 2);
+                ImGui::RadioButton("Position", &renderGlobals.integratorID, 3);
+                ImGui::RadioButton("Normal", &renderGlobals.integratorID, 4);
+                ImGui::RadioButton("Debug", &renderGlobals.integratorID, 5);
 
                 ImGui::EndMenu();
             }
             
             ImGui::Separator();
-            ImGui::MenuItem("Config", NULL, &renderConfigBool);
+            ImGui::MenuItem("Config", NULL, &renderConfigState);
 
-            if (!swapBool)
+            if (!swapState)
             {
                 ImGui::Separator();
-                ImGui::Checkbox("Pause Render", &pauseBool);
+                ImGui::Checkbox("Pause Render", &pauseState);
             }
 
             ImGui::EndMenu();
@@ -295,7 +239,7 @@ void Window::setupGUI()
 
         if (ImGui::BeginMenu("Camera"))
         {
-            ImGui::Checkbox("Jitter Rays", &camera._doJitter);
+            ImGui::Checkbox("Jitter Rays", &renderGlobals.rayJitter);
 
             ImGui::EndMenu();
         }
@@ -306,16 +250,16 @@ void Window::setupGUI()
             {
                 if (ImGui::MenuItem("Cup and Saucer"))
                 {
-                    sceneManager.loadScene("res/scenes/usd/cupandsaucer.usdz");
-                    camera.init();
+                    sceneManager.LoadScene("res/scenes/usd/cupandsaucer.usdz");
+                    camera.Init();
 
                     renderReset = true;
                 }
 
                 if (ImGui::MenuItem("Stormtroopers"))
                 {
-                    sceneManager.loadScene("res/scenes/usd/stormtroopers.usdc");
-                    camera.init();
+                    sceneManager.LoadScene("res/scenes/usd/stormtroopers.usdc");
+                    camera.Init();
 
                     renderReset = true;
                 }
@@ -328,9 +272,9 @@ void Window::setupGUI()
 
         if (ImGui::BeginMenu("Help"))
         {
-            ImGui::MenuItem("Profiling", NULL, &fpsBool);
+            ImGui::MenuItem("Profiling", NULL, &profilingState);
             ImGui::Separator();
-            ImGui::MenuItem("About", NULL, &aboutBool);
+            ImGui::MenuItem("About", NULL, &aboutState);
 
             ImGui::EndMenu();
         }
@@ -339,17 +283,74 @@ void Window::setupGUI()
     }
 }
 
-void Window::renderGUI()
+void Window::RenderGui()
 {
     ImGui::Render();
 }
 
-void Window::stopGUI()
+void Window::StopGui()
 {
     ImGui_ImplGlfwGL3_Shutdown();
 }
 
-void Window::keyboardCallback(ImGuiIO& guiIO)
+void Window::RenderConfigWindow(bool& guiOpen)
+{
+    ImGui::Begin("Render Config", &guiOpen);
+
+    ImGui::InputInt("Width", &renderGlobals.width);
+    ImGui::InputInt("Height", &renderGlobals.height);
+    ImGui::InputInt("Samples", &renderGlobals.samples);
+    ImGui::InputInt("Depth", &renderGlobals.depth);
+
+    ImGui::Separator();
+
+    if (!swapState)
+    {
+        if (ImGui::Button("Save To Back Buffer"))
+        {
+            backBuffer.Clean(renderGlobals.width, renderGlobals.height);
+            backBuffer._pixelData = frontBuffer._pixelData;
+        }
+    }
+    if (ImGui::Button("Swap Buffers"))
+    {
+        frontBuffer.Swap(backBuffer);
+        renderManager.RenderToScreenTexture(renderGlobals.width, renderGlobals.height, frontBuffer);
+
+        swapState = !swapState;
+        pauseState = true;
+    }
+
+    ImGui::End();
+}
+
+void Window::ProfilingWindow(bool& guiOpen)
+{
+    ImGui::SetNextWindowPos(ImVec2(ImGui::GetIO().DisplaySize.x - 160, 30), 1);
+
+    ImGui::Begin("FPS Counter",
+        &guiOpen,
+        ImGuiWindowFlags_NoTitleBar
+        |ImGuiWindowFlags_NoResize
+        |ImGuiWindowFlags_AlwaysAutoResize
+        |ImGuiWindowFlags_NoMove
+        |ImGuiWindowFlags_NoSavedSettings);
+
+    ImGui::Text("Framerate %.2f FPS", ImGui::GetIO().Framerate);
+
+    ImGui::End();
+}
+
+void Window::AboutWindow(bool& guiOpen)
+{
+    ImGui::Begin("About", &guiOpen);
+
+    ImGui::Text("Tracer by Joshua Senouf\n\nEmail: joshua.senouf@gmail.com\nTwitter: @JoshuaSenouf");
+
+    ImGui::End();
+}
+
+void Window::KeyboardCallback(ImGuiIO& guiIO)
 {
     if (guiIO.KeysDown[GLFW_KEY_ESCAPE])
     {
@@ -357,24 +358,29 @@ void Window::keyboardCallback(ImGuiIO& guiIO)
     }
     if (guiIO.KeysDown[GLFW_KEY_W])
     {
-        camera.keyboardCallback(FORWARD, deltaTime);
+        camera.KeyboardCallback(FORWARD, deltaTime);
+
         renderReset = true;
     }
     if (guiIO.KeysDown[GLFW_KEY_S])
     {
-        camera.keyboardCallback(BACKWARD, deltaTime);
+        camera.KeyboardCallback(BACKWARD, deltaTime);
+
         renderReset = true;
     }
     if (guiIO.KeysDown[GLFW_KEY_A])
     {
-        camera.keyboardCallback(LEFT, deltaTime);
+        camera.KeyboardCallback(LEFT, deltaTime);
+
         renderReset = true;
     }
     if (guiIO.KeysDown[GLFW_KEY_D])
     {
-        camera.keyboardCallback(RIGHT, deltaTime);
+        camera.KeyboardCallback(RIGHT, deltaTime);
+
         renderReset = true;
     }
+
     if (guiIO.KeysDown[GLFW_KEY_KP_ADD])
     {
         if (guiIO.KeysDown[GLFW_KEY_LEFT_CONTROL])
@@ -398,32 +404,32 @@ void Window::keyboardCallback(ImGuiIO& guiIO)
         {
             camera._apertureRadius = camera._apertureRadius - 0.005f;
         }
+
         renderReset = true;
     }
 }
 
-void Window::mouseCallback(ImGuiIO& guiIO,
-    float mousePosX,
-    float mousePosY)
+void Window::MouseCallback(ImGuiIO& guiIO,
+    embree::Vec2fa mousePos)
 {
     if (firstMouse)
     {
-        lastPosX = mousePosX;
-        lastPosY = mousePosY;
+        prevMousePos = embree::Vec2fa(mousePos);
+
         firstMouse = false;
     }
 
-    float offsetX(mousePosX - lastPosX);
-    float offsetY(mousePosY - lastPosY);
-
-    lastPosX = mousePosX;
-    lastPosY = mousePosY;
+    embree::Vec2fa mouseOffset(mousePos.x - prevMousePos.x,
+        mousePos.y - prevMousePos.y);
+    prevMousePos = embree::Vec2fa(mousePos);
 
     if (guiIO.MouseDown[GLFW_MOUSE_BUTTON_RIGHT])
     {
-        if (offsetX != 0 || offsetY != 0)
+        if (mouseOffset != embree::Vec2fa())
+
         {
-            camera.mouseCallback(offsetX, offsetY, true);
+            camera.MouseCallback(mouseOffset);
+
             renderReset = true;
         }
     }

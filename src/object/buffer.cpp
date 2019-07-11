@@ -6,13 +6,13 @@ Buffer::Buffer()
 
 }
 
-void Buffer::init(int width,
+void Buffer::Init(int width,
     int height)
 {
     _pixelData.resize(width * height);
 }
 
-void Buffer::clean(int width,
+void Buffer::Clean(int width,
     int height)
 {
     _pixelData.clear();
@@ -20,7 +20,7 @@ void Buffer::clean(int width,
     _pixelData.resize(width * height);
 }
 
-void Buffer::swap(Buffer& buffer)
+void Buffer::Swap(Buffer& buffer)
 {
     _pixelData.swap(buffer._pixelData);
 }

@@ -8,10 +8,10 @@ struct OcclusionIntegrator : public Integrator
 {
     OcclusionIntegrator();
 
-    virtual embree::Vec3f getPixelColor(Ray& ray,
+    virtual embree::Vec3f GetPixelColor(Ray& ray,
+        Sample& pixelSample,
         SceneManager &sceneManager,
-        Randomizer& randEngine,
-        int rayDepth);
+        const RenderGlobals& renderGlobals) override;
 };
 
 #endif // OCCLUSION_H

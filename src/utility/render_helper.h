@@ -1,8 +1,20 @@
 #ifndef RENDER_HELPER_H
 #define RENDER_HELPER_H
 
+#include "glad/glad.h"
+
+#include "sampler.h"
+
 #include "embree_helper.h"
 
+
+static const GLfloat screenQuadVertices[] =
+{
+    -1.0f,  1.0f, 0.0f, 0.0f, 1.0f,
+    -1.0f, -1.0f, 0.0f, 0.0f, 0.0f,
+    1.0f,  1.0f, 0.0f, 1.0f, 1.0f,
+    1.0f, -1.0f, 0.0f, 1.0f, 0.0f,
+};
 
 enum INTEGRATOR_ID {
     UDPT,
@@ -13,45 +25,88 @@ enum INTEGRATOR_ID {
     DEBUG,
 };
 
-inline float clamp(float colorChannel)
+struct RenderGlobals
 {
-    return colorChannel < 0.0f ? 0.0f : colorChannel > 1.0f ? 1.0f : colorChannel;
-}
+    int width;
+    int height;
+    int depth;
+    int samples;
+    int integratorID;
+    bool rayJitter;
 
-inline embree::Vec3fa clamp(const embree::Vec3fa &color)
-{
-    return embree::Vec3fa(clamp(color.x),
-        clamp(color.y),
-        clamp(color.z));
-}
+    RenderGlobals() {};
 
-inline float toSRGB(float colorChannel)
-{
-    return std::pow(colorChannel, 1.0f / 2.2f);
-}
+    __forceinline RenderGlobals(int width,
+        int height,
+        int depth,
+        int samples,
+        int integratorID,
+        bool rayJitter)
+        : width(width),
+        height(height),
+        depth(depth),
+        samples(samples),
+        integratorID(integratorID),
+        rayJitter(rayJitter)
+    {
+    }
+};
 
-inline embree::Vec3fa toSRGB(const embree::Vec3fa &color)
+struct Sample
 {
-    return embree::Vec3fa(toSRGB(color.x),
-        toSRGB(color.y),
-        toSRGB(color.z));
-}
+    int pixelX;
+    int pixelY;
+    int pixelIdx;
+    int sampleIdx;
+    int sampleCount;
+    Sampler& sampler;
 
-inline float toLinear(float colorChannel)
-{
-    return std::pow(colorChannel, 2.2f);
-}
+    __forceinline Sample(int pixelX,
+        int pixelY,
+        int pixelIdx,
+        int sampleIdx,
+        int sampleCount,
+        Sampler& sampler)
+        : pixelX(pixelX),
+        pixelY(pixelY),
+        pixelIdx(pixelIdx),
+        sampleIdx(sampleIdx),
+        sampleCount(sampleCount),
+        sampler(sampler)
+    {
+    }
+};
 
-inline embree::Vec3fa toLinear(const embree::Vec3fa &color)
+struct ShadingPoint
 {
-    return embree::Vec3fa(toLinear(color.x),
-        toLinear(color.y),
-        toLinear(color.z));
-}
+    // embree::Vec3f color;     // Shaded color of the shading point.
+    const embree::Vec3fa& P;    // World-space position of the shading point.
+    const embree::Vec3f& N;     // Object/Local-space normal of the shading point.
+    const embree::Vec3f& Nw;    // World-space normal of the shading point.
+    const embree::Vec2fa& UV;   // UV barycentric coordinates of the shading point.
+    const embree::Vec3fa& V;    // View vector from the camera.
+    const uint& geomID;         // Embree Geometry ID of the object the ray hit;
+    const uint& primID;         // Embree Primitive ID of the object the ray hit;
+    const uint& instID;         // Embree Instance ID of the object the ray hit;
 
-inline int toRGB(float colorChannel)
-{
-    return static_cast<int>(clamp(colorChannel) * 255);
-}
+    __forceinline ShadingPoint(const embree::Vec3fa& P = embree::Vec3fa(0.0f),
+        const embree::Vec3f& N = embree::Vec3f(0.0f),
+        const embree::Vec3f& Nw = embree::Vec3f(0.0f),
+        const embree::Vec2fa& UV = embree::Vec2fa(0.0f),
+        const embree::Vec3fa& V = embree::Vec3fa(0.0f),
+        const uint& geomID = RTC_INVALID_GEOMETRY_ID,
+        const uint& primID = RTC_INVALID_GEOMETRY_ID,
+        const uint& instID = RTC_INVALID_GEOMETRY_ID)
+        : P(P),
+        N(N),
+        Nw(Nw),
+        UV(UV),
+        V(V),
+        geomID(geomID),
+        primID(primID),
+        instID(instID)
+    {
+    }
+};
 
 #endif // RENDER_HELPER_H
