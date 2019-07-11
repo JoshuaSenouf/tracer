@@ -18,7 +18,7 @@ embree::Vec3f DebugIntegrator::GetPixelColor(Ray& ray,
 
     rtcIntersect1(sceneManager._scene, &intersectContext, RTCRayHit_(ray));
 
-    if (ray.geomID == RTC_INVALID_GEOMETRY_ID)
+    if (ray.instID == RTC_INVALID_GEOMETRY_ID)
     {
         // TODO: Hardcoded sky color value for now.
         return embree::Vec3f(0.7, 0.8, 0.9);
