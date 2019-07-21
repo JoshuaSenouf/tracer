@@ -1,7 +1,6 @@
-// Tracer by Joshua Senouf - 2017
+// Tracer by Joshua Senouf - 2017-2019
 
 #define STB_IMAGE_IMPLEMENTATION
-#define TINYEXR_IMPLEMENTATION
 
 #include "window.h"
 
@@ -9,7 +8,7 @@
 int main()
 {
     Window mainWindow;
-    mainWindow.renderWindow();
+    mainWindow.RenderWindow();
 
     return 0;
 }

@@ -6,17 +6,11 @@ Tracer is a C++ rendering engine that aimed to produce photorealistic images usi
 Screenshots
 ------
 
-* Glossy sphere and DoF (1280x720, 4 bounces, 1spp, after ~1.5 minutes on an i7-6700K) :
+* USD Kitchen, using the UDPT, Diffuse, Position, Normal and Debug integrators:
 
-![](https://image.ibb.co/bW14U6/mono_Sphere_Do_F_720p.png)
-
-* Low light material test (1280x720, 4 bounces, 1spp, after ~2 minutes on an i7-6700K) :
-
-![](https://image.ibb.co/cxF9wm/material_Test_720p.png)
-
-* Cornell Box (1280x720, 4 bounces, 1spp, after ~3 minutes on an i7-6700K) :
-
-![](https://image.ibb.co/nD0bbm/cornell_720p.png)
+<img src="https://i.ibb.co/CPKcY58/tracer-render-udpt.png" width="320" height="180"> <img src="https://i.ibb.co/0yZdGqq/tracer-render-diffuse.png" width="320" height="180">
+<img src="https://i.ibb.co/fqnQrBs/tracer-render-position.png" width="320" height="180"> <img src="https://i.ibb.co/Trg5H3W/tracer-render-normal.png" width="320" height="180">
+<img src="https://i.ibb.co/xHCYrnY/tracer-render-debug.png" width="320" height="180">
 
 Features
 ------
@@ -27,44 +21,88 @@ Features
     * Render/export to EXR
 
 * Camera:
-    * Movements
+    * Types:
+        * FPS
+        * **TODO :** DCC-style
     * Subpixel jitter antialiasing
     * Depth of Field (using aperture radius and focal distance)
 
+* Integrator:
+    * UDPT (Unidirectional Path Tracing):
+        * **TODO :** Environment sampling
+            * **TODO :** Color-based sky/background
+            * **TODO :** Image-Based Lighting (IBL)
+        * **TODO :** Light sampling/Next Event Estimation (NEE)
+        * BSDF sampling
+    * Diffuse (**WIP**)
+    * **TODO :** Occlusion
+    * Position
+    * Normal
+    * Debug
+        * Render the equivalent of Pixar USD's primID on the geometry
+
+* Sampling:
+    * RNG:
+        * Uniform (jittered)
+        * Stratified (**WIP**)
+    * Methods:
+        * Hemisphere:
+            * Uniform
+            * Cosine Weighted
+        * Sphere:
+            * Uniform
+
 * Material:
-    * Lambertian diffuse.
-    * Specular component:
-        * Roughness/metalness workflow.
-        * Still an empirical WIP before a switch to Beckmann or GGX.
-    * **TODO :** Physically-based BSDF (Probably a simplified version of the Disney principled BSDF)
+    * **TODO :** Default
+    * **TODO :** Diffuse
+    * **TODO :** Empirical (for experiment purposes)
+    * **TODO :** Disney (2012)
+
+* BSDF/Lobes:
+    * Diffuse:
+        * Lambert
+        * **TODO :** Oren-Nayar
+        * **TODO :** Burley
+        * **TODO :** Sheen
+        * **TODO :** Subsurface Scattering
+    * Specular:
+        * **TODO :** GGX
+        * **TODO :** Beckmann
+        * **TODO :** Clearcoat
+        * **TODO :** Thin Film
 
 * Light sources:
-    * Geometry light
-    * Sky light
+    * Sky/background light
+    * **TODO :** Geometry light
 
-* Primitives:
-    * Sphere
-    * **TODO :** Quad
-    * **TODO :** Cube
-    * **TODO :** Triangle
+* Geometry types:
+    * Meshes
+        * Triangle-based
+        * Quad-based 
+        * **TODO :**  Subdivided
+    * **TODO :** Curves
+    * **TODO :** Primitives (sphere, cube...)
+    * Instances:
+        * Per-geometry instancing ("Everything is an instance" philosophy)
+        * **TODO :** Native, multiple instancing of geometry prototypes
 
 * Acceleration structure:
-    * **TODO :** BVH
-    * **TODO :** KD-Tree
+    * Intel Embree native BVH
+    * **TODO :** Custom-based
 
 * Scene:
     * Format:
         * Pixar USD
-    * Material loading
-    * Primitives loading:
-        * Sphere
-        * **TODO :** Quad
-        * **TODO :** Cube
-        * **TODO :** Triangle
-    * **TODO :** Mesh loading
-    * Light loading
-    * Camera loading
-    * Settings loading
+            * As .usd/usda/usdc/usdz
+    * Ingested types:
+        * **TODO :** Materials
+        * **TODO :** Cameras
+        * Geometry:
+            * Meshes
+            * **TODO :** Curves
+            * **TODO :** Primitives
+            * **TODO :** Instances
+        * **TODO :** Light sources
 
 * Utility:
     * GUI using ImGui
@@ -75,7 +113,7 @@ Features
 How to use
 ------
 
-Tracer was written using Linux, QtCreator as the IDE, CMake as the building tool, and a C++11 compiler in mind.
+Tracer was written using Linux, VSCode as the IDE, CMake as the building tool, and a C++14 compiler in mind.
 
 Download the source, build the project structure using CMake 3.x, open the project using your favorite IDE (tested on QtCreator), build the project, and everything should be ready to use.
 
@@ -84,14 +122,14 @@ Download the source, build the project structure using CMake 3.x, open the proje
     * Use the "+" and "-" buttons on the keypad control the aperture radius
     * Hold LeftCtrl and "+" or "-" to control the focal distance
 
-Dependencies (included, aside from OpenMP, as well as Pixar USD and its own dependencies)
+Dependencies (included, aside from Intel Embree/TBB, as well as Pixar USD and its own dependencies)
 ------
 
-- Window & Input system : GLFW
-- OpenGL Function Loader : GLAD
-- GUI system : dear imgui
-- Multithreading : OpenMP
-- EXR handling : tinyexr
-- Mesh loading : tinyobjloader
-- Image loading : stb
-- Scene loading : Pixar USD
+- Window&Input System: GLFW
+- OpenGL Functions Loader: GLAD
+- GUI System: dear imgui
+- EXR Handling: tinyexr
+- Image Loading: stb
+- Scene Loading: Pixar USD
+- Ray Tracing Kernels: Intel Embree
+- Multithreading: Intel TBB

@@ -14,7 +14,6 @@ set (_usd_components
     usdHydra
     hdx
     hdSt
-    hdStream
     hd
     glf
     garch

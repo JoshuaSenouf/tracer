@@ -1,264 +1,86 @@
-#include "math_helper.h"
-
 #include "camera.h"
 
 
 Camera::Camera()
 {
-
 }
 
-
-void Camera::initCameraData(const cameraData sceneCamera)
+void Camera::Init()
 {
-    this->position = sceneCamera.position;
-    this->yaw = sceneCamera.yaw;
-    this->pitch = sceneCamera.pitch;
-    this->FOV.x = sceneCamera.FOV;
-    this->apertureRadius = sceneCamera.apertureRadius;
-    this->focalDistance = sceneCamera.focalDistance;
-    this->up = Vector3(0.0f, 1.0f, 0.0f).normalize();
-    this->speed = 10.0f;
-    this->sensitivity = 0.10f;
+    // TODO: Hardcoded information for now.
+    _position = embree::Vec3fa(0, 4, 15);
+    _yaw = 90;
+    _pitch = 6;
+    _fov.x = 45;
+    _apertureRadius = 0;
+    _focalDistance = 4;
 
-    setFOV(FOV.x);
-    updateCameraVectors();
+    _up = embree::normalize(embree::Vec3fa(0.0f, 1.0f, 0.0f));
+    _speed = 10.0f;
+    _sensitivity = 0.10f;
+
+    SetupFOV();
+    Update();
 }
 
-
-void Camera::updateCameraVectors()
+void Camera::SetupFOV()
 {
-    Vector3 tempFront;
-
-    tempFront.x = cos(degreesToRadians(this->yaw)) * cos(degreesToRadians(this->pitch));
-    tempFront.y = sin(degreesToRadians(this->pitch));
-    tempFront.z = sin(degreesToRadians(this->yaw)) * cos(degreesToRadians(this->pitch));
-    tempFront *= -1.0f;
-
-    this->front = tempFront.normalize();
-    this->right = this->front.cross(this->up).normalize();
-}
-
-
-Ray Camera::getCameraRay(int posX,
-    int posY,
-    Randomizer& randEngine)
-{
-    Vector3 horizontalAxis = this->front.cross(this->up).normalize();
-    Vector3 verticalAxis = horizontalAxis.cross(this->front).normalize();
-
-    Vector3 middle = this->position + this->front;
-    Vector3 horizontal = horizontalAxis * std::tan(this->FOV.x * 0.5f * (M_PI / 180));
-    Vector3 vertical = verticalAxis * std::tan(this->FOV.y * -0.5f * (M_PI / 180));
-
-    float rayJitterX = ((randEngine.getRandomFloat() - 0.5f) + posX) / (this->resolution.x - 1.0f);
-    float rayJitterY = ((randEngine.getRandomFloat() - 0.5f) + posY) / (this->resolution.y - 1.0f);
-
-    Vector3 pointOnPlane = this->position
-                                + ((middle
-                                + (horizontal * ((2.0f * rayJitterX) - 1.0f))
-                                + (vertical * ((2.0f * rayJitterY) - 1.0f))
-                                - this->position)
-                                * this->focalDistance);
-
-    Vector3 aperturePoint = this->position;
-
-    if (this->apertureRadius > 0.0f)
-    {
-        float randomizedAngle = 2.0f * M_PI * randEngine.getRandomFloat();
-        float randomizedRadius = this->apertureRadius * std::sqrt(randEngine.getRandomFloat());
-        float apertureX = std::cos(randomizedAngle) * randomizedRadius;
-        float apertureY = std::sin(randomizedAngle) * randomizedRadius;
-
-        aperturePoint = this->position + (horizontalAxis * apertureX) + (verticalAxis * apertureY);
-    }
-
-    Vector3 rayOrigin = aperturePoint;
-    Vector3 rayDirection = (pointOnPlane - aperturePoint).normalize();
-
-    return Ray(rayOrigin, rayDirection);
-}
-
-
-Vector2& Camera::getResolution()
-{
-    return this->resolution;
-}
-
-
-Vector3& Camera::getPosition()
-{
-    return this->position;
-}
-
-
-Vector3& Camera::getFront()
-{
-    return this->front;
-}
-
-
-Vector3& Camera::getUp()
-{
-    return this->up;
-}
-
-
-Vector3& Camera::getRight()
-{
-    return this->right;
-}
-
-
-Vector2& Camera::getFOV()
-{
-    return this->FOV;
-}
-
-
-float& Camera::getYaw()
-{
-    return this->yaw;
-}
-
-
-float& Camera::getPitch()
-{
-    return this->pitch;
-}
-
-
-float& Camera::getSpeed()
-{
-    return this->speed;
-}
-
-
-float& Camera::getSensitivity()
-{
-    return this->sensitivity;
-}
-
-
-float& Camera::getApertureRadius()
-{
-    return this->apertureRadius;
-}
-
-
-float& Camera::getFocalDistance()
-{
-    return this->focalDistance;
-}
-
-
-void Camera::setResolution(Vector2 tempResolution)
-{
-    this->resolution = tempResolution;
-}
-
-
-void Camera::setPosition(Vector3 tempPosition)
-{
-    this->position = tempPosition;
-}
-
-
-void Camera::setFront(Vector3 tempForward)
-{
-    this->front = tempForward;
-}
-
-
-void Camera::setUp(Vector3 tempUp)
-{
-    this->up = tempUp;
-}
-
-
-void Camera::setRight(Vector3 tempRight)
-{
-    this->right = tempRight;
-}
-
-
-void Camera::setFOV(float tempFOV)
-{
-    this->FOV.x = tempFOV;
-    this->FOV.y = (atan(tan(tempFOV * M_PI * M_1_180 * 0.5f)
-        * ((float)this->resolution.y / (float)this->resolution.x)) * 2.0f)
+    _fov.y = (atan(tan(_fov.x * M_PI * M_1_180 * 0.5f)
+        * ((float)_resolution.y / (float)_resolution.x)) * 2.0f)
         * 180.0f * M_1_PI;
 }
 
-
-void Camera::setYaw(float tempYaw)
+void Camera::Update()
 {
-    this->yaw = fmax(tempYaw, 0.0f);
+    embree::Vec3fa front(cos(DegToRad(_yaw)) * cos(DegToRad(_pitch)),
+        sin(DegToRad(_pitch)),
+        sin(DegToRad(_yaw)) * cos(DegToRad(_pitch))
+    );
+
+    front *= -1.0f;
+
+    _front = embree::normalize(front);
+    _right = embree::normalize(embree::cross(_front, _up));
 }
 
-
-void Camera::setPitch(float tempPitch)
+void Camera::KeyboardCallback(CAMERA_MOVEMENTS direction,
+    float deltaTime)
 {
-    this->pitch = fmax(tempPitch, 0.0f);
-}
-
-
-void Camera::setSpeed(float tempSpeed)
-{
-    this->speed = fmax(tempSpeed, 0.0f);
-}
-
-
-void Camera::setSensitivity(float tempSensitivity)
-{
-    this->sensitivity = fmax(tempSensitivity, 0.0f);
-}
-
-
-void Camera::setApertureRadius(float tempAperture)
-{
-    this->apertureRadius = fmax(tempAperture, 0.0f);
-}
-
-
-void Camera::setFocalDistance(float tempFocal)
-{
-    this->focalDistance = fmax(tempFocal, 0.01f);
-}
-
-
-void Camera::keyboardCall(cameraMovement direction,
-    GLfloat deltaTime)
-{
-    GLfloat velocity = this->speed * deltaTime;
+    float velocity(_speed * deltaTime);
 
     if (direction == FORWARD)
-        this->position += this->front * velocity;
+    {
+        _position += _front * velocity;
+    }
     if (direction == BACKWARD)
-        this->position -= this->front * velocity;
+    {
+        _position -= _front * velocity;
+    }
     if (direction == LEFT)
-        this->position -= this->right * velocity;
+    {
+        _position -= _right * velocity;
+    }
     if (direction == RIGHT)
-        this->position += this->right * velocity;
+    {
+        _position += _right * velocity;
+    }
 }
 
-
-void Camera::mouseCall(GLfloat xoffset,
-    GLfloat yoffset,
-    GLboolean constrainPitch)
+void Camera::MouseCallback(embree::Vec2fa mouseOffset)
 {
-    xoffset *= this->sensitivity;
-    yoffset *= this->sensitivity;
-    this->yaw += xoffset;
-    this->pitch += yoffset;
+    mouseOffset *= _sensitivity;
 
-    if (constrainPitch)
+    _yaw += mouseOffset.x;
+    _pitch += mouseOffset.y;
+
+    if (_pitch > 89.0f)
     {
-        if (this->pitch > 89.0f)
-            this->pitch = 89.0f;
-        if (this->pitch < -89.0f)
-            this->pitch = -89.0f;
+        _pitch = 89.0f;
+    }
+    if (_pitch < -89.0f)
+    {
+        _pitch = -89.0f;
     }
 
-    updateCameraVectors();
+    Update();
 }
