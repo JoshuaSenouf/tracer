@@ -9,7 +9,7 @@ NormalIntegrator::NormalIntegrator()
 }
 
 embree::Vec3f NormalIntegrator::GetPixelColor(Ray& ray,
-    Sample& pixelSample,
+    PixelSample& pixelSample,
     SceneManager &sceneManager,
     const RenderGlobals& renderGlobals)
 {
@@ -24,5 +24,8 @@ embree::Vec3f NormalIntegrator::GetPixelColor(Ray& ray,
         return embree::Vec3f(0.7, 0.8, 0.9);
     }
 
-    return embree::normalize(ray.Ng);
+    // We setup all the necessary data describing the shading point.
+    ShadingPoint shadingPoint(SetupShadingPoint(sceneManager, ray));
+
+    return shadingPoint.N;
 }

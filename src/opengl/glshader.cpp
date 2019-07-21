@@ -3,7 +3,6 @@
 
 GLShader::GLShader()
 {
-
 }
 
 void GLShader::Setup(std::string vertexShaderPath,

@@ -9,7 +9,7 @@ struct DebugIntegrator : public Integrator
     DebugIntegrator();
 
     virtual embree::Vec3f GetPixelColor(Ray& ray,
-        Sample& pixelSample,
+        PixelSample& pixelSample,
         SceneManager &sceneManager,
         const RenderGlobals& renderGlobals) override;
 };

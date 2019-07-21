@@ -9,7 +9,7 @@ PositionIntegrator::PositionIntegrator()
 }
 
 embree::Vec3f PositionIntegrator::GetPixelColor(Ray& ray,
-    Sample& pixelSample,
+    PixelSample& pixelSample,
     SceneManager &sceneManager,
     const RenderGlobals& renderGlobals)
 {
@@ -24,5 +24,8 @@ embree::Vec3f PositionIntegrator::GetPixelColor(Ray& ray,
         return embree::Vec3f(0.7, 0.8, 0.9);
     }
 
-    return embree::normalize(ray.origin + ray.tfar * ray.direction);
+    // We setup all the necessary data describing the shading point.
+    ShadingPoint shadingPoint(SetupShadingPoint(sceneManager, ray));
+
+    return embree::normalize(shadingPoint.P);
 }

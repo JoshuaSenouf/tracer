@@ -57,7 +57,7 @@ bool SceneManager::LoadMeshGeometry()
 {
     std::vector<pxr::UsdPrim> meshPrims;
 
-    getPrimFromType("Mesh", _stage, pxr::SdfPath("/"), meshPrims);
+    GetPrimFromType("Mesh", _stage, pxr::SdfPath("/"), meshPrims);
 
     tbb::parallel_for_each(meshPrims.begin(), meshPrims.end(), [&](pxr::UsdPrim& prim)
     {
@@ -111,7 +111,7 @@ bool SceneManager::LoadMeshGeometry()
             // usdGeom.GetHoleIndicesAttr().Get(&meshHoleIndices);
             // usdGeom.GetOrientationAttr().Get(&meshOrientation);
 
-            // pxr::VtVec3iArray meshTriangulatedIndices(triangulateMeshIndices(indicesCounts,
+            // pxr::VtVec3iArray meshTriangulatedIndices(TriangulateMeshIndices(indicesCounts,
             //     indices,
             //     meshHoleIndices,
             //     meshOrientation));

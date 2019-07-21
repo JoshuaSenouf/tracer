@@ -3,7 +3,6 @@
 
 Default::Default()
 {
-
 }
 
 bool Default::Evaluate()

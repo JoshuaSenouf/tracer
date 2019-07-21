@@ -5,6 +5,7 @@
 #include "sampler.h"
 
 #include "embree_helper.h"
+#include "render_helper.h"
 
 
 struct Ray
@@ -24,8 +25,8 @@ struct Ray
     unsigned int geomID;
     unsigned int instID;
 
-    __forceinline Ray(const embree::Vec3fa &origin,
-        const embree::Vec3fa &direction,
+    __forceinline Ray(const embree::Vec3fa& origin,
+        const embree::Vec3fa& direction,
         float tnear = 0.0f,
         float tfar = std::numeric_limits<float>::infinity(),
         float time = 0.0f,
@@ -44,7 +45,7 @@ struct Ray
     }
 
     __forceinline Ray(const Camera& camera,
-        const Sample& pixelSample,
+        const PixelSample& pixelSample,
         float tnear = 0.0f,
         float tfar = std::numeric_limits<float>::infinity(),
         float time = 0.0f,
@@ -80,9 +81,9 @@ struct Ray
         if (camera._apertureRadius > 0.0f)
         {
             float randomAngle(2.0f * M_PI * pixelSample.sampler.Uniform1D());
-            float randomRadius(camera._apertureRadius * std::sqrt(pixelSample.sampler.Uniform1D()));
-            float apertureX(std::cos(randomAngle) * randomRadius);
-            float apertureY(std::sin(randomAngle) * randomRadius);
+            float randomRadius(camera._apertureRadius * embree::sqrt(pixelSample.sampler.Uniform1D()));
+            float apertureX(embree::cos(randomAngle) * randomRadius);
+            float apertureY(embree::sin(randomAngle) * randomRadius);
 
             aperturePoint = camera._position + (axisX * apertureX) + (axisY * apertureY);
         }
@@ -92,14 +93,14 @@ struct Ray
     }
 };
 
-__forceinline RTCRay *RTCRay_(Ray &ray)
+__forceinline RTCRay *RTCRay_(Ray& ray)
 {
-    return (RTCRay *)&ray;
+    return (RTCRay *) &ray;
 }
 
-__forceinline RTCRayHit *RTCRayHit_(Ray &ray)
+__forceinline RTCRayHit *RTCRayHit_(Ray& ray)
 {
-    return (RTCRayHit *)&ray;
+    return (RTCRayHit *) &ray;
 }
 
 #endif // RAY_H

@@ -3,7 +3,6 @@
 
 Disney::Disney()
 {
-
 }
 
 bool Disney::Evaluate()

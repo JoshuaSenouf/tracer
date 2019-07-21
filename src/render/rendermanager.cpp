@@ -5,10 +5,6 @@ RenderManager::RenderManager()
 {
 }
 
-RenderManager::~RenderManager()
-{
-}
-
 void RenderManager::Trace(const RenderGlobals& renderGlobals,
     SceneManager &sceneManager,
     Camera& camera,
@@ -24,16 +20,18 @@ void RenderManager::Trace(const RenderGlobals& renderGlobals,
 
             for (int pixelX = 0; pixelX < renderGlobals.width; ++pixelX)
             {
-                Sample pixelSample(pixelX,
-                    pixelY,
-                    pixelX + pixelY * renderGlobals.width,
-                    0,
-                    renderGlobals.samples,
-                    sampler);
+                // We setup all the necessary data describing the current sample.
+                PixelSample pixelSample(sampler);
+                pixelSample.pixelX = pixelX;
+                pixelSample.pixelY = pixelY;
+                pixelSample.pixelIdx = pixelX + pixelY * renderGlobals.width;
+                pixelSample.samples = renderGlobals.samples;
+                pixelSample.sampleIdx = 0;
 
+                // The final pixel color of the sample we are computed that will be added and averaged to the buffer.
                 embree::Vec3f pixelColor(0.0f);
 
-                for (int Sample = 0; Sample < renderGlobals.samples; ++Sample)
+                for (int sample = 0; sample < renderGlobals.samples; ++sample)
                 {
                     Ray primaryRay(camera, pixelSample);
 
@@ -45,11 +43,11 @@ void RenderManager::Trace(const RenderGlobals& renderGlobals,
 
                     // Random noise test
                     // pixelColor += (embree::Vec3f(buffer._pixelData[pixelSample.pixelIdx] * (iterations - 1)) +
-                    //     embree::Vec3f(sampler.Uniform1D(),
-                    //         sampler.Uniform1D(),
-                    //         sampler.Uniform1D())) * (1.0f / renderGlobals.samples);
+                    //     embree::Vec3f(pixelSample.sampler.Uniform1D(),
+                    //         pixelSample.sampler.Uniform1D(),
+                    //         pixelSample.sampler.Uniform1D())) * (1.0f / renderGlobals.samples);
 
-                    pixelSample.sampleCount++;
+                    pixelSample.sampleIdx++;
                 }
 
                 buffer._pixelData[pixelSample.pixelIdx] = pixelColor / iterations;

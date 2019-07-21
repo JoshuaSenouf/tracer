@@ -1,14 +1,14 @@
-#ifndef LAMBERT_H
-#define LAMBERT_H
+#ifndef ORENNAYAR_H
+#define ORENNAYAR_H
 
 #include <string>
 
 #include "bsdf.h"
 
 
-struct Lambert : public BSDF
+struct OrenNayar : public BSDF
 {
-    Lambert();
+    OrenNayar();
 
     virtual embree::Vec3f Evaluate(PixelSample& pixelSample,
         ShadingPoint& shadingPoint,
@@ -19,6 +19,8 @@ struct Lambert : public BSDF
     virtual float Pdf(PixelSample& pixelSample,
         ShadingPoint& shadingPoint,
         BSDFSample& bsdfSample) override;
+
+    float _roughness;
 };
 
-#endif // LAMBERT_H
+#endif // ORENNAYAR_H

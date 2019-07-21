@@ -3,7 +3,6 @@
 
 Camera::Camera()
 {
-
 }
 
 void Camera::Init()
@@ -20,11 +19,11 @@ void Camera::Init()
     _speed = 10.0f;
     _sensitivity = 0.10f;
 
-    SetupFov();
+    SetupFOV();
     Update();
 }
 
-void Camera::SetupFov()
+void Camera::SetupFOV()
 {
     _fov.y = (atan(tan(_fov.x * M_PI * M_1_180 * 0.5f)
         * ((float)_resolution.y / (float)_resolution.x)) * 2.0f)
@@ -33,9 +32,9 @@ void Camera::SetupFov()
 
 void Camera::Update()
 {
-    embree::Vec3fa front(cos(degToRad(_yaw)) * cos(degToRad(_pitch)),
-        sin(degToRad(_pitch)),
-        sin(degToRad(_yaw)) * cos(degToRad(_pitch))
+    embree::Vec3fa front(cos(DegToRad(_yaw)) * cos(DegToRad(_pitch)),
+        sin(DegToRad(_pitch)),
+        sin(DegToRad(_yaw)) * cos(DegToRad(_pitch))
     );
 
     front *= -1.0f;

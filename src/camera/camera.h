@@ -4,7 +4,6 @@
 #include "camera_helper.h"
 #include "embree_helper.h"
 #include "math_helper.h"
-#include "render_helper.h"
 
 
 struct Camera
@@ -13,7 +12,7 @@ struct Camera
 
     void Init();
     void Update();
-    void SetupFov();
+    void SetupFOV();
     void KeyboardCallback(CAMERA_MOVEMENTS direction,
         float deltaTime);
     void MouseCallback(embree::Vec2fa mouseOffset);

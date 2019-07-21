@@ -29,7 +29,6 @@
 struct RenderManager
 {
     RenderManager();
-    ~RenderManager();
 
     void Trace(const RenderGlobals& renderGlobals,
         SceneManager& sceneManager,

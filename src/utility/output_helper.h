@@ -20,9 +20,9 @@ inline void toPPM(int width,
     for (unsigned int pixelIdx = 0; pixelIdx < (width * height); ++pixelIdx)
     {
         // A lot faster than using std::ofstream or std::ostream_iterator/std::copy, actually.
-        fprintf(ppmFile, "%d %d %d ", ToRgb(ToSrgb(buffer._pixelData[pixelIdx].x)),
-            ToRgb(ToSrgb(buffer._pixelData[pixelIdx].y)),
-            ToRgb(ToSrgb(buffer._pixelData[pixelIdx].z)));
+        fprintf(ppmFile, "%d %d %d ", ToRGB(ToSRGB(buffer._pixelData[pixelIdx].x)),
+            ToRGB(ToSRGB(buffer._pixelData[pixelIdx].y)),
+            ToRGB(ToSRGB(buffer._pixelData[pixelIdx].z)));
     }
 
     fclose(ppmFile);

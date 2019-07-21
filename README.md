@@ -8,9 +8,9 @@ Screenshots
 
 * USD Kitchen, using the UDPT, Diffuse, Position, Normal and Debug integrators:
 
-<img src="https://i.ibb.co/hch2YHf/tracer-render-udpt.png" width="320" height="180"> <img src="https://i.ibb.co/KDcwzGG/tracer-render-diffuse.png" width="320" height="180">
-<img src="https://i.ibb.co/209PjBG/tracer-render-position.png" width="320" height="180"> <img src="https://i.ibb.co/87sh556/tracer-render-normal.png" width="320" height="180">
-<img src="https://i.ibb.co/tCm78Z5/tracer-render-debug.png" width="320" height="180">
+<img src="https://i.ibb.co/CPKcY58/tracer-render-udpt.png" width="320" height="180"> <img src="https://i.ibb.co/0yZdGqq/tracer-render-diffuse.png" width="320" height="180">
+<img src="https://i.ibb.co/fqnQrBs/tracer-render-position.png" width="320" height="180"> <img src="https://i.ibb.co/Trg5H3W/tracer-render-normal.png" width="320" height="180">
+<img src="https://i.ibb.co/xHCYrnY/tracer-render-debug.png" width="320" height="180">
 
 Features
 ------
@@ -23,12 +23,17 @@ Features
 * Camera:
     * Types:
         * FPS
-        * **TODO: ** DCC-style
+        * **TODO :** DCC-style
     * Subpixel jitter antialiasing
     * Depth of Field (using aperture radius and focal distance)
 
 * Integrator:
-    * UDPT (Unidirectional Path Tracing) (**WIP**)
+    * UDPT (Unidirectional Path Tracing):
+        * **TODO :** Environment sampling
+            * **TODO :** Color-based sky/background
+            * **TODO :** Image-Based Lighting (IBL)
+        * **TODO :** Light sampling/Next Event Estimation (NEE)
+        * BSDF sampling
     * Diffuse (**WIP**)
     * **TODO :** Occlusion
     * Position
@@ -43,19 +48,19 @@ Features
     * Methods:
         * Hemisphere:
             * Uniform
-            * Cosine weighted
+            * Cosine Weighted
         * Sphere:
             * Uniform
 
 * Material:
     * **TODO :** Default
     * **TODO :** Diffuse
-    * **TODO :** Empirical (For experiment purposes)
+    * **TODO :** Empirical (for experiment purposes)
     * **TODO :** Disney (2012)
 
 * BSDF/Lobes:
     * Diffuse:
-        * **TODO :** Lambert
+        * Lambert
         * **TODO :** Oren-Nayar
         * **TODO :** Burley
         * **TODO :** Sheen
@@ -67,7 +72,7 @@ Features
         * **TODO :** Thin Film
 
 * Light sources:
-    * Sky light
+    * Sky/background light
     * **TODO :** Geometry light
 
 * Geometry types:

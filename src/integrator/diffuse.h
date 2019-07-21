@@ -9,7 +9,7 @@ struct DiffuseIntegrator : public Integrator
     DiffuseIntegrator();
 
     virtual embree::Vec3f GetPixelColor(Ray& ray,
-        Sample& pixelSample,
+        PixelSample& pixelSample,
         SceneManager &sceneManager,
         const RenderGlobals& renderGlobals) override;
 };

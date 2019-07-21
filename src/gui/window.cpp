@@ -5,12 +5,6 @@
 
 Window::Window()
 {
-    renderGlobals = RenderGlobals(WIDTH,
-        HEIGHT,
-        DEPTH,
-        SAMPLES,
-        INTEGRATORID,
-        RAYJITTER);
 }
 
 int Window::RenderWindow()
@@ -57,7 +51,7 @@ int Window::RenderWindow()
         //--------------
         // GUI setting & callbacks
         //--------------
-        SetupGui();
+        SetupGUI();
         ImGuiIO guiIO(ImGui::GetIO());
 
         KeyboardCallback(guiIO);
@@ -114,7 +108,7 @@ int Window::RenderWindow()
         //----------------
         // GUI rendering
         //----------------
-        RenderGui();
+        RenderGUI();
 
         glfwSwapBuffers(window);
     }
@@ -122,7 +116,7 @@ int Window::RenderWindow()
     //---------
     // Cleaning
     //---------
-    StopGui();
+    StopGUI();
 
     glfwTerminate();
 
@@ -137,7 +131,7 @@ void Window::ResetRenderer()
     renderReset = false;
 }
 
-void Window::SetupGui()
+void Window::SetupGUI()
 {
     ImGui_ImplGlfwGL3_NewFrame();
 
@@ -283,12 +277,12 @@ void Window::SetupGui()
     }
 }
 
-void Window::RenderGui()
+void Window::RenderGUI()
 {
     ImGui::Render();
 }
 
-void Window::StopGui()
+void Window::StopGUI()
 {
     ImGui_ImplGlfwGL3_Shutdown();
 }
@@ -326,17 +320,13 @@ void Window::RenderConfigWindow(bool& guiOpen)
 
 void Window::ProfilingWindow(bool& guiOpen)
 {
-    ImGui::SetNextWindowPos(ImVec2(ImGui::GetIO().DisplaySize.x - 160, 30), 1);
-
-    ImGui::Begin("FPS Counter",
+    ImGui::Begin("Profiling",
         &guiOpen,
         ImGuiWindowFlags_NoTitleBar
-        |ImGuiWindowFlags_NoResize
-        |ImGuiWindowFlags_AlwaysAutoResize
-        |ImGuiWindowFlags_NoMove
-        |ImGuiWindowFlags_NoSavedSettings);
+        |ImGuiWindowFlags_AlwaysAutoResize);
 
-    ImGui::Text("Framerate %.2f FPS", ImGui::GetIO().Framerate);
+    ImGui::Text("Framerate: %.2f FPS / %.2f ms", ImGui::GetIO().Framerate, 1000.0f / ImGui::GetIO().Framerate);
+    ImGui::Text("Camera Position: (%.2f, %.2f, %.2f)", camera._position.x, camera._position.y, camera._position.z);
 
     ImGui::End();
 }

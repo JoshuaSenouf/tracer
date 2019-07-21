@@ -1,19 +1,27 @@
-#include "lambert.h"
+#include "orennayar.h"
 
 
-Lambert::Lambert()
+OrenNayar::OrenNayar()
 {
+    _roughness = 0.5f;
 }
 
-embree::Vec3f Lambert::Evaluate(PixelSample& pixelSample,
+embree::Vec3f OrenNayar::Evaluate(PixelSample& pixelSample,
     ShadingPoint& shadingPoint,
     BSDFSample& bsdfSample)
 {
+    float roughnessSqrt(_roughness * _roughness);
+    // We setup Oren-Nayar's specific terms.
+	float A = 1 - 0.5f * (roughnessSqrt / (roughnessSqrt + 0.57f));
+    float B = 0.45f * (roughnessSqrt / (roughnessSqrt + 0.09f));
+
+    // TODO
+
     // TODO: "NdotL" should not be the same one as from "Sample()", but the actual dot product of the normal and the light direction?
-    return (shadingPoint.geometry->_displayColor / M_PI) * bsdfSample.NdotL;
+    return embree::Vec3f(0.0f);
 }
 
-embree::Vec3fa Lambert::Sample(PixelSample& pixelSample,
+embree::Vec3fa OrenNayar::Sample(PixelSample& pixelSample,
     ShadingPoint& shadingPoint,
     BSDFSample& bsdfSample)
 {
@@ -45,7 +53,7 @@ embree::Vec3fa Lambert::Sample(PixelSample& pixelSample,
     return wi;
 }
 
-float Lambert::Pdf(PixelSample& pixelSample,
+float OrenNayar::Pdf(PixelSample& pixelSample,
     ShadingPoint& shadingPoint,
     BSDFSample& bsdfSample)
 {

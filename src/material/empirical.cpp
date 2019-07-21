@@ -3,7 +3,6 @@
 
 Empirical::Empirical()
 {
-
 }
 
 bool Empirical::Evaluate()

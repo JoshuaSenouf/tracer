@@ -3,7 +3,6 @@
 
 Diffuse::Diffuse()
 {
-
 }
 
 bool Diffuse::Evaluate()

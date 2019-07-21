@@ -3,7 +3,6 @@
 
 Geometry::Geometry()
 {
-
 }
 
 bool Geometry::Create(const RTCDevice& device,

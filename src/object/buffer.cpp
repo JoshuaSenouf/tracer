@@ -3,7 +3,6 @@
 
 Buffer::Buffer()
 {
-
 }
 
 void Buffer::Init(int width,

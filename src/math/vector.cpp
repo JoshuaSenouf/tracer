@@ -5,7 +5,6 @@
 //     y(0.0f),
 //     z(0.0f)
 // {
-
 // }
 
 // Vector3::Vector3(float tempXYZ)
@@ -31,7 +30,7 @@
 
 // float Vector3::Length() const
 // {
-//     return std::sqrt(this->x * this->x + this->y * this->y + this->z * this->z);
+//     return embree::sqrt(this->x * this->x + this->y * this->y + this->z * this->z);
 // }
 
 // Vector3 Vector3::Normalize() const
@@ -186,7 +185,6 @@
 // Vector2::Vector2(): x(0.0f),
 //     y(0.0f)
 // {
-
 // }
 
 // Vector2::Vector2(float tempXY)
@@ -209,7 +207,7 @@
 
 // float Vector2::Length() const
 // {
-//     return std::sqrt(this->x * this->x + this->y * this->y);
+//     return embree::sqrt(this->x * this->x + this->y * this->y);
 // }
 
 // Vector2 Vector2::Normalize() const

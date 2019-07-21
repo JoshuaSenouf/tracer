@@ -16,16 +16,16 @@ inline embree::Vec3fa Clamp(const embree::Vec3fa &color)
         Clamp(color.z));
 }
 
-inline float ToSrgb(float colorChannel)
+inline float ToSRGB(float colorChannel)
 {
     return std::pow(colorChannel, 1.0f / 2.2f);
 }
 
-inline embree::Vec3fa ToSrgb(const embree::Vec3fa &color)
+inline embree::Vec3fa ToSRGB(const embree::Vec3fa &color)
 {
-    return embree::Vec3fa(ToSrgb(color.x),
-        ToSrgb(color.y),
-        ToSrgb(color.z));
+    return embree::Vec3fa(ToSRGB(color.x),
+        ToSRGB(color.y),
+        ToSRGB(color.z));
 }
 
 inline float ToLinear(float colorChannel)
@@ -40,7 +40,7 @@ inline embree::Vec3fa ToLinear(const embree::Vec3fa &color)
         ToLinear(color.z));
 }
 
-inline int ToRgb(float colorChannel)
+inline int ToRGB(float colorChannel)
 {
     return static_cast<int>(Clamp(colorChannel) * 255);
 }

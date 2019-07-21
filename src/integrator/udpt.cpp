@@ -9,12 +9,12 @@ UDPTIntegrator::UDPTIntegrator()
 }
 
 embree::Vec3f UDPTIntegrator::GetPixelColor(Ray& ray,
-    Sample& pixelSample,
+    PixelSample& pixelSample,
     SceneManager &sceneManager,
     const RenderGlobals& renderGlobals)
 {
     embree::Vec3f colorAccumulation(0.0f);
-    embree::Vec3f colorMask(1.0f);
+    embree::Vec3f colorThroughput(1.0f);
 
     for (int bounce = 0; bounce < renderGlobals.depth; ++bounce)
     {
@@ -26,66 +26,35 @@ embree::Vec3f UDPTIntegrator::GetPixelColor(Ray& ray,
         if (ray.instID == RTC_INVALID_GEOMETRY_ID)
         {
             // TODO: Hardcoded sky color value for now.
-            return colorAccumulation += colorMask * embree::Vec3f(0.7, 0.8, 0.9);
+            return colorAccumulation += colorThroughput * embree::Vec3f(0.7, 0.8, 0.9);
         }
 
-        auto intersectedGeom(sceneManager._sceneGeom[ray.instID].get());
+        // We setup all the necessary data describing the shading point.
+        ShadingPoint shadingPoint(SetupShadingPoint(sceneManager, ray));
 
-        pxr::GfMatrix4f transform(intersectedGeom->_transform);
-        embree::Vec3fa position(ray.origin + ray.tfar * ray.direction);
-        // TODO: Use the normals primvar if available (for smooth normals).
-        embree::Vec3f normalObject(ray.Ng);
-        // Object to world space normal conversion.
-        embree::Vec3f normalWorld(normalObject.x * transform[0][0] +
-                normalObject.y * transform[1][0] +
-                normalObject.z * transform[2][0],
-            normalObject.x * transform[0][1] +
-                normalObject.y * transform[1][1] +
-                normalObject.z * transform[2][1],
-            normalObject.x * transform[0][2] +
-                normalObject.y * transform[1][2] +
-                normalObject.z * transform[2][2]);
+        // Sky/Environment Sampling
+        // TODO
 
-        normalWorld = embree::normalize(embree::dot(ray.direction, normalWorld) < 0.0f ? normalWorld : -normalWorld);
+        // Light Sampling/Next Event Estimation
+        // TODO
 
-        ShadingPoint shadingPoint(position,
-            normalObject,
-            normalWorld,
-            embree::Vec2fa(ray.u, ray.v),
-            -ray.direction,
-            ray.geomID,
-            ray.primID,
-            ray.instID);
+        // BSDF Sampling
+        BSDFSample bsdfSample;
+        // TODO: We should use a proper material instead of a BSDF/Lobe directly.
+        bsdfSample.wi = diffuseMat.Sample(pixelSample, shadingPoint, bsdfSample);
+        bsdfSample.reflectance = diffuseMat.Evaluate(pixelSample, shadingPoint, bsdfSample);
 
-        // From Embree 3.x
-        float errorBias = 32.0f * 1.19209e-07f * std::max(
-            std::max(std::abs(shadingPoint.P.x), abs(shadingPoint.P.y)), 
-            std::max(std::abs(shadingPoint.P.z), ray.tfar));
-
-        const float rand0 = pixelSample.sampler.Uniform1D();
-        const float rand1 = pixelSample.sampler.Uniform1D();
-        const float r = std::sqrt(rand0);
-        const float theta = 2.0f * M_PI * rand1;
-        const float x = r * std::cos(theta);
-        const float y = r * std::sin(theta);
-
-        embree::Vec3fa u(embree::normalize(embree::cross(shadingPoint.Nw,
-            pixelSample.sampler.SphereUniform(pixelSample.sampler.Uniform1D(),
-                pixelSample.sampler.Uniform1D()))));
-        embree::Vec3fa v(embree::cross(shadingPoint.Nw, u));
-
-        embree::Vec3fa sampleDirection(shadingPoint.Nw * std::sqrt(1 - rand1));
-        sampleDirection += (u * x);
-        sampleDirection += (v * y);
-
-        float positionSign(embree::dot(sampleDirection, shadingPoint.Nw) < 0.0f ? -1.0f : 1.0f);
-        ray.origin = position + (positionSign * errorBias * shadingPoint.Nw);
-        ray.direction = sampleDirection;
+        // Using the world-space normal and the error bias of the shading point , as well as a sign,
+        // we apply some form of jitter on the position of the shading point,
+        // effectively offsetting the origin of the following ray.
+        float directionSign(embree::sign(embree::dot(bsdfSample.wi, shadingPoint.Nw)));
+        ray.origin = shadingPoint.P + (directionSign * shadingPoint.error * shadingPoint.Nw);
+        ray.direction = bsdfSample.wi;
 
         // Initializing the new ray.
-        ray = Ray(ray.origin, ray.direction, errorBias);
+        ray = Ray(ray.origin, ray.direction, shadingPoint.error);
 
-        colorMask = colorMask * embree::Vec3f(intersectedGeom->_displayColor * (1.0f / M_PI));
+        colorThroughput = colorThroughput * (bsdfSample.reflectance / bsdfSample.pdf);
     }
 
     return colorAccumulation;

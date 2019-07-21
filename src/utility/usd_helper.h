@@ -9,11 +9,13 @@
 #include <pxr/usd/usdGeom/xformCache.h>
 #include <pxr/usd/usd/attribute.h>
 #include <pxr/base/vt/array.h>
-#include <pxr/base/gf/matrix4d.h>
+#include <pxr/base/gf/matrix3f.h>
+#include <pxr/base/gf/matrix3d.h>
 #include <pxr/base/gf/matrix4f.h>
+#include <pxr/base/gf/matrix4d.h>
 
 
-inline void getPrimFromType(const std::string& primType,
+inline void GetPrimFromType(const std::string& primType,
     const pxr::UsdStageRefPtr& stage,
     const pxr::SdfPath& primPath,
     std::vector<pxr::UsdPrim>& primVector)
@@ -30,14 +32,14 @@ inline void getPrimFromType(const std::string& primType,
 
         if (prim.GetChildren())
         {
-            getPrimFromType(primType, stage, prim.GetPath(), primVector);
+            GetPrimFromType(primType, stage, prim.GetPath(), primVector);
         }
     }
 }
 
 /* Reimplementation of some USD's Hd API functions to triangulate/quadriangulate meshes,
     so they can be used outside of the Hd API. */
-inline bool doFanTriangulation(pxr::GfVec3i& triangulatedIndices,
+inline bool DoFanTriangulation(pxr::GfVec3i& triangulatedIndices,
     const pxr::VtArray<int>& meshVertexIndices,
     int meshVertexIndicesOffset,
     int meshVertexIndicesIdx,
@@ -68,7 +70,7 @@ inline bool doFanTriangulation(pxr::GfVec3i& triangulatedIndices,
     return true;
 }
 
-inline pxr::VtVec3iArray triangulateMeshIndices(pxr::VtArray<int>& meshVertexCounts,
+inline pxr::VtVec3iArray TriangulateMeshIndices(pxr::VtArray<int>& meshVertexCounts,
     const pxr::VtArray<int>& meshVertexIndices,
     const pxr::VtArray<int>& meshHoleIndices,
     const pxr::TfToken& meshOrientation)
@@ -131,7 +133,7 @@ inline pxr::VtVec3iArray triangulateMeshIndices(pxr::VtArray<int>& meshVertexCou
             {
                 meshTriangulatedIndices[triangleFaceIdx] = pxr::GfVec3i(0, 0, 0);
 
-                if (!doFanTriangulation(meshTriangulatedIndices[triangleFaceIdx],
+                if (!DoFanTriangulation(meshTriangulatedIndices[triangleFaceIdx],
                     meshVertexIndices,
                     faceVertexIdx,
                     faceVertexCountIdx,

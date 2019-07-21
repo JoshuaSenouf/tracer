@@ -9,7 +9,7 @@ DebugIntegrator::DebugIntegrator()
 }
 
 embree::Vec3f DebugIntegrator::GetPixelColor(Ray& ray,
-    Sample& pixelSample,
+    PixelSample& pixelSample,
     SceneManager &sceneManager,
     const RenderGlobals& renderGlobals)
 {
@@ -24,10 +24,8 @@ embree::Vec3f DebugIntegrator::GetPixelColor(Ray& ray,
         return embree::Vec3f(0.7, 0.8, 0.9);
     }
 
-    // Creating a local copy of the Geometry pointer here will
-    // decrease performance a bit, for obvious reasons, the solution being
-    // to only reference the one from the geometry map from the SceneManager.
-    // auto intersectedGeom(sceneManager._sceneGeom[ray.instID].get());
+    // We setup all the necessary data describing the shading point.
+    ShadingPoint shadingPoint(SetupShadingPoint(sceneManager, ray));
 
     // We return a color based on the "instID" of the intersected geometry.
     // In Embree, the "primID" correspond to a unique *piece* of geometry, such as a triangle,
@@ -38,7 +36,7 @@ embree::Vec3f DebugIntegrator::GetPixelColor(Ray& ray,
     // and no actual geometry prototypes.
     // TODO: Using a "parallel_for_each" loop in the SceneManager to generate the Embree geometry
     // means that the IDs will never be the same everytime we run Tracer.
-    return embree::Vec3f((static_cast<float>((ray.instID & 0x000000ff) >>  0)) / 255.0f,
-        (static_cast<float>((ray.instID & 0x0000ff00) >>  8)) / 255.0f,
-        (static_cast<float>((ray.instID & 0x00ff0000) >> 16)) / 255.0f);
+    return embree::Vec3f((static_cast<float>((shadingPoint.instID & 0x000000ff) >>  0)) / 255.0f,
+        (static_cast<float>((shadingPoint.instID & 0x0000ff00) >>  8)) / 255.0f,
+        (static_cast<float>((shadingPoint.instID & 0x00ff0000) >> 16)) / 255.0f);
 }

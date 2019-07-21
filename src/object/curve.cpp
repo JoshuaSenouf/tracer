@@ -3,5 +3,4 @@
 
 Curve::Curve()
 {
-
 }

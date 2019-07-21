@@ -19,13 +19,6 @@
 #include "embree_helper.h"
 #include "render_helper.h"
 
-#define WIDTH 800
-#define HEIGHT 600
-#define DEPTH 3
-#define SAMPLES 1
-#define INTEGRATORID UDPT
-#define RAYJITTER true
-
 
 class Window
 {
@@ -34,9 +27,9 @@ class Window
 
         int RenderWindow();
         void ResetRenderer();
-        void SetupGui();
-        void RenderGui();
-        void StopGui();
+        void SetupGUI();
+        void RenderGUI();
+        void StopGUI();
         void RenderConfigWindow(bool &guiOpen);
         void ProfilingWindow(bool& guiOpen);
         void AboutWindow(bool &guiOpen);
@@ -55,7 +48,7 @@ class Window
         int iterations = 0;
         float deltaTime = 0.0f;
         float lastFrame = 0.0f;
-        embree::Vec2fa prevMousePos = embree::Vec2fa(WIDTH / 2.0f, HEIGHT / 2.0f);
+        embree::Vec2fa prevMousePos = embree::Vec2fa(renderGlobals.width / 2.0f, renderGlobals.height / 2.0f);
 
         Buffer frontBuffer;
         Buffer backBuffer;
