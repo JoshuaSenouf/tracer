@@ -1,5 +1,4 @@
 #include "diffuse.h"
-#include "quadmesh.h"
 
 
 DiffuseIntegrator::DiffuseIntegrator()

@@ -1,7 +1,7 @@
 Tracer
 ======
 
-Tracer is a C++ rendering engine that aimed to produce photorealistic images using Path Tracing techniques on CPU.
+Tracer is a renderer using C++, Embree and USD to produce photorealistic images using Path Tracing techniques on the CPU.
 
 Screenshots
 ------
@@ -29,11 +29,11 @@ Features
 
 * Integrator:
     * UDPT (Unidirectional Path Tracing):
-        * **TODO :** Environment sampling
+        * **TODO :** Environment Sampling
             * **TODO :** Color-based sky/background
             * **TODO :** Image-Based Lighting (IBL)
-        * **TODO :** Light sampling/Next Event Estimation (NEE)
-        * BSDF sampling
+        * **TODO :** Light Sampling/Next Event Estimation (NEE)
+        * BSDF Sampling
     * Diffuse (**WIP**)
     * **TODO :** Occlusion
     * Position
@@ -43,7 +43,7 @@ Features
 
 * Sampling:
     * RNG:
-        * Uniform (jittered)
+        * Uniform
         * Stratified (**WIP**)
     * Methods:
         * Hemisphere:
@@ -115,7 +115,7 @@ How to use
 
 Tracer was written using Linux, VSCode as the IDE, CMake as the building tool, and a C++14 compiler in mind.
 
-Download the source, build the project structure using CMake 3.x, open the project using your favorite IDE (tested on QtCreator), build the project, and everything should be ready to use.
+Download the source, build the project structure using CMake 3.x, open the project using your favorite IDE (tested on VSCode), build the project, and everything should be ready to use.
 
 * In Tracer :
     * Hold the right mouse button to use the camera
@@ -125,11 +125,16 @@ Download the source, build the project structure using CMake 3.x, open the proje
 Dependencies (included, aside from Intel Embree/TBB, as well as Pixar USD and its own dependencies)
 ------
 
-- Window&Input System: GLFW
+- Window & Input System: GLFW (3.3)
 - OpenGL Functions Loader: GLAD
-- GUI System: dear imgui
-- EXR Handling: tinyexr
-- Image Loading: stb
-- Scene Loading: Pixar USD
-- Ray Tracing Kernels: Intel Embree
-- Multithreading: Intel TBB
+- GUI System: dear imgui (1.53)
+- EXR Handling: tinyexr (0.9.5)
+- Image Loading: stb (2.34)
+- Scene Description: Pixar USD (19.05)
+- Ray Tracing Kernels: Intel Embree (3.5.2)
+- Multithreading: Intel TBB (2019U5)
+- Math Operations: Intel Embree SIMD Library (3.5.2)
+
+Credits
+------
+

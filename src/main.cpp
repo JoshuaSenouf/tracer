@@ -5,7 +5,7 @@
 #include "window.h"
 
 
-int main()
+int main(int argc, char** argv)
 {
     Window mainWindow;
     mainWindow.RenderWindow();
