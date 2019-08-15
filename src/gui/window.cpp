@@ -16,7 +16,7 @@ int Window::RenderWindow()
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
     glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
 
-    window = glfwCreateWindow(renderGlobals.width, renderGlobals.height, "Tracer", nullptr, nullptr);
+    window = glfwCreateWindow(globals.width, globals.height, "Tracer", nullptr, nullptr);
     glfwMakeContextCurrent(window);
 
     glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
@@ -26,15 +26,15 @@ int Window::RenderWindow()
 
     ImGui_ImplGlfwGL3_Init(window, true);
 
-    sceneManager.LoadScene("res/scenes/cupandsaucer.usdz");
+    scene.LoadScene("res/scenes/cupandsaucer.usdz");
 
-    camera._resolution = embree::Vec2fa(renderGlobals.width, renderGlobals.height);
+    camera._resolution = embree::Vec2fa(globals.width, globals.height);
     camera.Init();
 
-    frontBuffer.Init(renderGlobals.width, renderGlobals.height);
-    backBuffer.Init(renderGlobals.width, renderGlobals.height);
+    frontBuffer.Init(globals.width, globals.height);
+    backBuffer.Init(globals.width, globals.height);
 
-    renderManager.SetupScreenQuad(renderGlobals.width, renderGlobals.height);
+    renderManager.SetupScreenQuad(globals.width, globals.height);
 
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 
@@ -66,15 +66,15 @@ int Window::RenderWindow()
         }
 
         // TODO: Will make use of Qt's callback system once the GUI will be revamped.
-        if (camera._jitter != renderGlobals.rayJitter)
+        if (camera._jitter != globals.rayJitter)
         {
-            camera._jitter = renderGlobals.rayJitter;
+            camera._jitter = globals.rayJitter;
 
             renderReset = true;
         }
-        if (renderManager.integratorID != renderGlobals.integratorID)
+        if (renderManager.integratorID != globals.integratorID)
         {
-            renderManager.integratorID = renderGlobals.integratorID;
+            renderManager.integratorID = globals.integratorID;
 
             renderReset = true;
         }
@@ -93,13 +93,13 @@ int Window::RenderWindow()
             iterations++;
 
             // Progressive rendering
-            renderManager.Trace(renderGlobals,
-                sceneManager,
+            renderManager.Trace(globals,
+                scene,
                 camera,
                 frontBuffer,
                 iterations);
-            renderManager.RenderToScreenTexture(renderGlobals.width,
-                renderGlobals.height,
+            renderManager.RenderToScreenTexture(globals.width,
+                globals.height,
                 frontBuffer);
         }
 
@@ -125,7 +125,7 @@ int Window::RenderWindow()
 
 void Window::ResetRenderer()
 {
-    frontBuffer.Clean(renderGlobals.width, renderGlobals.height);
+    frontBuffer.Clean(globals.width, globals.height);
 
     iterations = 0;
     renderReset = false;
@@ -151,32 +151,32 @@ void Window::SetupGUI()
                 if (ImGui::MenuItem("PPM"))
                 {
                     Buffer outputBuffer;
-                    outputBuffer.Init(renderGlobals.width, renderGlobals.height);
+                    outputBuffer.Init(globals.width, globals.height);
 
-                    renderManager.Trace(renderGlobals,
-                        sceneManager,
+                    renderManager.Trace(globals,
+                        scene,
                         camera,
                         outputBuffer,
                         1);
 
-                    toPPM(renderGlobals.width,
-                        renderGlobals.height,
+                    toPPM(globals.width,
+                        globals.height,
                         outputBuffer);
                 }
 
                 if (ImGui::MenuItem("EXR"))
                 {
                     Buffer outputBuffer;
-                    outputBuffer.Init(renderGlobals.width, renderGlobals.height);
+                    outputBuffer.Init(globals.width, globals.height);
                     
-                    renderManager.Trace(renderGlobals,
-                        sceneManager,
+                    renderManager.Trace(globals,
+                        scene,
                         camera,
                         outputBuffer,
                         1);
 
-                    toEXR(renderGlobals.width,
-                        renderGlobals.height,
+                    toEXR(globals.width,
+                        globals.height,
                         outputBuffer);
                 }
 
@@ -187,15 +187,15 @@ void Window::SetupGUI()
             {
                 if (ImGui::MenuItem("PPM"))
                 {
-                    toPPM(renderGlobals.width,
-                        renderGlobals.height,
+                    toPPM(globals.width,
+                        globals.height,
                         frontBuffer);
                 }
 
                 if (ImGui::MenuItem("EXR"))
                 {
-                    toEXR(renderGlobals.width,
-                        renderGlobals.height,
+                    toEXR(globals.width,
+                        globals.height,
                         frontBuffer);
                 }
 
@@ -209,12 +209,12 @@ void Window::SetupGUI()
         {
             if (ImGui::BeginMenu("Integrator"))
             {
-                ImGui::RadioButton("UDPT", &renderGlobals.integratorID, 0);
-                ImGui::RadioButton("Diffuse", &renderGlobals.integratorID, 1);
-                ImGui::RadioButton("Occlusion", &renderGlobals.integratorID, 2);
-                ImGui::RadioButton("Position", &renderGlobals.integratorID, 3);
-                ImGui::RadioButton("Normal", &renderGlobals.integratorID, 4);
-                ImGui::RadioButton("Debug", &renderGlobals.integratorID, 5);
+                ImGui::RadioButton("UDPT", &globals.integratorID, 0);
+                ImGui::RadioButton("Diffuse", &globals.integratorID, 1);
+                ImGui::RadioButton("Occlusion", &globals.integratorID, 2);
+                ImGui::RadioButton("Position", &globals.integratorID, 3);
+                ImGui::RadioButton("Normal", &globals.integratorID, 4);
+                ImGui::RadioButton("Debug", &globals.integratorID, 5);
 
                 ImGui::EndMenu();
             }
@@ -233,7 +233,7 @@ void Window::SetupGUI()
 
         if (ImGui::BeginMenu("Camera"))
         {
-            ImGui::Checkbox("Jitter Rays", &renderGlobals.rayJitter);
+            ImGui::Checkbox("Jitter Rays", &globals.rayJitter);
 
             ImGui::EndMenu();
         }
@@ -244,7 +244,7 @@ void Window::SetupGUI()
             {
                 if (ImGui::MenuItem("Cup and Saucer"))
                 {
-                    sceneManager.LoadScene("res/scenes/usd/cupandsaucer.usdz");
+                    scene.LoadScene("res/scenes/usd/cupandsaucer.usdz");
                     camera.Init();
 
                     renderReset = true;
@@ -252,7 +252,7 @@ void Window::SetupGUI()
 
                 if (ImGui::MenuItem("Stormtroopers"))
                 {
-                    sceneManager.LoadScene("res/scenes/usd/stormtroopers.usdc");
+                    scene.LoadScene("res/scenes/usd/stormtroopers.usdc");
                     camera.Init();
 
                     renderReset = true;
@@ -291,10 +291,10 @@ void Window::RenderConfigWindow(bool& guiOpen)
 {
     ImGui::Begin("Render Config", &guiOpen);
 
-    ImGui::InputInt("Width", &renderGlobals.width);
-    ImGui::InputInt("Height", &renderGlobals.height);
-    ImGui::InputInt("Samples", &renderGlobals.samples);
-    ImGui::InputInt("Depth", &renderGlobals.depth);
+    ImGui::InputInt("Width", &globals.width);
+    ImGui::InputInt("Height", &globals.height);
+    ImGui::InputInt("Samples", &globals.samples);
+    ImGui::InputInt("Depth", &globals.depth);
 
     ImGui::Separator();
 
@@ -302,14 +302,14 @@ void Window::RenderConfigWindow(bool& guiOpen)
     {
         if (ImGui::Button("Save To Back Buffer"))
         {
-            backBuffer.Clean(renderGlobals.width, renderGlobals.height);
-            backBuffer._pixelData = frontBuffer._pixelData;
+            backBuffer.Clean(globals.width, globals.height);
+            backBuffer._data = frontBuffer._data;
         }
     }
     if (ImGui::Button("Swap Buffers"))
     {
         frontBuffer.Swap(backBuffer);
-        renderManager.RenderToScreenTexture(renderGlobals.width, renderGlobals.height, frontBuffer);
+        renderManager.RenderToScreenTexture(globals.width, globals.height, frontBuffer);
 
         swapState = !swapState;
         pauseState = true;

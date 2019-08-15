@@ -9,19 +9,19 @@ UDPTIntegrator::UDPTIntegrator()
 }
 
 embree::Vec3f UDPTIntegrator::GetPixelColor(Ray& ray,
-    PixelSample& pixelSample,
-    SceneManager &sceneManager,
-    const RenderGlobals& renderGlobals)
+    PixelSample& sample,
+    SceneManager &scene,
+    const RenderGlobals& globals)
 {
     embree::Vec3f colorAccumulation(0.0f);
     embree::Vec3f colorThroughput(1.0f);
 
-    for (int bounce = 0; bounce < renderGlobals.depth; ++bounce)
+    for (int bounce = 0; bounce < globals.depth; ++bounce)
     {
         RTCIntersectContext intersectContext;
         rtcInitIntersectContext(&intersectContext);
 
-        rtcIntersect1(sceneManager._scene, &intersectContext, RTCRayHit_(ray));
+        rtcIntersect1(scene._scene, &intersectContext, RTCRayHit_(ray));
 
         if (ray.instID == RTC_INVALID_GEOMETRY_ID)
         {
@@ -30,7 +30,7 @@ embree::Vec3f UDPTIntegrator::GetPixelColor(Ray& ray,
         }
 
         // We setup all the necessary data describing the shading point.
-        ShadingPoint shadingPoint(SetupShadingPoint(sceneManager, ray));
+        ShadingPoint shadingPoint(SetupShadingPoint(scene, ray));
 
         // Sky/Environment Sampling
         // TODO
@@ -41,8 +41,8 @@ embree::Vec3f UDPTIntegrator::GetPixelColor(Ray& ray,
         // BSDF Sampling
         BSDFSample bsdfSample;
         // TODO: We should use a proper material instead of a BSDF/Lobe directly.
-        bsdfSample.wi = diffuseMat.Sample(pixelSample, shadingPoint, bsdfSample);
-        bsdfSample.reflectance = diffuseMat.Evaluate(pixelSample, shadingPoint, bsdfSample);
+        bsdfSample.wi = diffuseMat.Sample(sample, shadingPoint, bsdfSample);
+        bsdfSample.reflectance = diffuseMat.Evaluate(sample, shadingPoint, bsdfSample);
 
         // Using the world-space normal and the error bias of the shading point , as well as a sign,
         // we apply some form of jitter on the position of the shading point,

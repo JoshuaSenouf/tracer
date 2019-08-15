@@ -1,9 +1,8 @@
 #ifndef OUTPUT_HELPER_H
 #define OUTPUT_HELPER_H
 
-#define TINYEXR_IMPLEMENTATION
-
-#include "tinyexr.h"
+#include <spdlog/spdlog.h>
+#include <tinyexr.h>
 
 #include "buffer.h"
 
@@ -14,18 +13,23 @@ inline void toPPM(int width,
     int height,
     const Buffer& buffer)
 {
+    spdlog::trace("toPPM()");
+
     FILE *ppmFile(fopen("tracer_render.ppm", "w"));
     fprintf(ppmFile, "P3\n%d %d\n%d\n", width, height, 255);
 
     for (unsigned int pixelIdx = 0; pixelIdx < (width * height); ++pixelIdx)
     {
         // A lot faster than using std::ofstream or std::ostream_iterator/std::copy, actually.
-        fprintf(ppmFile, "%d %d %d ", ToRGB(ToSRGB(buffer._pixelData[pixelIdx].x)),
-            ToRGB(ToSRGB(buffer._pixelData[pixelIdx].y)),
-            ToRGB(ToSRGB(buffer._pixelData[pixelIdx].z)));
+        fprintf(ppmFile, "%d %d %d ", ToRGB(ToSRGB(buffer._data[pixelIdx].x)),
+            ToRGB(ToSRGB(buffer._data[pixelIdx].y)),
+            ToRGB(ToSRGB(buffer._data[pixelIdx].z)));
     }
 
     fclose(ppmFile);
+
+    spdlog::info("toPPM() - "
+        "Render exported to PPM successfully.");
 }
 
 // Based on TinyEXR way of saving a scanline EXR file
@@ -33,6 +37,8 @@ inline void toEXR(int width,
     int height,
     const Buffer& buffer)
 {
+    spdlog::trace("toEXR()");
+
     EXRHeader exrHeader;
     EXRImage exrImage;
 
@@ -47,9 +53,9 @@ inline void toEXR(int width,
 
     for (unsigned int pixelIdx = 0; pixelIdx < (width * height); ++pixelIdx)
     {
-        channels[0][pixelIdx] = buffer._pixelData[pixelIdx].x;
-        channels[1][pixelIdx] = buffer._pixelData[pixelIdx].y;
-        channels[2][pixelIdx] = buffer._pixelData[pixelIdx].z;
+        channels[0][pixelIdx] = buffer._data[pixelIdx].x;
+        channels[1][pixelIdx] = buffer._data[pixelIdx].y;
+        channels[2][pixelIdx] = buffer._data[pixelIdx].z;
     }
 
     // We are swapping the channel order to BGR as many EXR file viewers are expecting this specific order,
@@ -94,6 +100,9 @@ inline void toEXR(int width,
     free(exrHeader.channels);
     free(exrHeader.pixel_types);
     free(exrHeader.requested_pixel_types);
+
+    spdlog::info("toEXR() - "
+        "Render exported to EXR successfully.");
 }
 
 

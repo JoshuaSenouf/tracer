@@ -1,8 +1,6 @@
 #ifndef RENDER_HELPER_H
 #define RENDER_HELPER_H
 
-#include "glad/glad.h"
-
 #include "geometry.h"
 #include "sampler.h"
 
@@ -76,7 +74,7 @@ struct BSDFSample
     float pdf = 0.0f;                                       // PDF of the BSDF sample.
 };
 
-static const GLfloat screenQuadVertices[] =
+static const float screenQuadVertices[] = // GLfloat
 {
     -1.0f,  1.0f, 0.0f, 0.0f, 1.0f,
     -1.0f, -1.0f, 0.0f, 0.0f, 0.0f,

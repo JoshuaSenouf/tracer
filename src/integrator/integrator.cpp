@@ -5,10 +5,10 @@ Integrator::Integrator()
 {
 }
 
-ShadingPoint Integrator::SetupShadingPoint(SceneManager &sceneManager,
+ShadingPoint Integrator::SetupShadingPoint(SceneManager &scene,
     const Ray& ray)
 {
-    ShadingPoint shadingPoint(sceneManager._sceneGeom[ray.instID]);
+    ShadingPoint shadingPoint(scene._sceneGeom[ray.instID]);
 
     shadingPoint.V = -ray.direction;
     shadingPoint.P = ray.origin + ray.tfar * ray.direction;

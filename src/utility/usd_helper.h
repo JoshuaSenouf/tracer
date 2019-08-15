@@ -1,18 +1,30 @@
 #ifndef USD_HELPER_H
 #define USD_HELPER_H
 
+#include <fstream>
+#include <iostream>
 #include <string>
 
-#include <pxr/usd/usd/stage.h>
+#include <pxr/usd/usd/attribute.h>
+#include <pxr/usd/usd/common.h>
 #include <pxr/usd/usd/prim.h>
+#include <pxr/usd/usd/stage.h>
+
+#include <pxr/usd/usdGeom/camera.h>
 #include <pxr/usd/usdGeom/mesh.h>
 #include <pxr/usd/usdGeom/xformCache.h>
-#include <pxr/usd/usd/attribute.h>
+
 #include <pxr/base/vt/array.h>
+
 #include <pxr/base/gf/matrix3f.h>
 #include <pxr/base/gf/matrix3d.h>
 #include <pxr/base/gf/matrix4f.h>
 #include <pxr/base/gf/matrix4d.h>
+
+#include <pxr/usdImaging/usdImagingGL/engine.h>
+#include <pxr/usdImaging/usdImagingGL/renderParams.h>
+
+#include <pxr/imaging/glf/simpleLight.h>
 
 
 inline void GetPrimFromType(const std::string& primType,

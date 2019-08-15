@@ -113,27 +113,25 @@ Features
 How to use
 ------
 
-Tracer was written using Linux, VSCode as the IDE, CMake as the building tool, and a C++14 compiler in mind.
+Tracer was written using Linux, VSCode as the IDE, CMake as the building tool, and a GCC C++14 compiler in mind.
 
 Download the source, build the project structure using CMake 3.x, open the project using your favorite IDE (tested on VSCode), build the project, and everything should be ready to use.
 
-* In Tracer :
-    * Hold the right mouse button to use the camera
-    * Use the "+" and "-" buttons on the keypad control the aperture radius
-    * Hold LeftCtrl and "+" or "-" to control the focal distance
-
-Dependencies (included, aside from Intel Embree/TBB, as well as Pixar USD and its own dependencies)
+Dependencies
 ------
 
-- Window & Input System: GLFW (3.3)
-- OpenGL Functions Loader: GLAD
-- GUI System: dear imgui (1.53)
-- EXR Handling: tinyexr (0.9.5)
-- Image Loading: stb (2.34)
-- Scene Description: Pixar USD (19.05)
-- Ray Tracing Kernels: Intel Embree (3.5.2)
-- Multithreading: Intel TBB (2019U5)
-- Math Operations: Intel Embree SIMD Library (3.5.2)
+The versions exposed here are the ones I personally used to develop and build the project in its current state. Depending on the projects, different versions, older as newer, would certainly work.
+
+* Included:
+    * Arguments Parsing: CLI11 (1.8)
+    * Logging: spdlog (1.3.1)
+    * Math Operations: Intel Embree SIMD Library (3.5.2)
+    * EXR Handling: tinyexr (0.9.5)
+* Not Included:
+    * GUI System: Qt & QtQuick (5.13)
+    * Scene Description: Pixar USD (19.05)
+    * Ray Tracing Kernels: Intel Embree (3.5.2)
+    * Multithreading: Intel TBB (2019U5)
 
 Credits
 ------

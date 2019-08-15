@@ -9,14 +9,14 @@ NormalIntegrator::NormalIntegrator()
 }
 
 embree::Vec3f NormalIntegrator::GetPixelColor(Ray& ray,
-    PixelSample& pixelSample,
-    SceneManager &sceneManager,
-    const RenderGlobals& renderGlobals)
+    PixelSample& sample,
+    SceneManager &scene,
+    const RenderGlobals& globals)
 {
     RTCIntersectContext intersectContext;
     rtcInitIntersectContext(&intersectContext);
 
-    rtcIntersect1(sceneManager._scene, &intersectContext, RTCRayHit_(ray));
+    rtcIntersect1(scene._scene, &intersectContext, RTCRayHit_(ray));
 
     if (ray.instID == RTC_INVALID_GEOMETRY_ID)
     {
@@ -25,7 +25,7 @@ embree::Vec3f NormalIntegrator::GetPixelColor(Ray& ray,
     }
 
     // We setup all the necessary data describing the shading point.
-    ShadingPoint shadingPoint(SetupShadingPoint(sceneManager, ray));
+    ShadingPoint shadingPoint(SetupShadingPoint(scene, ray));
 
     return shadingPoint.N;
 }

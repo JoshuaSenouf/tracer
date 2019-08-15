@@ -10,13 +10,13 @@ struct OrenNayar : public BSDF
 {
     OrenNayar();
 
-    virtual embree::Vec3f Evaluate(PixelSample& pixelSample,
+    virtual embree::Vec3f Evaluate(PixelSample& sample,
         ShadingPoint& shadingPoint,
         BSDFSample& bsdfSample) override;
-    virtual embree::Vec3fa Sample(PixelSample& pixelSample,
+    virtual embree::Vec3fa Sample(PixelSample& sample,
         ShadingPoint& shadingPoint,
         BSDFSample& bsdfSample) override;
-    virtual float Pdf(PixelSample& pixelSample,
+    virtual float Pdf(PixelSample& sample,
         ShadingPoint& shadingPoint,
         BSDFSample& bsdfSample) override;
 

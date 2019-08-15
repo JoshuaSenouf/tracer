@@ -15,13 +15,13 @@ struct BSDF
 {
     BSDF();
 
-    virtual embree::Vec3f Evaluate(PixelSample& pixelSample,
+    virtual embree::Vec3f Evaluate(PixelSample& sample,
         ShadingPoint& shadingPoint,
         BSDFSample& bsdfSample) = 0;
-    virtual embree::Vec3fa Sample(PixelSample& pixelSample,
+    virtual embree::Vec3fa Sample(PixelSample& sample,
         ShadingPoint& shadingPoint,
         BSDFSample& bsdfSample) = 0;
-    virtual float Pdf(PixelSample& pixelSample,
+    virtual float Pdf(PixelSample& sample,
         ShadingPoint& shadingPoint,
         BSDFSample& bsdfSample) = 0;
 

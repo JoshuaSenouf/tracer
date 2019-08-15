@@ -48,15 +48,15 @@ class Window
         int iterations = 0;
         float deltaTime = 0.0f;
         float lastFrame = 0.0f;
-        embree::Vec2fa prevMousePos = embree::Vec2fa(renderGlobals.width / 2.0f, renderGlobals.height / 2.0f);
+        embree::Vec2fa prevMousePos = embree::Vec2fa(globals.width / 2.0f, globals.height / 2.0f);
 
         Buffer frontBuffer;
         Buffer backBuffer;
         Camera camera;
         GLFWwindow* window;
-        SceneManager sceneManager;
+        SceneManager scene;
         RenderManager renderManager;
-        RenderGlobals renderGlobals;
+        RenderGlobals globals;
 };
 
 

@@ -7,9 +7,9 @@ OcclusionIntegrator::OcclusionIntegrator()
 }
 
 embree::Vec3f OcclusionIntegrator::GetPixelColor(Ray& ray,
-    PixelSample& pixelSample,
-    SceneManager &sceneManager,
-    const RenderGlobals& renderGlobals)
+    PixelSample& sample,
+    SceneManager &scene,
+    const RenderGlobals& globals)
 {
     // TODO
 

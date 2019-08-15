@@ -3,11 +3,15 @@
 
 Camera::Camera()
 {
+    spdlog::trace("Camera::Camera()");
 }
 
-void Camera::Init()
+void Camera::Init(int width, int height)
 {
+    spdlog::trace("Camera::Init()");
+
     // TODO: Hardcoded information for now.
+    _resolution = embree::Vec2fa(width, height);
     _position = embree::Vec3fa(0, 4, 15);
     _yaw = 90;
     _pitch = 6;
@@ -21,10 +25,15 @@ void Camera::Init()
 
     SetupFOV();
     Update();
+
+    spdlog::info("Camera::Init() - "
+        "Camera initialized successfully.");
 }
 
 void Camera::SetupFOV()
 {
+    spdlog::trace("Camera::SetupFOV()");
+
     _fov.y = (atan(tan(_fov.x * M_PI * M_1_180 * 0.5f)
         * ((float)_resolution.y / (float)_resolution.x)) * 2.0f)
         * 180.0f * M_1_PI;
@@ -32,6 +41,8 @@ void Camera::SetupFOV()
 
 void Camera::Update()
 {
+    spdlog::trace("Camera::Update()");
+
     embree::Vec3fa front(cos(DegToRad(_yaw)) * cos(DegToRad(_pitch)),
         sin(DegToRad(_pitch)),
         sin(DegToRad(_yaw)) * cos(DegToRad(_pitch))

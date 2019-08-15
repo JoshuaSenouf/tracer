@@ -6,6 +6,8 @@
 #include <mutex>
 #include <unordered_map>
 
+#include <spdlog/spdlog.h>
+
 #include "geometry.h"
 #include "material.h"
 

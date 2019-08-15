@@ -16,10 +16,10 @@ struct Integrator
     Integrator();
 
     virtual embree::Vec3f GetPixelColor(Ray& ray,
-        PixelSample& pixelSample,
-        SceneManager &sceneManager,
-        const RenderGlobals& renderGlobals) = 0;
-    virtual ShadingPoint SetupShadingPoint(SceneManager &sceneManager,
+        PixelSample& sample,
+        SceneManager &scene,
+        const RenderGlobals& globals) = 0;
+    virtual ShadingPoint SetupShadingPoint(SceneManager &scene,
         const Ray& ray);
 
     std::string _handle;

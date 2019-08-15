@@ -5,7 +5,7 @@ Lambert::Lambert()
 {
 }
 
-embree::Vec3f Lambert::Evaluate(PixelSample& pixelSample,
+embree::Vec3f Lambert::Evaluate(PixelSample& sample,
     ShadingPoint& shadingPoint,
     BSDFSample& bsdfSample)
 {
@@ -13,13 +13,13 @@ embree::Vec3f Lambert::Evaluate(PixelSample& pixelSample,
     return (shadingPoint.geometry->_displayColor / M_PI) * bsdfSample.NdotL;
 }
 
-embree::Vec3fa Lambert::Sample(PixelSample& pixelSample,
+embree::Vec3fa Lambert::Sample(PixelSample& sample,
     ShadingPoint& shadingPoint,
     BSDFSample& bsdfSample)
 {
-    float rand0 = pixelSample.sampler.Uniform1D();
-    float rand1 = pixelSample.sampler.Uniform1D();
-    embree::Vec3fa randomDirection(pixelSample.sampler.HemisphereCosineWeighted(rand0, rand1));
+    float rand0 = sample.sampler.Uniform1D();
+    float rand1 = sample.sampler.Uniform1D();
+    embree::Vec3fa randomDirection(sample.sampler.HemisphereCosineWeighted(rand0, rand1));
 
     float r = embree::sqrt(rand0);
     float theta = 2.0f * M_PI * rand1;
@@ -38,14 +38,14 @@ embree::Vec3fa Lambert::Sample(PixelSample& pixelSample,
     wi += (v * y);
 
     bsdfSample.NdotL = embree::dot(shadingPoint.Nw, wi);
-    bsdfSample.pdf = Pdf(pixelSample, shadingPoint, bsdfSample);
+    bsdfSample.pdf = Pdf(sample, shadingPoint, bsdfSample);
 
     // TODO: Using the basis directly does not yield the same result. This should get looked into.
     // return embree::normalize(USDToEmbreeSIMD(EmbreeSIMDToUSD(wi) * shadingPoint.basis));
     return wi;
 }
 
-float Lambert::Pdf(PixelSample& pixelSample,
+float Lambert::Pdf(PixelSample& sample,
     ShadingPoint& shadingPoint,
     BSDFSample& bsdfSample)
 {

@@ -1,6 +1,8 @@
 #ifndef GEOMETRY_H
 #define GEOMETRY_H
 
+#include <spdlog/spdlog.h>
+
 #include "embree_helper.h"
 #include "usd_helper.h"
 

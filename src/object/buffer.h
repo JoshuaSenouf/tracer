@@ -3,6 +3,8 @@
 
 #include <vector>
 
+#include <spdlog/spdlog.h>
+
 #include "embree_helper.h"
 
 
@@ -16,7 +18,7 @@ struct Buffer
         int height);
     void Swap(Buffer& buffer);
 
-    std::vector<embree::Vec3f> _pixelData;
+    std::vector<embree::Vec3f> _data;
 };
 
 #endif // BUFFER_H

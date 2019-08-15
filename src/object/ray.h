@@ -45,7 +45,7 @@ struct Ray
     }
 
     __forceinline Ray(const Camera& camera,
-        const PixelSample& pixelSample,
+        const PixelSample& sample,
         float tnear = 0.0f,
         float tfar = std::numeric_limits<float>::infinity(),
         float time = 0.0f,
@@ -65,9 +65,9 @@ struct Ray
         embree::Vec3fa vectorX(axisX * std::tan(camera._fov.x * 0.5f * (M_PI / 180)));
         embree::Vec3fa vectorY(axisY * std::tan(camera._fov.y * -0.5f * (M_PI / 180)));
 
-        float pointX((((camera._jitter ? pixelSample.sampler.Uniform1D() : 0.0f) - 0.5f) + pixelSample.pixelX)
+        float pointX((((camera._jitter ? sample.sampler.Uniform1D() : 0.0f) - 0.5f) + sample.pixelX)
             / (camera._resolution.x - 1.0f));
-        float pointY((((camera._jitter ? pixelSample.sampler.Uniform1D() : 0.0f) - 0.5f) + pixelSample.pixelY)
+        float pointY((((camera._jitter ? sample.sampler.Uniform1D() : 0.0f) - 0.5f) + sample.pixelY)
             / (camera._resolution.y - 1.0f));
 
         embree::Vec3fa pointOnPlane(camera._position
@@ -80,8 +80,8 @@ struct Ray
         embree::Vec3fa aperturePoint(camera._position);
         if (camera._apertureRadius > 0.0f)
         {
-            float randomAngle(2.0f * M_PI * pixelSample.sampler.Uniform1D());
-            float randomRadius(camera._apertureRadius * embree::sqrt(pixelSample.sampler.Uniform1D()));
+            float randomAngle(2.0f * M_PI * sample.sampler.Uniform1D());
+            float randomRadius(camera._apertureRadius * embree::sqrt(sample.sampler.Uniform1D()));
             float apertureX(embree::cos(randomAngle) * randomRadius);
             float apertureY(embree::sin(randomAngle) * randomRadius);
 

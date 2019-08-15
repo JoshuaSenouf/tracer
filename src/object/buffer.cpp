@@ -3,23 +3,39 @@
 
 Buffer::Buffer()
 {
+    spdlog::trace("Buffer::Buffer()");
 }
 
 void Buffer::Init(int width,
     int height)
 {
-    _pixelData.resize(width * height);
+    spdlog::trace("Buffer::Init()");
+
+    _data.resize(width * height);
+
+    spdlog::info("Buffer::Init() - "
+        "Buffer initialized successfully.");
 }
 
 void Buffer::Clean(int width,
     int height)
 {
-    _pixelData.clear();
-    _pixelData.shrink_to_fit();
-    _pixelData.resize(width * height);
+    spdlog::trace("Buffer::Clean()");
+
+    _data.clear();
+    _data.shrink_to_fit();
+    _data.resize(width * height);
+
+    spdlog::debug("Buffer::Clean() - "
+        "Buffer cleaned successfully.");
 }
 
 void Buffer::Swap(Buffer& buffer)
 {
-    _pixelData.swap(buffer._pixelData);
+    spdlog::trace("Buffer::Swap()");
+
+    _data.swap(buffer._data);
+
+    spdlog::debug("Buffer::Swap() - "
+        "Buffer swapped successfully.");
 }

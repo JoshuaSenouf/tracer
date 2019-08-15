@@ -1,6 +1,8 @@
 #ifndef CAMERA_H
 #define CAMERA_H
 
+#include <spdlog/spdlog.h>
+
 #include "camera_helper.h"
 #include "embree_helper.h"
 #include "math_helper.h"
@@ -10,7 +12,7 @@ struct Camera
 {
     Camera();
 
-    void Init();
+    void Init(int width, int height);
     void Update();
     void SetupFOV();
     void KeyboardCallback(CAMERA_MOVEMENTS direction,
