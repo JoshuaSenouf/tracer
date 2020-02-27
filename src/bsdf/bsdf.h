@@ -3,12 +3,9 @@
 
 #include <string>
 
-#include "sampler.h"
+#include <embree3/common/math/vec3.h>
 
-#include "embree_helper.h"
-#include "math_helper.h"
 #include "render_helper.h"
-#include "usd_helper.h"
 
 
 struct BSDF

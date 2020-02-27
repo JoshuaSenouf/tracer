@@ -6,18 +6,20 @@
 #include <memory>
 #include <vector>
 
+#include <embree3/common/math/vec2.h>
+
 #include <glad/glad.h>
+
 #include <GLFW/glfw3.h>
+
 #include <imgui.h>
 #include <imgui_impl_glfw_gl3.h>
 
 #include "buffer.h"
 #include "camera.h"
+#include "render_helper.h"
 #include "rendermanager.h"
 #include "scenemanager.h"
-
-#include "embree_helper.h"
-#include "render_helper.h"
 
 
 class Window

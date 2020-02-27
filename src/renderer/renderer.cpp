@@ -1,4 +1,11 @@
+#include <spdlog/spdlog.h>
+
+#include <tbb/blocked_range3d.h>
+#include <tbb/parallel_for.h>
+
+#include "ray.h"
 #include "renderer.h"
+#include "sampler.h"
 
 
 TracerRenderer::TracerRenderer()

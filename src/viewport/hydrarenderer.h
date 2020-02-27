@@ -10,8 +10,6 @@
 #include <QOpenGLFramebufferObject>
 #include <QQuickFramebufferObject>
 
-#include "usd_helper.h"
-
 
 class HydraRenderer : public QQuickFramebufferObject::Renderer
 {

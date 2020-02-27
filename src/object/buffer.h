@@ -3,9 +3,7 @@
 
 #include <vector>
 
-#include <spdlog/spdlog.h>
-
-#include "embree_helper.h"
+#include <embree3/common/math/vec3.h>
 
 
 struct Buffer

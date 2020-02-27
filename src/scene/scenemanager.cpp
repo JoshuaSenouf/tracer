@@ -1,8 +1,12 @@
-#include "scenemanager.h"
+#include <spdlog/spdlog.h>
 
-#include "trianglemesh.h"
+#include <tbb/parallel_for_each.h>
+
 #include "quadmesh.h"
-#include "tbb_helper.h"
+#include "trianglemesh.h"
+#include "usd_helper.h"
+
+#include "scenemanager.h"
 
 
 SceneManager::SceneManager()

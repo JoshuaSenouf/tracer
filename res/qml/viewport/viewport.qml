@@ -7,7 +7,7 @@ Item
     id: root
 
     HydraViewport
-    {   
+    {
         id: hydraviewport
         width: parent.width
         height: parent.height

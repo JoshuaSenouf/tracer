@@ -1,11 +1,14 @@
 #ifndef RENDER_HELPER_H
 #define RENDER_HELPER_H
 
+#include <embree3/common/math/vec2.h>
+#include <embree3/common/math/vec3.h>
+#include <embree3/rtcore.h>
+
+#include <pxr/base/gf/matrix3f.h>
+
 #include "geometry.h"
 #include "sampler.h"
-
-#include "embree_helper.h"
-#include "usd_helper.h"
 
 
 // From Embree 3.x

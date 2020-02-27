@@ -4,24 +4,18 @@
 #include <memory>
 #include <vector>
 
-#include <spdlog/spdlog.h>
-
 #include "buffer.h"
 #include "camera.h"
 #include "integrator.h"
-#include "ray.h"
+#include "render_helper.h"
 #include "scenemanager.h"
-#include "sampler.h"
 
-#include "udpt.h"
+#include "debug.h"
 #include "diffuse.h"
+#include "normal.h"
 #include "occlusion.h"
 #include "position.h"
-#include "normal.h"
-#include "debug.h"
-
-#include "render_helper.h"
-#include "tbb_helper.h"
+#include "udpt.h"
 
 
 struct TracerRenderer

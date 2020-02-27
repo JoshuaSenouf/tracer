@@ -3,8 +3,6 @@
 
 #include <string>
 
-#include "embree_helper.h"
-
 
 struct Material
 {

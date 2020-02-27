@@ -1,11 +1,12 @@
-#include "normal.h"
+#include <embree3/rtcore.h>
+#include <embree3/rtcore_ray.h>
 
-#include "render_helper.h"
+#include "normal.h"
 
 
 NormalIntegrator::NormalIntegrator()
 {
-    _handle = "Normal";
+    _handle = "normal";
 }
 
 embree::Vec3f NormalIntegrator::GetPixelColor(Ray& ray,

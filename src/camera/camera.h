@@ -1,11 +1,10 @@
 #ifndef CAMERA_H
 #define CAMERA_H
 
-#include <spdlog/spdlog.h>
+#include <embree3/common/math/vec2.h>
+#include <embree3/common/math/vec3.h>
 
 #include "camera_helper.h"
-#include "embree_helper.h"
-#include "math_helper.h"
 
 
 struct Camera

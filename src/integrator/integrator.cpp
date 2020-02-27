@@ -1,3 +1,9 @@
+#include <embree3/common/math/vec2.h>
+
+#include <pxr/base/gf/matrix3f.h>
+
+#include "math_helper.h"
+
 #include "integrator.h"
 
 
@@ -50,7 +56,7 @@ ShadingPoint Integrator::SetupShadingPoint(SceneManager &scene,
     shadingPoint.primID = ray.primID;
     shadingPoint.instID = ray.instID;
     shadingPoint.error = errorBias * std::max(
-        std::max(std::abs(shadingPoint.P.x), abs(shadingPoint.P.y)), 
+        std::max(std::abs(shadingPoint.P.x), abs(shadingPoint.P.y)),
         std::max(std::abs(shadingPoint.P.z), ray.tfar));
 
     return shadingPoint;

@@ -5,6 +5,8 @@
 
 #include "context.h"
 
+#include "render_helper.h"
+
 
 struct ContextGUI : public Context
 {

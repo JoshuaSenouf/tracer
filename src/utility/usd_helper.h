@@ -1,30 +1,29 @@
 #ifndef USD_HELPER_H
 #define USD_HELPER_H
 
-#include <fstream>
-#include <iostream>
 #include <string>
 
-#include <pxr/usd/usd/attribute.h>
-#include <pxr/usd/usd/common.h>
+// #include <pxr/usd/usd/attribute.h>
+// #include <pxr/usd/usd/common.h>
+#include <pxr/usd/sdf/path.h>
 #include <pxr/usd/usd/prim.h>
 #include <pxr/usd/usd/stage.h>
 
-#include <pxr/usd/usdGeom/camera.h>
-#include <pxr/usd/usdGeom/mesh.h>
-#include <pxr/usd/usdGeom/xformCache.h>
+// #include <pxr/usd/usdGeom/camera.h>
+// #include <pxr/usd/usdGeom/mesh.h>
+// #include <pxr/usd/usdGeom/xformCache.h>
 
-#include <pxr/base/vt/array.h>
+// #include <pxr/base/vt/array.h>
 
-#include <pxr/base/gf/matrix3f.h>
-#include <pxr/base/gf/matrix3d.h>
-#include <pxr/base/gf/matrix4f.h>
-#include <pxr/base/gf/matrix4d.h>
+// #include <pxr/base/gf/matrix3f.h>
+// #include <pxr/base/gf/matrix3d.h>
+// #include <pxr/base/gf/matrix4f.h>
+// #include <pxr/base/gf/matrix4d.h>
 
-#include <pxr/usdImaging/usdImagingGL/engine.h>
-#include <pxr/usdImaging/usdImagingGL/renderParams.h>
+// #include <pxr/usdImaging/usdImagingGL/engine.h>
+// #include <pxr/usdImaging/usdImagingGL/renderParams.h>
 
-#include <pxr/imaging/glf/simpleLight.h>
+// #include <pxr/imaging/glf/simpleLight.h>
 
 
 inline void GetPrimFromType(const std::string& primType,
@@ -49,152 +48,152 @@ inline void GetPrimFromType(const std::string& primType,
     }
 }
 
-/* Reimplementation of some USD's Hd API functions to triangulate/quadriangulate meshes,
-    so they can be used outside of the Hd API. */
-inline bool DoFanTriangulation(pxr::GfVec3i& triangulatedIndices,
-    const pxr::VtArray<int>& meshVertexIndices,
-    int meshVertexIndicesOffset,
-    int meshVertexIndicesIdx,
-    int meshIndicesCount,
-    bool flipWindingOrder)
-{
-    // We check the topology.
-    if (meshVertexIndicesOffset + meshVertexIndicesIdx + 2 >= meshIndicesCount)
-    {
-        triangulatedIndices = pxr::GfVec3i(0, 0, 0);
+// /* Reimplementation of some USD's Hd API functions to triangulate/quadriangulate meshes,
+//     so they can be used outside of the Hd API. */
+// inline bool DoFanTriangulation(pxr::GfVec3i& triangulatedIndices,
+//     const pxr::VtArray<int>& meshVertexIndices,
+//     int meshVertexIndicesOffset,
+//     int meshVertexIndicesIdx,
+//     int meshIndicesCount,
+//     bool flipWindingOrder)
+// {
+//     // We check the topology.
+//     if (meshVertexIndicesOffset + meshVertexIndicesIdx + 2 >= meshIndicesCount)
+//     {
+//         triangulatedIndices = pxr::GfVec3i(0, 0, 0);
 
-        return false;
-    }
+//         return false;
+//     }
 
-    if (flipWindingOrder)
-    {
-        triangulatedIndices = pxr::GfVec3i(meshVertexIndices[meshVertexIndicesOffset],
-        meshVertexIndices[meshVertexIndicesOffset + meshVertexIndicesIdx + 2],
-        meshVertexIndices[meshVertexIndicesOffset + meshVertexIndicesIdx + 1]);
-    }
-    else
-    {
-        triangulatedIndices = pxr::GfVec3i(meshVertexIndices[meshVertexIndicesOffset],
-        meshVertexIndices[meshVertexIndicesOffset + meshVertexIndicesIdx + 1],
-        meshVertexIndices[meshVertexIndicesOffset + meshVertexIndicesIdx + 2]);
-    }
+//     if (flipWindingOrder)
+//     {
+//         triangulatedIndices = pxr::GfVec3i(meshVertexIndices[meshVertexIndicesOffset],
+//         meshVertexIndices[meshVertexIndicesOffset + meshVertexIndicesIdx + 2],
+//         meshVertexIndices[meshVertexIndicesOffset + meshVertexIndicesIdx + 1]);
+//     }
+//     else
+//     {
+//         triangulatedIndices = pxr::GfVec3i(meshVertexIndices[meshVertexIndicesOffset],
+//         meshVertexIndices[meshVertexIndicesOffset + meshVertexIndicesIdx + 1],
+//         meshVertexIndices[meshVertexIndicesOffset + meshVertexIndicesIdx + 2]);
+//     }
 
-    return true;
-}
+//     return true;
+// }
 
-inline pxr::VtVec3iArray TriangulateMeshIndices(pxr::VtArray<int>& meshVertexCounts,
-    const pxr::VtArray<int>& meshVertexIndices,
-    const pxr::VtArray<int>& meshHoleIndices,
-    const pxr::TfToken& meshOrientation)
-{
-    pxr::VtVec3iArray meshTriangulatedIndices;
+// inline pxr::VtVec3iArray TriangulateMeshIndices(pxr::VtArray<int>& meshVertexCounts,
+//     const pxr::VtArray<int>& meshVertexIndices,
+//     const pxr::VtArray<int>& meshHoleIndices,
+//     const pxr::TfToken& meshOrientation)
+// {
+//     pxr::VtVec3iArray meshTriangulatedIndices;
 
-    int meshFacesCount = meshVertexCounts.size();
-    int meshIndicesCount = meshVertexIndices.size();
-    int meshHoleIndicesCount = meshHoleIndices.size();
-    int meshTrianglesCount = 0;
-    int meshHoleIdx = 0;
-    bool flipWindingOrder = (meshOrientation != pxr::TfToken("rightHanded"));
-    bool invalidTopology = false;
+//     int meshFacesCount = meshVertexCounts.size();
+//     int meshIndicesCount = meshVertexIndices.size();
+//     int meshHoleIndicesCount = meshHoleIndices.size();
+//     int meshTrianglesCount = 0;
+//     int meshHoleIdx = 0;
+//     bool flipWindingOrder = (meshOrientation != pxr::TfToken("rightHanded"));
+//     bool invalidTopology = false;
 
-    for (int faceIdx = 0; faceIdx < meshFacesCount; ++faceIdx)
-    {
-        int trianglesPerFace = meshVertexCounts[faceIdx] - 2;
+//     for (int faceIdx = 0; faceIdx < meshFacesCount; ++faceIdx)
+//     {
+//         int trianglesPerFace = meshVertexCounts[faceIdx] - 2;
 
-        // We skip the broken faces
-        if (trianglesPerFace < 1)
-        {
-            invalidTopology = true;
-        }
-        // We skip the hole faces
-        else if (meshHoleIdx < meshHoleIndicesCount && meshHoleIndices[meshHoleIdx] == faceIdx)
-        {
-            ++meshHoleIdx;
-        }
-        else
-        {
-            meshTrianglesCount += trianglesPerFace;
-        }
-    }
+//         // We skip the broken faces
+//         if (trianglesPerFace < 1)
+//         {
+//             invalidTopology = true;
+//         }
+//         // We skip the hole faces
+//         else if (meshHoleIdx < meshHoleIndicesCount && meshHoleIndices[meshHoleIdx] == faceIdx)
+//         {
+//             ++meshHoleIdx;
+//         }
+//         else
+//         {
+//             meshTrianglesCount += trianglesPerFace;
+//         }
+//     }
 
-    if (invalidTopology)
-    {
-        std::cout << std::string("WARNING - Broken faces have been found.") << std::endl;
-        invalidTopology = false;
-    }
+//     if (invalidTopology)
+//     {
+//         std::cout << std::string("WARNING - Broken faces have been found.") << std::endl;
+//         invalidTopology = false;
+//     }
 
-    meshTriangulatedIndices.resize(meshTrianglesCount);
-    meshHoleIdx = 0;
+//     meshTriangulatedIndices.resize(meshTrianglesCount);
+//     meshHoleIdx = 0;
 
-    for (int faceIdx = 0, triangleFaceIdx = 0, faceVertexIdx = 0; faceIdx < meshFacesCount; ++faceIdx)
-    {
-        int faceVertexCount = meshVertexCounts[faceIdx];
-        
-        if (faceVertexCount < 3)
-        {
-            // We skip the invalid triangle faces.
-        }
-        else if (meshHoleIdx < meshHoleIndicesCount && meshHoleIndices[meshHoleIdx] == faceIdx)
-        {
-            // We skip the hole faces.
-            ++meshHoleIdx;
-        }
-        else
-        {
-            for (int faceVertexCountIdx = 0; faceVertexCountIdx < faceVertexCount - 2; ++faceVertexCountIdx)
-            {
-                meshTriangulatedIndices[triangleFaceIdx] = pxr::GfVec3i(0, 0, 0);
+//     for (int faceIdx = 0, triangleFaceIdx = 0, faceVertexIdx = 0; faceIdx < meshFacesCount; ++faceIdx)
+//     {
+//         int faceVertexCount = meshVertexCounts[faceIdx];
 
-                if (!DoFanTriangulation(meshTriangulatedIndices[triangleFaceIdx],
-                    meshVertexIndices,
-                    faceVertexIdx,
-                    faceVertexCountIdx,
-                    meshIndicesCount,
-                    flipWindingOrder))
-                {
-                    invalidTopology = true;
-                }
+//         if (faceVertexCount < 3)
+//         {
+//             // We skip the invalid triangle faces.
+//         }
+//         else if (meshHoleIdx < meshHoleIndicesCount && meshHoleIndices[meshHoleIdx] == faceIdx)
+//         {
+//             // We skip the hole faces.
+//             ++meshHoleIdx;
+//         }
+//         else
+//         {
+//             for (int faceVertexCountIdx = 0; faceVertexCountIdx < faceVertexCount - 2; ++faceVertexCountIdx)
+//             {
+//                 meshTriangulatedIndices[triangleFaceIdx] = pxr::GfVec3i(0, 0, 0);
 
-                if (faceVertexCount > 3)
-                {
-                    if (faceVertexCountIdx == 0)
-                    {
-                        if (flipWindingOrder)
-                        {
-                            pxr::GfVec3i &triangulatedIndices = meshTriangulatedIndices[triangleFaceIdx];
+//                 if (!DoFanTriangulation(meshTriangulatedIndices[triangleFaceIdx],
+//                     meshVertexIndices,
+//                     faceVertexIdx,
+//                     faceVertexCountIdx,
+//                     meshIndicesCount,
+//                     flipWindingOrder))
+//                 {
+//                     invalidTopology = true;
+//                 }
 
-                            triangulatedIndices.Set(triangulatedIndices[1],
-                                triangulatedIndices[2],
-                                triangulatedIndices[0]);
-                        }
-                    }
-                    else if (faceVertexCountIdx == faceVertexCount - 3)
-                    {
-                        if (flipWindingOrder)
-                        {
-                            pxr::GfVec3i &triangulatedIndices = meshTriangulatedIndices[triangleFaceIdx];
-                            
-                            triangulatedIndices.Set(triangulatedIndices[2],
-                                triangulatedIndices[0],
-                                triangulatedIndices[1]);
-                        }
-                    }
-                }
+//                 if (faceVertexCount > 3)
+//                 {
+//                     if (faceVertexCountIdx == 0)
+//                     {
+//                         if (flipWindingOrder)
+//                         {
+//                             pxr::GfVec3i &triangulatedIndices = meshTriangulatedIndices[triangleFaceIdx];
 
-                ++triangleFaceIdx;
-            }
-        }
+//                             triangulatedIndices.Set(triangulatedIndices[1],
+//                                 triangulatedIndices[2],
+//                                 triangulatedIndices[0]);
+//                         }
+//                     }
+//                     else if (faceVertexCountIdx == faceVertexCount - 3)
+//                     {
+//                         if (flipWindingOrder)
+//                         {
+//                             pxr::GfVec3i &triangulatedIndices = meshTriangulatedIndices[triangleFaceIdx];
 
-        faceVertexIdx += faceVertexCount;
-    }
+//                             triangulatedIndices.Set(triangulatedIndices[2],
+//                                 triangulatedIndices[0],
+//                                 triangulatedIndices[1]);
+//                         }
+//                     }
+//                 }
 
-    if (invalidTopology)
-    {
-        std::cout << std::string("WARNING - An inconsistency between the mesh faceVertexCounts and faceVertexIndices "
-            "has been found.") << std::endl;
-    }
+//                 ++triangleFaceIdx;
+//             }
+//         }
 
-    return meshTriangulatedIndices;
-}
+//         faceVertexIdx += faceVertexCount;
+//     }
+
+//     if (invalidTopology)
+//     {
+//         std::cout << std::string("WARNING - An inconsistency between the mesh faceVertexCounts and faceVertexIndices "
+//             "has been found.") << std::endl;
+//     }
+
+//     return meshTriangulatedIndices;
+// }
 
 #endif // USD_HELPER_H

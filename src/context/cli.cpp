@@ -1,3 +1,7 @@
+#include <spdlog/spdlog.h>
+
+#include "output_helper.h"
+
 #include "cli.h"
 
 

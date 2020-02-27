@@ -1,14 +1,11 @@
 #ifndef INTEGRATOR_H
 #define INTEGRATOR_H
 
-#include "material.h"
-#include "ray.h"
-#include "sampler.h"
-#include "scenemanager.h"
+#include <embree3/common/math/vec3.h>
 
-#include "embree_helper.h"
-#include "math_helper.h"
+#include "ray.h"
 #include "render_helper.h"
+#include "scenemanager.h"
 
 
 struct Integrator

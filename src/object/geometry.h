@@ -1,10 +1,13 @@
 #ifndef GEOMETRY_H
 #define GEOMETRY_H
 
-#include <spdlog/spdlog.h>
+#include <embree3/common/math/vec3.h>
+#include <embree3/rtcore.h>
 
-#include "embree_helper.h"
-#include "usd_helper.h"
+#include <pxr/usd/usd/prim.h>
+#include <pxr/usd/usdGeom/mesh.h>
+#include <pxr/usd/usdGeom/xformCache.h>
+#include <pxr/base/gf/matrix4f.h>
 
 
 struct Geometry
@@ -26,7 +29,7 @@ struct Geometry
 
     unsigned int _geomID = RTC_INVALID_GEOMETRY_ID;
     unsigned int _geomInstanceID = RTC_INVALID_GEOMETRY_ID;
-    
+
     RTCScene _scene = nullptr;
     RTCGeometry _geom = nullptr;
     RTCGeometry _geomInstance = nullptr;

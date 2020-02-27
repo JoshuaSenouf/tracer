@@ -1,6 +1,8 @@
 #ifndef CLI_HELPER_H
 #define CLI_HELPER_H
 
+#include <string>
+
 #include "render_helper.h"
 
 

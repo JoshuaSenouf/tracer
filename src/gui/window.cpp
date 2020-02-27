@@ -1,6 +1,6 @@
-#include "window.h"
-
 #include "output_helper.h"
+
+#include "window.h"
 
 
 Window::Window()
@@ -168,7 +168,7 @@ void Window::SetupGUI()
                 {
                     Buffer outputBuffer;
                     outputBuffer.Init(globals.width, globals.height);
-                    
+
                     renderManager.Trace(globals,
                         scene,
                         camera,
@@ -218,7 +218,7 @@ void Window::SetupGUI()
 
                 ImGui::EndMenu();
             }
-            
+
             ImGui::Separator();
             ImGui::MenuItem("Config", NULL, &renderConfigState);
 

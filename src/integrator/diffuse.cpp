@@ -1,9 +1,12 @@
+#include <embree3/rtcore.h>
+#include <embree3/rtcore_ray.h>
+
 #include "diffuse.h"
 
 
 DiffuseIntegrator::DiffuseIntegrator()
 {
-    _handle = "Diffuse";
+    _handle = "diffuse";
 }
 
 embree::Vec3f DiffuseIntegrator::GetPixelColor(Ray& ray,

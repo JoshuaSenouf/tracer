@@ -1,5 +1,6 @@
-#include "sampler.h"
 #include <iterator>
+
+#include "sampler.h"
 
 
 Sampler::Sampler():

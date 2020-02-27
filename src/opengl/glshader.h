@@ -17,7 +17,7 @@ class GLShader
         void Setup(std::string vertexShaderPath,
             std::string fragmentShaderPath);
         void Use();
-        
+
     private:
         GLuint programID;
 };

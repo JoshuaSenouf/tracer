@@ -1,11 +1,9 @@
 #ifndef UPDT_H
 #define UPDT_H
 
-#include "integrator.h"
-
-
 #include "lambert.h"
-#include "orennayar.h"
+
+#include "integrator.h"
 
 
 struct UDPTIntegrator : public Integrator

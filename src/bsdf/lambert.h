@@ -1,8 +1,6 @@
 #ifndef LAMBERT_H
 #define LAMBERT_H
 
-#include <string>
-
 #include "bsdf.h"
 
 

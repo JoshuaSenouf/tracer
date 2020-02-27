@@ -27,7 +27,7 @@ Item
             {
                 text: "Open..."
             }
-            
+
             MenuSeparator {}
 
             Action

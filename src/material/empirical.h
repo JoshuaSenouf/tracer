@@ -3,8 +3,6 @@
 
 #include "material.h"
 
-#include "embree_helper.h"
-
 
 struct Empirical : public Material
 {

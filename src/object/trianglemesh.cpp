@@ -1,8 +1,11 @@
+#include <spdlog/spdlog.h>
+
 #include "trianglemesh.h"
 
 
 TriangleMesh::TriangleMesh()
 {
+    spdlog::trace("TriangleMesh::TriangleMesh()");
 }
 
 TriangleMesh::TriangleMesh(const pxr::UsdPrim& prim,

@@ -1,8 +1,6 @@
 #ifndef ORENNAYAR_H
 #define ORENNAYAR_H
 
-#include <string>
-
 #include "bsdf.h"
 
 

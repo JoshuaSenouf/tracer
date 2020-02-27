@@ -1,8 +1,11 @@
+#include <spdlog/spdlog.h>
+
 #include "quadmesh.h"
 
 
 QuadMesh::QuadMesh()
 {
+    spdlog::trace("QuadMesh::QuadMesh()");
 }
 
 QuadMesh::QuadMesh(const pxr::UsdPrim& prim,

@@ -1,11 +1,12 @@
-#include "position.h"
+#include <embree3/rtcore.h>
+#include <embree3/rtcore_ray.h>
 
-#include "render_helper.h"
+#include "position.h"
 
 
 PositionIntegrator::PositionIntegrator()
 {
-    _handle = "Position";
+    _handle = "position";
 }
 
 embree::Vec3f PositionIntegrator::GetPixelColor(Ray& ray,

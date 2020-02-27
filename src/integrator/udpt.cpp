@@ -1,11 +1,12 @@
-#include "udpt.h"
+#include <embree3/rtcore.h>
+#include <embree3/rtcore_ray.h>
 
-#include "ray.h"
+#include "udpt.h"
 
 
 UDPTIntegrator::UDPTIntegrator()
 {
-    _handle = "UDPT";
+    _handle = "udpt";
 }
 
 embree::Vec3f UDPTIntegrator::GetPixelColor(Ray& ray,

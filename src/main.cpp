@@ -1,14 +1,11 @@
-// Tracer by Joshua Senouf - 2017-2019
-
-#define TINYEXR_IMPLEMENTATION
+// Tracer by Joshua Senouf - 2017-2020
 
 #include <CLI11.hpp>
 #include <spdlog/spdlog.h>
 
 #include "cli.h"
-#include "gui.h"
-
 #include "cli_helper.h"
+#include "gui.h"
 
 
 int main(int argc, char** argv)

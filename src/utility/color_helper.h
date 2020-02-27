@@ -1,7 +1,7 @@
 #ifndef COLOR_HELPER_H
 #define COLOR_HELPER_H
 
-#include "embree_helper.h"
+#include <embree3/common/math/vec3.h>
 
 
 inline float Clamp(float colorChannel)

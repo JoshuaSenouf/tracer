@@ -1,11 +1,13 @@
 #ifndef RAY_H
 #define RAY_H
 
-#include "camera.h"
-#include "sampler.h"
+#include <embree3/common/math/vec3.h>
+#include <embree3/rtcore.h>
+#include <embree3/rtcore_ray.h>
 
-#include "embree_helper.h"
+#include "camera.h"
 #include "render_helper.h"
+#include "sampler.h"
 
 
 struct Ray

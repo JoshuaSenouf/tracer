@@ -3,6 +3,12 @@
 
 #include <string>
 
+#include "buffer.h"
+#include "camera.h"
+#include "render_helper.h"
+#include "renderer.h"
+#include "scenemanager.h"
+
 #include "context.h"
 
 

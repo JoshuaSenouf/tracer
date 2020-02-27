@@ -6,8 +6,9 @@
 
 #include <math.h>
 
-#include "embree_helper.h"
-#include "usd_helper.h"
+#include <embree3/common/math/vec3.h>
+
+#include <pxr/base/gf/vec3f.h>
 
 
 inline float DegToRad(float degAngle)

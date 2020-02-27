@@ -1,3 +1,5 @@
+#include <spdlog/spdlog.h>
+
 #include "gui.h"
 
 
@@ -36,7 +38,7 @@ bool ContextGUI::Initialize()
 
 bool ContextGUI::Execute()
 {
-    spdlog::trace("ContextGUI::Execute()"); 
+    spdlog::trace("ContextGUI::Execute()");
 
     return true;
 }

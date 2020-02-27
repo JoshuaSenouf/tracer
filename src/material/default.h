@@ -3,8 +3,6 @@
 
 #include "material.h"
 
-#include "embree_helper.h"
-
 
 struct Default : public Material
 {

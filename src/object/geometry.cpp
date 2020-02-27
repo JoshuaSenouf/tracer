@@ -1,3 +1,5 @@
+#include <spdlog/spdlog.h>
+
 #include "geometry.h"
 
 
@@ -28,7 +30,7 @@ bool Geometry::Create(const RTCDevice& device,
 }
 
 bool Geometry::CreatePrototype(const RTCDevice& device)
-{        
+{
     return true;
 }
 
@@ -53,7 +55,7 @@ bool Geometry::CreateInstance(const RTCDevice& device,
 }
 
 bool Geometry::Commit()
-{    
+{
     if (CommitPrototype() && CommitInstance())
     {
         return true;
@@ -102,7 +104,7 @@ bool Geometry::Update()
 }
 
 bool Geometry::UpdatePrototype()
-{    
+{
     return true;
 }
 

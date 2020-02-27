@@ -1,11 +1,13 @@
 #ifndef OUTPUT_HELPER_H
 #define OUTPUT_HELPER_H
 
+#define TINYEXR_IMPLEMENTATION
+
 #include <spdlog/spdlog.h>
+
 #include <tinyexr.h>
 
 #include "buffer.h"
-
 #include "color_helper.h"
 
 

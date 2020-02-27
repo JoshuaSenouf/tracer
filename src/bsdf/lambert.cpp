@@ -1,3 +1,5 @@
+#include "math_helper.h"
+
 #include "lambert.h"
 
 

@@ -18,7 +18,6 @@ class HydraViewport : public QQuickFramebufferObject
 
         QQuickFramebufferObject::Renderer* createRenderer() const override;
     private:
-    
 };
 
 #endif // HYDRAVIEWPORT_H

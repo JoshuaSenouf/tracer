@@ -1,11 +1,12 @@
-#include "debug.h"
+#include <embree3/rtcore.h>
+#include <embree3/rtcore_ray.h>
 
-#include "render_helper.h"
+#include "debug.h"
 
 
 DebugIntegrator::DebugIntegrator()
 {
-    _handle = "Debug";
+    _handle = "debug";
 }
 
 embree::Vec3f DebugIntegrator::GetPixelColor(Ray& ray,
