@@ -3,9 +3,12 @@
 
 #include <string>
 
-#include "context.h"
+#include <QtWidgets/QApplication>
 
 #include "render_helper.h"
+#include "tracerwindow.h"
+
+#include "context.h"
 
 
 struct ContextGUI : public Context
@@ -18,6 +21,10 @@ struct ContextGUI : public Context
 
     private:
         RenderGlobals _globals;
+
+        QApplication *_qtApp;
+
+        TracerWindow *_tracerWindow;
 };
 
 #endif // GUI_H

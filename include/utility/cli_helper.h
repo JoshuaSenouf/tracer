@@ -18,6 +18,8 @@ struct CLIArgs
     std::string output;
     RenderGlobals globals;
     int verbosity = 4;
+    int argc;
+    char** argv;
 };
 
 #endif // CLI_HELPER_H

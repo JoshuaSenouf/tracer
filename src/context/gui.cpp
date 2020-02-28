@@ -29,6 +29,8 @@ bool ContextGUI::Initialize()
     }
 
     _globals = _args.globals;
+    _qtApp = new QApplication(_args.argc, _args.argv);
+    _tracerWindow = new TracerWindow();
 
     spdlog::info("ContextGUI::Initialize() - "
         "Context has been initialized properly.");
@@ -40,5 +42,7 @@ bool ContextGUI::Execute()
 {
     spdlog::trace("ContextGUI::Execute()");
 
-    return true;
+    _tracerWindow->show();
+
+    return _qtApp->exec();
 }

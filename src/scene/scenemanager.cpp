@@ -146,7 +146,7 @@ bool SceneManager::LoadMeshGeometry()
             //     indices,
             //     meshHoleIndices,
             //     meshOrientation));
-            
+
             // TODO
 
             spdlog::debug("SceneManager::LoadGeometry() - "

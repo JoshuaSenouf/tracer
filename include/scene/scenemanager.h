@@ -11,7 +11,7 @@
 #include <pxr/usd/usd/stage.h>
 
 #include "geometry.h"
-#include "material.h"
+// #include "material.h"
 
 
 struct SceneManager
@@ -32,7 +32,7 @@ struct SceneManager
     RTCDevice _device = nullptr;
     RTCScene _scene = nullptr; // Contains the instanced (single or not) geometry objects. This is the scene we are tracing against.
     std::unordered_map<unsigned int, std::shared_ptr<Geometry>> _sceneGeom;
-    std::unordered_map<unsigned int, std::shared_ptr<Material>> _sceneMaterial;
+    // std::unordered_map<unsigned int, std::shared_ptr<Material>> _sceneMaterial;
     std::mutex _sceneMutex;
 };
 

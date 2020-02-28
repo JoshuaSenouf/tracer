@@ -10,8 +10,6 @@ set(CMAKE_AUTOUIC ON)
 find_package(Qt5 COMPONENTS
     Core
     Gui
-    Quick
-    QuickWidgets
     Widgets
     REQUIRED)
 find_package(USD REQUIRED)
@@ -30,8 +28,6 @@ find_package(TBB REQUIRED)
 set(QT_LIBS
     Qt5::Core
     Qt5::Gui
-    Qt5::Quick
-    Qt5::QuickWidgets
     Qt5::Widgets)
 set(USD_LIBS
     ${USD_LIBRARIES}
@@ -56,20 +52,19 @@ include_directories(
     thirdparty/embree/include
     thirdparty/spdlog
     thirdparty/tinyexr
-    src/bsdf
-    src/camera
-    src/context
-    # src/gui
-    src/integrator
-    src/material
-    src/math
-    src/object
-    # src/opengl
-    src/renderer
-    src/sampling
-    src/scene
-    src/utility
-    src/viewport
+    include/bsdf
+    include/camera
+    include/context
+    include/gui
+    include/integrator
+    # include/material
+    include/math
+    include/object
+    # include/opengl
+    include/renderer
+    include/sampling
+    include/scene
+    include/utility
     ${USD_INCLUDE_DIR}
     ${PYTHON_INCLUDE_PATH}
     ${EMBREE_INCLUDE_DIRS}
@@ -79,29 +74,28 @@ file(GLOB THIRDPARTY_SOURCES
     )
 
 file(GLOB PROJECT_HEADERS
-    src/bsdf/*.h
-    src/camera/*.h
-    src/context/*.h
-    # src/gui/*.h
-    src/integrator/*.h
-    src/material/*.h
-    src/math/*.h
-    src/object/*.h
-    # src/opengl/*.h
-    src/renderer/*.h
-    src/sampling/*.h
-    src/scene/*.h
-    src/utility/*.h
-    src/viewport/*.h
-    src/*.h)
+    include/bsdf/*.h
+    include/camera/*.h
+    include/context/*.h
+    include/gui/*.h
+    include/integrator/*.h
+    # include/material/*.h
+    include/math/*.h
+    include/object/*.h
+    # include/opengl/*.h
+    include/renderer/*.h
+    include/sampling/*.h
+    include/scene/*.h
+    include/utility/*.h
+    include/*.h)
 
 file(GLOB PROJECT_SOURCES
     src/bsdf/*.cpp
     src/camera/*.cpp
     src/context/*.cpp
-    # src/gui/*.cpp
+    src/gui/*.cpp
     src/integrator/*.cpp
-    src/material/*.cpp
+    # src/material/*.cpp
     src/math/*.cpp
     src/object/*.cpp
     # src/opengl/*.cpp
@@ -109,25 +103,7 @@ file(GLOB PROJECT_SOURCES
     src/sampling/*.cpp
     src/scene/*.cpp
     src/utility/*.cpp
-    src/viewport/*.cpp
     src/*.cpp)
-
-file(GLOB PROJECT_QT
-    res/qml/*.qrc
-    res/qml/*.qml
-    res/qml/qmldir
-    res/qml/logger/*.qrc
-    res/qml/logger/*.qml
-    res/qml/logger/qmldir
-    res/qml/renderconfig/*.qrc
-    res/qml/renderconfig/*.qml
-    res/qml/renderconfig/qmldir
-    res/qml/scenegraph/*.qrc
-    res/qml/scenegraph/*.qml
-    res/qml/scenegraph/qmldir
-    res/qml/viewport/*.qrc
-    res/qml/viewport/*.qml
-    res/qml/viewport/qmldir)
 
 file(GLOB PROJECT_SHADERS
     res/shaders/*.frag
@@ -150,7 +126,6 @@ file(GLOB PROJECT_CONFIGS
 source_group("ThirdParty" FILES ${THIRDPARTY_SOURCES})
 source_group("Headers" FILES ${PROJECT_HEADERS})
 source_group("Sources" FILES ${PROJECT_SOURCES})
-source_group("Qt" FILES ${PROJECT_QT})
 source_group("Shaders" FILES ${PROJECT_SHADERS})
 source_group("Scenes" FILES ${PROJECT_SCENES})
 
@@ -160,7 +135,6 @@ add_definitions(-DGLFW_INCLUDE_NONE
 add_executable(${PROJECT_NAME} ${THIRDPARTY_SOURCES}
     ${PROJECT_SOURCES}
     ${PROJECT_HEADERS}
-    ${PROJECT_QT}
     ${PROJECT_SHADERS}
     ${PROJECT_SCENES}
     ${PROJECT_CONFIGS})

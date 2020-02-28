@@ -30,6 +30,9 @@ int main(int argc, char** argv)
     // Run the argument parsing.
     CLI11_PARSE(cli, argc, argv);
 
+    args.argc = argc;
+    args.argv = argv;
+
     spdlog::info("main() - "
         "Command line arguments parsed successfully.");
 
