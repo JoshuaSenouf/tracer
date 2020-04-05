@@ -81,6 +81,7 @@ bool ContextCLI::Execute()
     // Exporting the result as an EXR image file.
     toEXR(_globals.width,
         _globals.height,
+        _args.output,
         _outputBuffer);
 
     spdlog::info("ContextCLI::Execute() - "

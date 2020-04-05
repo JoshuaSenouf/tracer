@@ -13,11 +13,12 @@
 
 inline void toPPM(int width,
     int height,
+    const std::string& fileName,
     const Buffer& buffer)
 {
     spdlog::trace("toPPM()");
 
-    FILE *ppmFile(fopen("tracer_render.ppm", "w"));
+    FILE *ppmFile(fopen(fileName.c_str(), "w"));
     fprintf(ppmFile, "P3\n%d %d\n%d\n", width, height, 255);
 
     for (unsigned int pixelIdx = 0; pixelIdx < (width * height); ++pixelIdx)
@@ -37,6 +38,7 @@ inline void toPPM(int width,
 // Based on TinyEXR way of saving a scanline EXR file
 inline void toEXR(int width,
     int height,
+    const std::string& fileName,
     const Buffer& buffer)
 {
     spdlog::trace("toEXR()");
@@ -92,7 +94,7 @@ inline void toEXR(int width,
     }
 
     const char* exrError;
-    int exrResult(SaveEXRImageToFile(&exrImage, &exrHeader, "tracer_render.exr", &exrError));
+    int exrResult(SaveEXRImageToFile(&exrImage, &exrHeader, fileName.c_str(), &exrError));
 
     if (exrResult != TINYEXR_SUCCESS)
     {
