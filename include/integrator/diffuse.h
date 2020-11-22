@@ -1,17 +1,19 @@
 #ifndef DIFFUSE_H
 #define DIFFUSE_H
 
-#include "integrator.h"
+#include "integrator/integrator.h"
 
 
-struct DiffuseIntegrator : public Integrator
+class DiffuseIntegrator : public Integrator
 {
-    DiffuseIntegrator();
+    public:
+        DiffuseIntegrator();
 
-    virtual embree::Vec3f GetPixelColor(Ray& ray,
-        PixelSample& sample,
-        SceneManager &scene,
-        const RenderGlobals& globals) override;
+        virtual embree::Vec3f GetPixelColor(
+            Ray &ray,
+            PixelSample &pixel_sample,
+            SceneManager &scene_manager,
+            const RenderGlobals &globals) override;
 };
 
 #endif // DIFFUSE_H

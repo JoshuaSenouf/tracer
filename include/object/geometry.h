@@ -14,11 +14,14 @@ struct Geometry
 {
     Geometry();
 
-    virtual bool Create(const RTCDevice& device,
-        const RTCScene& topScene);
-    virtual bool CreatePrototype(const RTCDevice& device);
-    virtual bool CreateInstance(const RTCDevice& device,
-        const RTCScene& topScene);
+    virtual bool Create(
+        const RTCDevice &device,
+        const RTCScene &top_scene);
+    virtual bool CreatePrototype(
+        const RTCDevice &device);
+    virtual bool CreateInstance(
+        const RTCDevice &device,
+        const RTCScene &top_scene);
     virtual bool Commit();
     virtual bool CommitPrototype();
     virtual bool CommitInstance();
@@ -27,18 +30,19 @@ struct Geometry
     virtual bool UpdateInstance();
     virtual bool Clean();
 
-    unsigned int _geomID = RTC_INVALID_GEOMETRY_ID;
-    unsigned int _geomInstanceID = RTC_INVALID_GEOMETRY_ID;
+    unsigned int geom_id = RTC_INVALID_GEOMETRY_ID;
+    unsigned int geom_instance_id = RTC_INVALID_GEOMETRY_ID;
+    RTCScene scene = nullptr;
+    RTCGeometry geom = nullptr;
+    RTCGeometry geom_instance = nullptr;
+    pxr::UsdPrim prim;
+    pxr::TfToken prim_name;
+    pxr::UsdGeomMesh usd_geom;
+    pxr::UsdGeomXformCache usd_geom_xform_cache;
 
-    RTCScene _scene = nullptr;
-    RTCGeometry _geom = nullptr;
-    RTCGeometry _geomInstance = nullptr;
-    pxr::UsdPrim _prim;
-    pxr::TfToken _primName;
-    pxr::UsdGeomMesh _usdGeom;
-    pxr::UsdGeomXformCache _usdGeomXformCache;
-    pxr::GfMatrix4f _transform;
-    embree::Vec3f _displayColor;
+    // TODO: Should be stored as Embree data since we are meant to interact with it at shading time.
+    pxr::GfMatrix4f transform;
+    embree::Vec3f display_color;
 };
 
 #endif // GEOMETRY_H

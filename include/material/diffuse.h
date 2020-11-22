@@ -1,16 +1,17 @@
 #ifndef DIFFUSE_H
 #define DIFFUSE_H
 
-#include "material.h"
+#include "material/material.h"
 
 
-struct Diffuse : public Material
+class Diffuse : public Material
 {
-    Diffuse();
+    public:
+        Diffuse();
 
-    virtual bool Evaluate() override;
-    virtual bool Sample() override;
-    virtual bool Pdf() override;
+        virtual bool Evaluate() override;
+        virtual bool Sample() override;
+        virtual bool Pdf() override;
 };
 
 #endif // DIFFUSE_H

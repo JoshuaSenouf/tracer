@@ -1,17 +1,19 @@
 #ifndef NORMAL_H
 #define NORMAL_H
 
-#include "integrator.h"
+#include "integrator/integrator.h"
 
 
-struct NormalIntegrator : public Integrator
+class NormalIntegrator : public Integrator
 {
-    NormalIntegrator();
+    public:
+        NormalIntegrator();
 
-    virtual embree::Vec3f GetPixelColor(Ray& ray,
-        PixelSample& sample,
-        SceneManager &scene,
-        const RenderGlobals& globals) override;
+        virtual embree::Vec3f GetPixelColor(
+            Ray &ray,
+            PixelSample &pixel_sample,
+            SceneManager &scene_manager,
+            const RenderGlobals &globals) override;
 };
 
 #endif // NORMAL_H

@@ -1,4 +1,4 @@
-#include "diffuse.h"
+#include "material/diffuse.h"
 
 
 Diffuse::Diffuse()

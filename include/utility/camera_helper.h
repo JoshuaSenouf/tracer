@@ -2,12 +2,12 @@
 #define CAMERA_HELPER_H
 
 
-enum CAMERA_MOVEMENTS
+enum CameraMovements
 {
-    FORWARD,
-    BACKWARD,
-    LEFT,
-    RIGHT
+    kForward = 0,
+    kBackward,
+    kLeft,
+    kRight
 };
 
 #endif // CAMERA_HELPER_H

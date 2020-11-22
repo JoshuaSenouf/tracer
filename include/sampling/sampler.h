@@ -8,20 +8,29 @@
 #include <embree3/common/math/vec3.h>
 
 
-struct Sampler
+class Sampler
 {
-    Sampler();
+    public:
+        Sampler();
 
-    unsigned NewSeed();
-    float Uniform1D();
-    embree::Vec2f Uniform2D();
-    std::vector<embree::Vec2f> Stratified2D(int samples);
-    embree::Vec3f HemisphereUniform(float rand0, float rand1);
-    embree::Vec3f HemisphereCosineWeighted(float rand0, float rand1);
-    embree::Vec3f SphereUniform(float rand0, float rand1);
+        unsigned NewSeed();
+        float Uniform1D();
+        embree::Vec2f Uniform2D();
+        std::vector<embree::Vec2f> Stratified2D(
+            int samples);
+        embree::Vec3f HemisphereUniform(
+            float rand0,
+            float rand1);
+        embree::Vec3f HemisphereCosineWeighted(
+            float rand0,
+            float rand1);
+        embree::Vec3f SphereUniform(
+            float rand0,
+            float rand1);
 
-    std::uniform_real_distribution<float> floatUniformDistribution;
-    std::mt19937 prng;
+    private:
+        std::uniform_real_distribution<float> float_uniform_distribution;
+        std::mt19937 prng;
 };
 
 #endif // SAMPLER_H

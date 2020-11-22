@@ -1,8 +1,8 @@
+#include <chrono>
+
 #include <spdlog/spdlog.h>
 
-#include "output_helper.h"
-
-#include "cli.h"
+#include "context/cli.h"
 
 
 ContextCLI::ContextCLI()
@@ -10,11 +10,12 @@ ContextCLI::ContextCLI()
     spdlog::trace("ContextCLI::ContextCLI()");
 }
 
-ContextCLI::ContextCLI(CLIArgs cliArgs)
+ContextCLI::ContextCLI(
+    CLIArgs cli_args)
 {
-    spdlog::trace("ContextCLI::ContextCLI(cliArgs)");
+    spdlog::trace("ContextCLI::ContextCLI(cli_args)");
 
-    _args = cliArgs;
+    args_ = cli_args;
 }
 
 bool ContextCLI::Initialize()
@@ -22,35 +23,39 @@ bool ContextCLI::Initialize()
     spdlog::trace("ContextCLI::Initialize()");
 
     // Check if the user provided an input USD scene file.
-    if (_args.input.empty())
+    if (args_.input.empty())
     {
-        spdlog::error("ContextCLI::Initialize() - "
+        spdlog::error(
+            "ContextCLI::Initialize() - "
             "No input USD scene file was provided.");
 
-        return 0;
+        return false;
     }
 
     // Check if the provided input USD scene file exists on disk.
-    if (!std::ifstream(_args.input))
+    if (!std::ifstream(args_.input))
     {
-        spdlog::error("ContextCLI::Initialize() - "
+        spdlog::error(
+            "ContextCLI::Initialize() - "
             "The provided USD scene file does not exist on disk.");
 
-        return 0;
+        return false;
     }
 
     // Check if the user provided an output path.
-    if (_args.output.empty())
+    if (args_.output.empty())
     {
-        spdlog::error("ContextCLI::Initialize() - "
+        spdlog::error(
+            "ContextCLI::Initialize() - "
             "It is necessary to provide an output path when using the CLI mode.");
 
         return false;
     }
 
-    _globals = _args.globals;
+    globals_ = args_.globals;
 
-    spdlog::info("ContextCLI::Initialize() - "
+    spdlog::debug(
+        "ContextCLI::Initialize() - "
         "Context has been initialized properly.");
 
     return true;
@@ -60,32 +65,52 @@ bool ContextCLI::Execute()
 {
     spdlog::trace("ContextCLI::Execute()");
 
-    // Initializing the necessary data for the renderer.
-    _scene.LoadScene(_args.input);
-    _camera.Init(_globals.width, _globals.height);
-    _outputBuffer.Init(_globals.width, _globals.height);
+    auto scene_start_time = std::chrono::high_resolution_clock::now();
 
-    spdlog::info("ContextCLI::Execute() - "
+    // Initializing the necessary data for the renderer_.
+    scene_manager_.LoadScene(args_.input);
+
+    auto scene_end_time = std::chrono::high_resolution_clock::now();
+	std::chrono::duration<float> scene_time = scene_end_time - scene_start_time;
+
+    spdlog::info(
+        "ContextCLI::Execute() - "
+        "Scene loaded successfully in " + std::to_string(scene_time.count()) + " seconds.");
+
+    camera_.Initialize(globals_.width, globals_.height);
+    buffer_.Initialize(globals_.width, globals_.height);
+
+    spdlog::info(
+        "ContextCLI::Execute() - "
         "Rendering the scene...");
 
+    auto render_start_time = std::chrono::high_resolution_clock::now();
+
     // Rendering the image as a single iteration.
-    _renderer.Trace(_globals,
-        _scene,
-        _camera,
-        _outputBuffer,
+    renderer_.Trace(
+        globals_,
+        scene_manager_,
+        camera_,
+        buffer_,
         1);
 
-    spdlog::info("ContextCLI::Execute() - "
-        "Scene rendered successfully.");
+    auto render_end_time = std::chrono::high_resolution_clock::now();
+	std::chrono::duration<float> render_time = render_end_time - render_start_time;
 
-    // Exporting the result as an EXR image file.
-    toEXR(_globals.width,
-        _globals.height,
-        _args.output,
-        _outputBuffer);
+    spdlog::info(
+        "ContextCLI::Execute() - "
+        "Scene rendered successfully in " + std::to_string(render_time.count()) + " seconds.");
 
-    spdlog::info("ContextCLI::Execute() - "
-        "Context task finished.");
+    if (args_.format == "exr")
+    {
+        buffer_.ToEXR(
+            args_.output);
+    }
+    else
+    {
+        buffer_.ToPPM(
+            args_.output);
+    }
 
     return true;
 }

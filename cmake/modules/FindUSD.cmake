@@ -2,43 +2,71 @@
 
 # Trying to find USD include path.
 find_path (
-    USD_INCLUDE_DIR
+    USD_INCLUDE_DIRS
     pxr/pxr.h
-    PATHS $ENV{USD_ROOT}/include
+    PATHS ${USD_ROOT}/include $ENV{USD_ROOT}/include
     NO_DEFAULT_PATH)
 
 # The list of required libraries for minimal USD.
 set (_usd_components
-    usdImagingGL
-    usdImaging
-    usdHydra
-    hdx
-    hdSt
-    hd
-    glf
-    garch
-    pxOsd
-    usdRi
-    usdUI
-    usdShade
-    usdGeom
-    usd
-    usdUtils
-    trace
-    pcp
-    sdf
-    plug
-    js
+    # ar
+    # arch
+    # cameraUtil
+    # garch
+    # gf
+    # glf
+    # hd
+    # hdSt
+    # hdx
+    # hf
+    # js
+    # kind
+    # pcp
+    # plug
+    # pxOsd
+    # sdf
+    # tf
+    # trace
+    # usd
+    # usdGeom
+    # usdHydra
+    # usdImaging
+    # usdImagingGL
+    # usdLux
+    # usdRi
+    # usdShade
+    # usdUI
+    # usdUtils
+    # vt
+    # work
+
     ar
-    work
-    tf
-    kind
     arch
-    vt
     gf
-    hf
-    cameraUtil
-    usdLux)
+    js
+    kind
+    ndr
+    pcp
+    plug
+    sdf
+    sdr
+    tf
+    trace
+    usd
+    usdGeom
+    usdHydra
+    usdLux
+    usdMedia
+    usdRender
+    usdRi
+    usdShade
+    usdSkel
+    usdUI
+    usdUtils
+    usdVol
+    vt
+    work
+)
 
 set (USD_LIBRARIES "")
 
@@ -51,7 +79,7 @@ foreach (COMPONENT ${_usd_components})
     find_library (
         USD_${UPPERCOMPONENT}_LIBRARY
         NAMES ${COMPONENT} ${COMPONENT}${CMAKE_STATIC_LIBRARY_SUFFIX} lib${COMPONENT}${CMAKE_STATIC_LIBRARY_SUFFIX}
-        PATHS $ENV{USD_ROOT}/lib
+        PATHS ${USD_ROOT}/lib $ENV{USD_ROOT}/lib
         NO_DEFAULT_PATH)
 
     list(APPEND USD_LIBRARIES ${USD_${UPPERCOMPONENT}_LIBRARY})

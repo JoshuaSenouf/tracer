@@ -4,32 +4,33 @@
 #include <memory>
 #include <vector>
 
-#include "buffer.h"
-#include "camera.h"
-#include "integrator.h"
-#include "render_helper.h"
-#include "scenemanager.h"
+#include "camera/camera.h"
+#include "integrator/debug.h"
+#include "integrator/diffuse.h"
+#include "integrator/integrator.h"
+#include "integrator/normal.h"
+#include "integrator/occlusion.h"
+#include "integrator/position.h"
+#include "integrator/udpt.h"
+#include "object/buffer.h"
+#include "scene/scenemanager.h"
+#include "utility/render_helper.h"
 
-#include "debug.h"
-#include "diffuse.h"
-#include "normal.h"
-#include "occlusion.h"
-#include "position.h"
-#include "udpt.h"
 
-
-struct TracerRenderer
+class TracerRenderer
 {
-    TracerRenderer();
+    public:
+        TracerRenderer();
 
-    void Trace(const RenderGlobals& globals,
-        SceneManager& scene,
-        Camera& camera,
-        Buffer& buffer,
-        int iterations);
+        void Trace(
+            const RenderGlobals &globals,
+            SceneManager &scene_manager,
+            Camera &camera,
+            Buffer &buffer,
+            int iterations);
 
     private:
-        std::vector<std::shared_ptr<Integrator>> _integrators {
+        std::vector<std::shared_ptr<Integrator>> integrators_ {
             std::make_shared<UDPTIntegrator>(),
             std::make_shared<DiffuseIntegrator>(),
             std::make_shared<OcclusionIntegrator>(),

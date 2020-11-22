@@ -1,6 +1,6 @@
 #include <spdlog/spdlog.h>
 
-#include "geometry.h"
+#include "object/geometry.h"
 
 
 Geometry::Geometry()
@@ -8,48 +8,53 @@ Geometry::Geometry()
     spdlog::trace("Geometry::Geometry()");
 }
 
-bool Geometry::Create(const RTCDevice& device,
-    const RTCScene& topScene)
+bool Geometry::Create(
+    const RTCDevice &device,
+    const RTCScene &top_scene)
 {
-    pxr::VtArray<pxr::GfVec3f> displayColor;
-    _usdGeom.GetDisplayColorAttr().Get(&displayColor);
+    pxr::VtArray<pxr::GfVec3f> display_color;
+    usd_geom.GetDisplayColorAttr().Get(&display_color);
 
-    _primName = _prim.GetName();
+    prim_name = prim.GetName();
     // TODO: Get the display color from the correct time value.
-    _displayColor = (displayColor.empty() ? embree::Vec3f(0.5f) :
-        embree::Vec3f(displayColor[0][0],
-            displayColor[0][1],
-            displayColor[0][2]));
+    this->display_color = (
+        display_color.empty() ? embree::Vec3f(0.5f) :
+            embree::Vec3f(
+                display_color[0][0],
+                display_color[0][1],
+                display_color[0][2]));
 
     CreatePrototype(device);
     CommitPrototype();
-    CreateInstance(device, topScene);
+    CreateInstance(device, top_scene);
     CommitInstance();
 
     return true;
 }
 
-bool Geometry::CreatePrototype(const RTCDevice& device)
+bool Geometry::CreatePrototype(
+    const RTCDevice &device)
 {
     return true;
 }
 
-bool Geometry::CreateInstance(const RTCDevice& device,
-    const RTCScene& topScene)
+bool Geometry::CreateInstance(
+    const RTCDevice &device,
+    const RTCScene &top_scene)
 {
-    _geomInstance = rtcNewGeometry(device, RTC_GEOMETRY_TYPE_INSTANCE);
-    _geomInstanceID = rtcAttachGeometry(topScene, _geomInstance);
+    geom_instance = rtcNewGeometry(device, RTC_GEOMETRY_TYPE_INSTANCE);
+    geom_instance_id = rtcAttachGeometry(top_scene, geom_instance);
 
-    rtcSetGeometryInstancedScene(_geomInstance, _scene);
-    rtcSetGeometryTimeStepCount(_geomInstance, 1);
+    rtcSetGeometryInstancedScene(geom_instance, scene);
+    rtcSetGeometryTimeStepCount(geom_instance, 1);
 
-    pxr::GfMatrix4d usdTransform(_usdGeomXformCache.GetLocalToWorldTransform(_prim));
-    _transform = pxr::GfMatrix4f(usdTransform);
+    pxr::GfMatrix4d usd_transform(usd_geom_xform_cache.GetLocalToWorldTransform(prim));
+    transform = pxr::GfMatrix4f(usd_transform);
 
-    rtcSetGeometryTransform(_geomInstance,
+    rtcSetGeometryTransform(geom_instance,
         0,
         RTC_FORMAT_FLOAT4X4_COLUMN_MAJOR,
-        _transform.GetArray());
+        transform.GetArray());
 
     return true;
 }
@@ -68,18 +73,18 @@ bool Geometry::Commit()
 
 bool Geometry::CommitPrototype()
 {
-    rtcCommitGeometry(_geom);
-    rtcReleaseGeometry(_geom);
+    rtcCommitGeometry(geom);
+    rtcReleaseGeometry(geom);
 
-    rtcCommitScene(_scene);
+    rtcCommitScene(scene);
 
     return true;
 }
 
 bool Geometry::CommitInstance()
 {
-    rtcCommitGeometry(_geomInstance);
-    rtcReleaseGeometry(_geomInstance);
+    rtcCommitGeometry(geom_instance);
+    rtcReleaseGeometry(geom_instance);
 
     return true;
 }
@@ -110,13 +115,13 @@ bool Geometry::UpdatePrototype()
 
 bool Geometry::UpdateInstance()
 {
-    pxr::GfMatrix4d usdTransform(_usdGeomXformCache.GetLocalToWorldTransform(_prim));
-    _transform = pxr::GfMatrix4f(usdTransform);
+    pxr::GfMatrix4d usd_transform(usd_geom_xform_cache.GetLocalToWorldTransform(prim));
+    transform = pxr::GfMatrix4f(usd_transform);
 
-    rtcSetGeometryTransform(_geomInstance,
+    rtcSetGeometryTransform(geom_instance,
         0,
         RTC_FORMAT_FLOAT4X4_COLUMN_MAJOR,
-        _transform.GetArray());
+        transform.GetArray());
 
     return true;
 }

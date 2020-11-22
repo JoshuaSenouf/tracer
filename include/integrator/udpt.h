@@ -1,22 +1,25 @@
 #ifndef UPDT_H
 #define UPDT_H
 
-#include "lambert.h"
+#include "bsdf/lambert.h"
 
-#include "integrator.h"
+#include "integrator/integrator.h"
 
 
-struct UDPTIntegrator : public Integrator
+class UDPTIntegrator : public Integrator
 {
-    UDPTIntegrator();
+    public:
+        UDPTIntegrator();
 
-    virtual embree::Vec3f GetPixelColor(Ray& ray,
-        PixelSample& sample,
-        SceneManager &scene,
-        const RenderGlobals& globals) override;
+        virtual embree::Vec3f GetPixelColor(
+            Ray &ray,
+            PixelSample &pixel_sample,
+            SceneManager &scene_manager,
+            const RenderGlobals &globals) override;
 
-    // TODO: To remove once we have a proper material system.
-    Lambert diffuseMat;
+    private:
+        // TODO: To remove once we have a proper material system.
+        Lambert diffuse_mat;
 };
 
 #endif // UPDT_H

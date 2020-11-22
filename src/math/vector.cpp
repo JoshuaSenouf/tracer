@@ -1,4 +1,4 @@
-// #include "vector.h"
+// #include "math/vector.h"
 
 
 // Vector3::Vector3(): x(0.0f),
@@ -7,176 +7,228 @@
 // {
 // }
 
-// Vector3::Vector3(float tempXYZ)
+// Vector3::Vector3(
+//     float temp_xyz)
 // {
-//     this->x = tempXYZ;
-//     this->y = tempXYZ;
-//     this->z = tempXYZ;
+//     x = temp_xyz;
+//     y = temp_xyz;
+//     z = temp_xyz;
 // }
 
-// Vector3::Vector3(float tempX, float tempY, float tempZ)
+// Vector3::Vector3(
+//     float temp_x,
+//     float temp_y,
+//     float temp_z)
 // {
-//     this->x = tempX;
-//     this->y = tempY;
-//     this->z = tempZ;
+//     x = temp_x;
+//     y = temp_y;
+//     z = temp_z;
 // }
 
-// Vector3::Vector3(const pxr::GfVec3f &usdVec3f)
+// Vector3::Vector3(
+//     const pxr::GfVec3f &usd_vec3f)
 // {
-//     this->x = usdVec3f[0];
-//     this->y = usdVec3f[1];
-//     this->z = usdVec3f[2];
+//     x = usd_vec3f[0];
+//     y = usd_vec3f[1];
+//     z = usd_vec3f[2];
 // }
 
 // float Vector3::Length() const
 // {
-//     return embree::sqrt(this->x * this->x + this->y * this->y + this->z * this->z);
+//     return embree::sqrt(x * x + y * y + z * z);
 // }
 
 // Vector3 Vector3::Normalize() const
 // {
-//     float vecLength = Length();
+//     float vec_length = Length();
 
-//     return Vector3(this->x / vecLength,
-//         this->y / vecLength,
-//         this->z / vecLength);
+//     return Vector3(
+//         x / vec_length,
+//         y / vec_length,
+//         z / vec_length);
 // }
 
-// float Vector3::Dot(const Vector3 &tempVec3) const
+// float Vector3::Dot(
+//     const Vector3 &temp_vec3) const
 // {
-//     return (this->x * tempVec3.x + this->y * tempVec3.y + this->z * tempVec3.z);
+//     return (x * temp_vec3.x + y * temp_vec3.y + z * temp_vec3.z);
 // }
 
-// Vector3 Vector3::Cross(const Vector3 &tempVec3) const
+// Vector3 Vector3::Cross(
+//     const Vector3 &temp_vec3) const
 // {
-//     return Vector3(this->y * tempVec3.z - this->z * tempVec3.y,
-//         this->z * tempVec3.x - this->x * tempVec3.z,
-//         this->x * tempVec3.y - this->y * tempVec3.x);
+//     return Vector3(
+//         y * temp_vec3.z - z * temp_vec3.y,
+//         z * temp_vec3.x - x * temp_vec3.z,
+//         x * temp_vec3.y - y * temp_vec3.x);
 // }
 
-// Vector3 Vector3::Lerp(const Vector3& tempVec3, float weightFactor)
+// Vector3 Vector3::Lerp(
+//     const Vector3 &temp_vec3,
+//     float weight)
 // {
-//     return Vector3((*this) + (tempVec3 - (*this)) * weightFactor);
+//     return Vector3((*this) + (temp_vec3 - (*this)) * weight);
 // }
 
 // void Vector3::Print()
 // {
-//     std::cout << "X: " << this->x << "\nY: " << this->y << "\nZ: " << this->z << std::endl;
+//     std::cout << "X: " << x << "\nY: " << y << "\nZ: " << z << std::endl;
 // }
 
-// Vector3& Vector3::operator+=(const Vector3 &tempVec3)
+// Vector3 &Vector3::operator+=(
+//     const Vector3 &temp_vec3)
 // {
-//     this->x += tempVec3.x;
-//     this->y += tempVec3.y;
-//     this->z += tempVec3.z;
+//     x += temp_vec3.x;
+//     y += temp_vec3.y;
+//     z += temp_vec3.z;
 
 //     return *this;
 // }
 
-// Vector3& Vector3::operator-=(const Vector3 &tempVec3)
+// Vector3 &Vector3::operator-=(
+//     const Vector3 &temp_vec3)
 // {
-//     this->x -= tempVec3.x;
-//     this->y -= tempVec3.y;
-//     this->z -= tempVec3.z;
+//     x -= temp_vec3.x;
+//     y -= temp_vec3.y;
+//     z -= temp_vec3.z;
 
 //     return *this;
 // }
 
-// Vector3& Vector3::operator*=(const Vector3 &tempVec3)
+// Vector3 &Vector3::operator*=(
+//     const Vector3 &temp_vec3)
 // {
-//     this->x *= tempVec3.x;
-//     this->y *= tempVec3.y;
-//     this->z *= tempVec3.z;
+//     x *= temp_vec3.x;
+//     y *= temp_vec3.y;
+//     z *= temp_vec3.z;
 
 //     return *this;
 // }
 
-// Vector3& Vector3::operator*=(float multFactor)
+// Vector3 &Vector3::operator*=(
+//     float factor)
 // {
-//     this->x *= multFactor;
-//     this->y *= multFactor;
-//     this->z *= multFactor;
+//     x *= factor;
+//     y *= factor;
+//     z *= factor;
 
 //     return *this;
 // }
 
-// Vector3& Vector3::operator/=(const Vector3 &tempVec3)
+// Vector3 &Vector3::operator/=(
+//     const Vector3 &temp_vec3)
 // {
-//     this->x /= tempVec3.x;
-//     this->y /= tempVec3.y;
-//     this->z /= tempVec3.z;
+//     x /= temp_vec3.x;
+//     y /= temp_vec3.y;
+//     z /= temp_vec3.z;
 
 //     return *this;
 // }
 
-// Vector3& Vector3::operator/=(float divFactor)
+// Vector3 &Vector3::operator/=(
+//     float factor)
 // {
-//     this->x /= divFactor;
-//     this->y /= divFactor;
-//     this->z /= divFactor;
+//     x /= factor;
+//     y /= factor;
+//     z /= factor;
 
 //     return *this;
 // }
 
-// Vector3 Vector3::operator+(const Vector3 &tempVec3) const
+// Vector3 Vector3::operator+(
+//     const Vector3 &temp_vec3) const
 // {
-//     return Vector3(this->x + tempVec3.x, this->y + tempVec3.y,  this->z + tempVec3.z);
+//     return Vector3(
+//         x + temp_vec3.x,
+//         y + temp_vec3.y,
+//         z + temp_vec3.z);
 // }
 
 
-// Vector3 Vector3::operator+(float addFactor) const
+// Vector3 Vector3::operator+(
+//     float factor) const
 // {
-//     return Vector3(this->x + addFactor, this->y + addFactor,  this->z + addFactor);
+//     return Vector3(
+//         x + factor,
+//         y + factor,
+//         z + factor);
 // }
 
-// Vector3 Vector3::operator-(const Vector3 &tempVec3) const
+// Vector3 Vector3::operator-(
+//     const Vector3 &temp_vec3) const
 // {
-//     return Vector3(this->x - tempVec3.x, this->y - tempVec3.y,  this->z - tempVec3.z);
+//     return Vector3(
+//         x - temp_vec3.x,
+//         y - temp_vec3.y,
+//         z - temp_vec3.z);
 // }
 
-// Vector3 Vector3::operator-(float subFactor) const
+// Vector3 Vector3::operator-(
+//     float factor) const
 // {
-//     return Vector3(this->x - subFactor, this->y - subFactor,  this->z - subFactor);
+//     return Vector3(
+//         x - factor,
+//         y - factor,
+//         z - factor);
 // }
 
 // Vector3 Vector3::operator-() const
 // {
-//     return Vector3(-(this->x), -(this->y), -(this->z));
+//     return Vector3(
+//         -(x),
+//         -(y),
+//         -(z));
 // }
 
-// Vector3 Vector3::operator*(const Vector3 &tempVec3) const
+// Vector3 Vector3::operator*(
+//     const Vector3 &temp_vec3) const
 // {
-//     return Vector3(this->x * tempVec3.x, this->y * tempVec3.y, this->z * tempVec3.z);
+//     return Vector3(
+//         x * temp_vec3.x,
+//         y * temp_vec3.y,
+//         z * temp_vec3.z);
 // }
 
-// Vector3 Vector3::operator*(float multFactor) const
+// Vector3 Vector3::operator*(
+//     float factor) const
 // {
-//     return Vector3(this->x * multFactor, this->y * multFactor, this->z * multFactor);
+//     return Vector3(
+//         x * factor,
+//         y * factor,
+//         z * factor);
 // }
 
-// Vector3 Vector3::operator/(const Vector3 &tempVec3) const
+// Vector3 Vector3::operator/(
+//     const Vector3 &temp_vec3) const
 // {
-//     return Vector3(this->x / tempVec3.x, this->y / tempVec3.y, this->z / tempVec3.z);
+//     return Vector3(
+//         x / temp_vec3.x,
+//         y / temp_vec3.y,
+//         z / temp_vec3.z);
 // }
 
-// Vector3 Vector3::operator/(float divFactor) const
+// Vector3 Vector3::operator/(
+//     float factor) const
 // {
-//     return (*this * (1.0f / divFactor));
+//     return (*this * (1.0f / factor));
 // }
 
-// bool Vector3::operator==(const Vector3 &tempVec3) const
+// bool Vector3::operator==(
+//     const Vector3 &temp_vec3) const
 // {
-//     return (this->x == tempVec3.x && this->y == tempVec3.y && this->z == tempVec3.z);
+//     return (x == temp_vec3.x && y == temp_vec3.y && z == temp_vec3.z);
 // }
 
-// bool Vector3::operator!=(const Vector3 &tempVec3) const
+// bool Vector3::operator!=(
+//     const Vector3 &temp_vec3) const
 // {
-//     return !(*this == tempVec3);
+//     return !(*this == temp_vec3);
 // }
 
-// bool Vector3::operator<(const Vector3 &tempVec3) const
+// bool Vector3::operator<(
+//     const Vector3 &temp_vec3) const
 // {
-//     return (this->x < tempVec3.x && this->y < tempVec3.y && this->z < tempVec3.z);
+//     return (x < temp_vec3.x && y < temp_vec3.y && z < temp_vec3.z);
 // }
 
 // /////////////////////////////////////////////////////////////
@@ -187,162 +239,205 @@
 // {
 // }
 
-// Vector2::Vector2(float tempXY)
+// Vector2::Vector2(
+//     float temp_xy)
 // {
-//     this->x = tempXY;
-//     this->y = tempXY;
+//     x = temp_xy;
+//     y = temp_xy;
 // }
 
-// Vector2::Vector2(float tempX, float tempY)
+// Vector2::Vector2(
+//     float temp_x,
+//     float temp_y)
 // {
-//     this->x = tempX;
-//     this->y = tempY;
+//     x = temp_x;
+//     y = temp_y;
 // }
 
-// Vector2::Vector2(const pxr::GfVec2f &usdVec2f)
+// Vector2::Vector2(
+//     const pxr::GfVec2f &usd_vec2f)
 // {
-//     this->x = usdVec2f[0];
-//     this->y = usdVec2f[1];
+//     x = usd_vec2f[0];
+//     y = usd_vec2f[1];
 // }
 
 // float Vector2::Length() const
 // {
-//     return embree::sqrt(this->x * this->x + this->y * this->y);
+//     return embree::sqrt(x * x + y * y);
 // }
 
 // Vector2 Vector2::Normalize() const
 // {
-//     float vecLength = Length();
+//     float vec_length = Length();
 
-//     return Vector2(this->x / vecLength, this->y / vecLength);
+//     return Vector2(
+//         x / vec_length,
+//         y / vec_length);
 // }
 
-// float Vector2::Dot(const Vector2 &tempVec2) const
+// float Vector2::Dot(
+//     const Vector2 &temp_vec2) const
 // {
-//     return (this->x * tempVec2.x + this->y * tempVec2.y);
+//     return (x * temp_vec2.x + y * temp_vec2.y);
 // }
 
 // void Vector2::Print()
 // {
-//     std::cout << "X: " << this->x << "\nY: " << this->y << std::endl;
+//     std::cout << "X: " << x << "\nY: " << y << std::endl;
 // }
 
-// Vector2& Vector2::operator+=(const Vector2 &tempVec2)
+// Vector2 &Vector2::operator+=(
+//     const Vector2 &temp_vec2)
 // {
-//     this->x += tempVec2.x;
-//     this->y += tempVec2.y;
+//     x += temp_vec2.x;
+//     y += temp_vec2.y;
 
 //     return *this;
 // }
 
-// Vector2& Vector2::operator-=(const Vector2 &tempVec2)
+// Vector2 &Vector2::operator-=(
+//     const Vector2 &temp_vec2)
 // {
-//     this->x -= tempVec2.x;
-//     this->y -= tempVec2.y;
+//     x -= temp_vec2.x;
+//     y -= temp_vec2.y;
 
 //     return *this;
 // }
 
-// Vector2& Vector2::operator*=(const Vector2 &tempVec2)
+// Vector2 &Vector2::operator*=(
+//     const Vector2 &temp_vec2)
 // {
-//     this->x *= tempVec2.x;
-//     this->y *= tempVec2.y;
+//     x *= temp_vec2.x;
+//     y *= temp_vec2.y;
 
 //     return *this;
 // }
 
-// Vector2& Vector2::operator*=(float multFactor)
+// Vector2 &Vector2::operator*=(
+//     float factor)
 // {
-//     this->x *= multFactor;
-//     this->y *= multFactor;
+//     x *= factor;
+//     y *= factor;
 
 //     return *this;
 // }
 
-// Vector2& Vector2::operator/=(const Vector2 &tempVec2)
+// Vector2 &Vector2::operator/=(
+//     const Vector2 &temp_vec2)
 // {
-//     this->x /= tempVec2.x;
-//     this->y /= tempVec2.y;
+//     x /= temp_vec2.x;
+//     y /= temp_vec2.y;
 
 //     return *this;
 // }
 
-// Vector2& Vector2::operator/=(float divFactor)
+// Vector2 &Vector2::operator/=(
+//     float factor)
 // {
-//     this->x /= divFactor;
-//     this->y /= divFactor;
+//     x /= factor;
+//     y /= factor;
 
 //     return *this;
 // }
 
-// Vector2 Vector2::operator+(const Vector2 &tempVec2) const
+// Vector2 Vector2::operator+(
+//     const Vector2 &temp_vec2) const
 // {
-//     return Vector2(this->x + tempVec2.x, this->y + tempVec2.y);
+//     return Vector2(
+//         x + temp_vec2.x,
+//         y + temp_vec2.y);
 // }
 
-// Vector2 Vector2::operator+(float addFactor) const
+// Vector2 Vector2::operator+(
+//     float factor) const
 // {
-//     return Vector2(this->x + addFactor, this->y + addFactor);
+//     return Vector2(
+//         x + factor,
+//         y + factor);
 // }
 
-// Vector2 Vector2::operator-(const Vector2 &tempVec2) const
+// Vector2 Vector2::operator-(
+//     const Vector2 &temp_vec2) const
 // {
-//     return Vector2(this->x - tempVec2.x, this->y - tempVec2.y);
+//     return Vector2(
+//         x - temp_vec2.x,
+//         y - temp_vec2.y);
 // }
 
-// Vector2 Vector2::operator-(float subFactor) const
+// Vector2 Vector2::operator-(
+//     float factor) const
 // {
-//     return Vector2(this->x - subFactor, this->y - subFactor);
+//     return Vector2(
+//         x - factor,
+//         y - factor);
 // }
 
 // Vector2 Vector2::operator-() const
 // {
-//     return Vector2(-(this->x), -(this->y));
+//     return Vector2(
+//         -(x),
+//         -(y));
 // }
 
-// Vector2 Vector2::operator*(const Vector2 &tempVec2) const
+// Vector2 Vector2::operator*(
+//     const Vector2 &temp_vec2) const
 // {
-//     return Vector2(this->x * tempVec2.x, this->y * tempVec2.y);
+//     return Vector2(
+//         x * temp_vec2.x,
+//         y * temp_vec2.y);
 // }
 
-// Vector2 Vector2::operator*(float multFactor) const
+// Vector2 Vector2::operator*(
+//     float factor) const
 // {
-//     return Vector2(this->x * multFactor, this->y * multFactor);
+//     return Vector2(
+//         x * factor,
+//         y * factor);
 // }
 
-// Vector2 Vector2::operator/(const Vector2 &tempVec2) const
+// Vector2 Vector2::operator/(
+//     const Vector2 &temp_vec2) const
 // {
-//     return Vector2(this->x / tempVec2.x, this->y / tempVec2.y);
+//     return Vector2(
+//         x / temp_vec2.x,
+//         y / temp_vec2.y);
 // }
 
-// Vector2 Vector2::operator/(float divFactor) const
+// Vector2 Vector2::operator/(
+//     float factor) const
 // {
-//     return (*this * (1.0f / divFactor));
+//     return (*this * (1.0f / factor));
 // }
 
-// bool Vector2::operator==(const Vector2 &tempVec2) const
+// bool Vector2::operator==(
+//     const Vector2 &temp_vec2) const
 // {
-//     return (this->x == tempVec2.x && this->y == tempVec2.y);
+//     return (x == temp_vec2.x && y == temp_vec2.y);
 // }
 
-// bool Vector2::operator!=(const Vector2 &tempVec2) const
+// bool Vector2::operator!=(
+//     const Vector2 &temp_vec2) const
 // {
-//     return !(*this == tempVec2);
+//     return !(*this == temp_vec2);
 // }
 
 // /////////////////////////////////////////////////////////////
 // /////////////////////////////////////////////////////////////
 
-// std::ostream& operator<<(std::ostream &os, const Vector3 &tempVec3)
+// std::ostream& operator<<(
+//     std::ostream &stream,
+//     const Vector3 &temp_vec3)
 // {
-//     os << tempVec3.x << " " << tempVec3.y << " " << tempVec3.z;
+//     stream << temp_vec3.x << " " << temp_vec3.y << " " << temp_vec3.z;
 
-//     return os;
+//     return stream;
 // }
 
-// std::ostream& operator<<(std::ostream &os, const Vector2 &tempVec2)
+// std::ostream& operator<<(
+//     std::ostream &stream,
+//     const Vector2 &temp_vec2)
 // {
-//     os << tempVec2.x << " " << tempVec2.y;
+//     stream << temp_vec2.x << " " << temp_vec2.y;
 
-//     return os;
+//     return stream;
 // }

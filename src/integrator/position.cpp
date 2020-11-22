@@ -1,32 +1,32 @@
 #include <embree3/rtcore.h>
 #include <embree3/rtcore_ray.h>
 
-#include "position.h"
+#include "integrator/position.h"
 
 
 PositionIntegrator::PositionIntegrator()
 {
-    _handle = "position";
 }
 
-embree::Vec3f PositionIntegrator::GetPixelColor(Ray& ray,
-    PixelSample& sample,
-    SceneManager &scene,
-    const RenderGlobals& globals)
+embree::Vec3f PositionIntegrator::GetPixelColor(
+    Ray &ray,
+    PixelSample &pixel_sample,
+    SceneManager &scene_manager,
+    const RenderGlobals &globals)
 {
-    RTCIntersectContext intersectContext;
-    rtcInitIntersectContext(&intersectContext);
+    RTCIntersectContext intersect_context;
 
-    rtcIntersect1(scene._scene, &intersectContext, RTCRayHit_(ray));
+    rtcInitIntersectContext(&intersect_context);
+    rtcIntersect1(scene_manager.scene, &intersect_context, RTCRayHit_(ray));
 
-    if (ray.instID == RTC_INVALID_GEOMETRY_ID)
+    if (ray.inst_id == RTC_INVALID_GEOMETRY_ID)
     {
         // TODO: Hardcoded sky color value for now.
         return embree::Vec3f(0.7, 0.8, 0.9);
     }
 
     // We setup all the necessary data describing the shading point.
-    ShadingPoint shadingPoint(SetupShadingPoint(scene, ray));
+    ShadingPoint shading_point(SetupShadingPoint(scene_manager, ray));
 
-    return embree::normalize(shadingPoint.P);
+    return embree::normalize(shading_point.P);
 }

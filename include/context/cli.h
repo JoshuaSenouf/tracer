@@ -3,29 +3,31 @@
 
 #include <string>
 
-#include "buffer.h"
-#include "camera.h"
-#include "render_helper.h"
-#include "renderer.h"
-#include "scenemanager.h"
+#include "camera/camera.h"
+#include "object/buffer.h"
+#include "renderer/renderer.h"
+#include "scene/scenemanager.h"
+#include "utility/render_helper.h"
 
-#include "context.h"
+#include "context/context.h"
 
 
-struct ContextCLI : public Context
+class ContextCLI : public Context
 {
-    ContextCLI();
-    ContextCLI(CLIArgs cliArgs);
+    public:
+        ContextCLI();
+        ContextCLI(
+            CLIArgs cli_args);
 
-    virtual bool Initialize() override;
-    virtual bool Execute() override;
+        virtual bool Initialize() override;
+        virtual bool Execute() override;
 
     private:
-        Buffer _outputBuffer;
-        Camera _camera;
-        TracerRenderer _renderer;
-        SceneManager _scene;
-        RenderGlobals _globals;
+        Buffer buffer_;
+        Camera camera_;
+        TracerRenderer renderer_;
+        SceneManager scene_manager_;
+        RenderGlobals globals_;
 };
 
 #endif // CLI_H

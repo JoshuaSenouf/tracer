@@ -1,4 +1,4 @@
-#include "curve.h"
+#include "object/curve.h"
 
 
 Curve::Curve()

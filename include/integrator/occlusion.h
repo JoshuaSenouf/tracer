@@ -1,17 +1,19 @@
 #ifndef OCCLUSION_H
 #define OCCLUSION_H
 
-#include "integrator.h"
+#include "integrator/integrator.h"
 
 
-struct OcclusionIntegrator : public Integrator
+class OcclusionIntegrator : public Integrator
 {
-    OcclusionIntegrator();
+    public:
+        OcclusionIntegrator();
 
-    virtual embree::Vec3f GetPixelColor(Ray& ray,
-        PixelSample& sample,
-        SceneManager &scene,
-        const RenderGlobals& globals) override;
+        virtual embree::Vec3f GetPixelColor(
+            Ray &ray,
+            PixelSample &pixel_sample,
+            SceneManager &scene_manager,
+            const RenderGlobals &globals) override;
 };
 
 #endif // OCCLUSION_H

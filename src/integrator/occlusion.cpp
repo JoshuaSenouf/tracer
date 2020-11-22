@@ -1,18 +1,18 @@
 #include <embree3/rtcore.h>
 #include <embree3/rtcore_ray.h>
 
-#include "occlusion.h"
+#include "integrator/occlusion.h"
 
 
 OcclusionIntegrator::OcclusionIntegrator()
 {
-    _handle = "occlusion";
 }
 
-embree::Vec3f OcclusionIntegrator::GetPixelColor(Ray& ray,
-    PixelSample& sample,
-    SceneManager &scene,
-    const RenderGlobals& globals)
+embree::Vec3f OcclusionIntegrator::GetPixelColor(
+    Ray &ray,
+    PixelSample &pixel_sample,
+    SceneManager &scene_manager,
+    const RenderGlobals &globals)
 {
     // TODO
 

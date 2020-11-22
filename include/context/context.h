@@ -1,17 +1,19 @@
 #ifndef CONTEXT_H
 #define CONTEXT_H
 
-#include "cli_helper.h"
+#include "utility/cli_helper.h"
 
 
-struct Context
+class Context
 {
-    Context();
+    public:
+        Context();
 
-    virtual bool Initialize() = 0;
-    virtual bool Execute() = 0;
+        virtual bool Initialize() = 0;
+        virtual bool Execute() = 0;
 
-    CLIArgs _args;
+    protected:
+        CLIArgs args_;
 };
 
 #endif // CONTEXT_H

@@ -1,22 +1,26 @@
 #ifndef LAMBERT_H
 #define LAMBERT_H
 
-#include "bsdf.h"
+#include "bsdf/bsdf.h"
 
 
-struct Lambert : public BSDF
+class Lambert : public BSDF
 {
-    Lambert();
+    public:
+        Lambert();
 
-    virtual embree::Vec3f Evaluate(PixelSample& sample,
-        ShadingPoint& shadingPoint,
-        BSDFSample& bsdfSample) override;
-    virtual embree::Vec3fa Sample(PixelSample& sample,
-        ShadingPoint& shadingPoint,
-        BSDFSample& bsdfSample) override;
-    virtual float Pdf(PixelSample& sample,
-        ShadingPoint& shadingPoint,
-        BSDFSample& bsdfSample) override;
+        virtual embree::Vec3f Evaluate(
+            PixelSample &pixel_sample,
+            ShadingPoint &shading_point,
+            BSDFSample &bsdf_sample) override;
+        virtual embree::Vec3fa Sample(
+            PixelSample &pixel_sample,
+            ShadingPoint &shading_point,
+            BSDFSample &bsdf_sample) override;
+        virtual float Pdf(
+            PixelSample &pixel_sample,
+            ShadingPoint &shading_point,
+            BSDFSample &bsdf_sample) override;
 };
 
 #endif // LAMBERT_H

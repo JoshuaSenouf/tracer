@@ -1,16 +1,17 @@
 #ifndef EMPIRICAL_H
 #define EMPIRICAL_H
 
-#include "material.h"
+#include "material/material.h"
 
 
-struct Empirical : public Material
+class Empirical : public Material
 {
-    Empirical();
+    public:
+        Empirical();
 
-    virtual bool Evaluate() override;
-    virtual bool Sample() override;
-    virtual bool Pdf() override;
+        virtual bool Evaluate() override;
+        virtual bool Sample() override;
+        virtual bool Pdf() override;
 };
 
 #endif // EMPIRICAL_H

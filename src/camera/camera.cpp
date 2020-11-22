@@ -1,8 +1,8 @@
 #include <spdlog/spdlog.h>
 
-#include "math_helper.h"
+#include "utility/math_helper.h"
 
-#include "camera.h"
+#include "camera/camera.h"
 
 
 Camera::Camera()
@@ -10,27 +10,30 @@ Camera::Camera()
     spdlog::trace("Camera::Camera()");
 }
 
-void Camera::Init(int width, int height)
+void Camera::Initialize(
+    int width,
+    int height)
 {
-    spdlog::trace("Camera::Init()");
+    spdlog::trace("Camera::Initialize()");
 
     // TODO: Hardcoded information for now.
-    _resolution = embree::Vec2fa(width, height);
-    _position = embree::Vec3fa(0, 4, 15);
-    _yaw = 90;
-    _pitch = 6;
-    _fov.x = 45;
-    _apertureRadius = 0;
-    _focalDistance = 4;
+    resolution = embree::Vec2fa(width, height);
+    position = embree::Vec3fa(0, 4, 15);
+    yaw = 90;
+    pitch = 6;
+    fov.x = 45;
+    aperture_radius = 0;
+    focal_distance = 4;
 
-    _up = embree::normalize(embree::Vec3fa(0.0f, 1.0f, 0.0f));
-    _speed = 10.0f;
-    _sensitivity = 0.10f;
+    up = embree::normalize(embree::Vec3fa(0.0f, 1.0f, 0.0f));
+    speed = 10.0f;
+    sensitivity = 0.10f;
 
     SetupFOV();
     Update();
 
-    spdlog::info("Camera::Init() - "
+    spdlog::debug(
+        "Camera::Initialize() - "
         "Camera initialized successfully.");
 }
 
@@ -38,63 +41,62 @@ void Camera::SetupFOV()
 {
     spdlog::trace("Camera::SetupFOV()");
 
-    _fov.y = (atan(tan(_fov.x * M_PI * M_1_180 * 0.5f)
-        * ((float)_resolution.y / (float)_resolution.x)) * 2.0f)
-        * 180.0f * M_1_PI;
+    fov.y = (
+        (atan(tan(fov.x * M_PI * M_1_180 * 0.5f) * ((float)resolution.y / (float)resolution.x))
+        * 2.0f) * 180.0f * M_1_PI);
 }
 
 void Camera::Update()
 {
     spdlog::trace("Camera::Update()");
 
-    embree::Vec3fa front(cos(DegToRad(_yaw)) * cos(DegToRad(_pitch)),
-        sin(DegToRad(_pitch)),
-        sin(DegToRad(_yaw)) * cos(DegToRad(_pitch))
-    );
-
-    front *= -1.0f;
-
-    _front = embree::normalize(front);
-    _right = embree::normalize(embree::cross(_front, _up));
+    front = embree::Vec3fa(
+        cos(DegToRad(yaw)) * cos(DegToRad(pitch)),
+        sin(DegToRad(pitch)),
+        sin(DegToRad(yaw)) * cos(DegToRad(pitch))) * -1.0f;
+    front = embree::normalize(front);
+    right = embree::normalize(embree::cross(front, up));
 }
 
-void Camera::KeyboardCallback(CAMERA_MOVEMENTS direction,
-    float deltaTime)
+void Camera::KeyboardCallback(
+    CameraMovements direction,
+    float delta_time)
 {
-    float velocity(_speed * deltaTime);
+    float velocity(speed * delta_time);
 
-    if (direction == FORWARD)
+    if (direction == kForward)
     {
-        _position += _front * velocity;
+        position += front * velocity;
     }
-    if (direction == BACKWARD)
+    if (direction == kBackward)
     {
-        _position -= _front * velocity;
+        position -= front * velocity;
     }
-    if (direction == LEFT)
+    if (direction == kLeft)
     {
-        _position -= _right * velocity;
+        position -= right * velocity;
     }
-    if (direction == RIGHT)
+    if (direction == kRight)
     {
-        _position += _right * velocity;
+        position += right * velocity;
     }
 }
 
-void Camera::MouseCallback(embree::Vec2fa mouseOffset)
+void Camera::MouseCallback(
+    embree::Vec2fa mouse_offset)
 {
-    mouseOffset *= _sensitivity;
+    mouse_offset *= sensitivity;
 
-    _yaw += mouseOffset.x;
-    _pitch += mouseOffset.y;
+    yaw += mouse_offset.x;
+    pitch += mouse_offset.y;
 
-    if (_pitch > 89.0f)
+    if (pitch > 89.0f)
     {
-        _pitch = 89.0f;
+        pitch = 89.0f;
     }
-    if (_pitch < -89.0f)
+    else if (pitch < -89.0f)
     {
-        _pitch = -89.0f;
+        pitch = -89.0f;
     }
 
     Update();

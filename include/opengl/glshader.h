@@ -14,12 +14,13 @@ class GLShader
     public:
         GLShader();
 
-        void Setup(std::string vertexShaderPath,
-            std::string fragmentShaderPath);
+        void Setup(
+            std::string vertex_shader_path,
+            std::string fragment_shader_path);
         void Use();
 
     private:
-        GLuint programID;
+        GLuint program_id_;
 };
 
 #endif // GLSHADER_H

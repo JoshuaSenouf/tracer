@@ -78,7 +78,7 @@ Features
 * Geometry types:
     * Meshes
         * Triangle-based
-        * Quad-based 
+        * Quad-based
         * **TODO :**  Subdivided
     * **TODO :** Curves
     * **TODO :** Primitives (sphere, cube...)
@@ -106,6 +106,7 @@ Features
 
 * Utility:
     * GUI using ImGui
+    * **TODO :** GUI using Qt5
     * Pause/resume render
     * Front/backbuffer swapping
     * FPS counter
@@ -125,14 +126,16 @@ The versions exposed here are the ones I personally used to develop and build th
 * Included:
     * Arguments Parsing: CLI11 (1.8)
     * Logging: spdlog (1.3.1)
-    * Math Operations: Intel Embree SIMD Library (3.5.2)
+    * Math Operations: Intel Embree SIMD Library (3.12.1)
     * EXR Handling: tinyexr (0.9.5)
+    * GUI System: ImGUI (1.81)
 * Not Included:
-    * GUI System: Qt & QtQuick (5.13)
-    * Scene Description: Pixar USD (19.05)
-    * Ray Tracing Kernels: Intel Embree (3.5.2)
-    * Multithreading: Intel TBB (2019U5)
+    * GUI System: Qt & QtQuick (5.12)
+    * Scene Description: Pixar USD (21.02)
+    * Ray Tracing Kernels: Intel Embree (3.12.1)
+    * Multithreading: Intel TBB (2020.2)
 
 Credits
 ------
 
+* TODO

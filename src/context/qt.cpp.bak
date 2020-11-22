@@ -1,0 +1,50 @@
+#include <spdlog/spdlog.h>
+
+#include "context/qt.h"
+
+
+ContextQt::ContextQt()
+{
+    spdlog::trace("ContextQt::ContextQt()");
+}
+
+ContextQt::ContextQt(CLIArgs cli_args)
+{
+    spdlog::trace("ContextQt::ContextQt(cli_args)");
+
+    args_ = cli_args;
+}
+
+bool ContextQt::Initialize()
+{
+    spdlog::trace("ContextQt::Initialize()");
+
+    // Check if the user provided an existing input file on disk.
+    if (!args_.input.empty() && !std::ifstream(args_.input))
+    {
+        spdlog::error(
+            "ContextQt::Initialize() - "
+            "The provided USD scene file does not exist on disk.");
+
+        return false;
+    }
+
+    globals_ = args_.globals;
+    qt_app = new QApplication(args_.argc, args_.argv);
+    tracer_window = new TracerWindow();
+
+    spdlog::debug(
+        "ContextQt::Initialize() - "
+        "Context has been initialized properly.");
+
+    return true;
+}
+
+bool ContextQt::Execute()
+{
+    spdlog::trace("ContextQt::Execute()");
+
+    tracer_window->show();
+
+    return qt_app->exec();
+}

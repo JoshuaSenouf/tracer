@@ -11,62 +11,78 @@
 #include <pxr/base/gf/vec3f.h>
 
 
-inline float DegToRad(float degAngle)
+inline float DegToRad(
+    float deg_angle)
 {
-    return degAngle * (M_PI / 180.0f);
+    return deg_angle * (M_PI / 180.0f);
 }
 
-inline float RadToDeg(float radAngle)
+inline float RadToDeg(
+    float rad_angle)
 {
-    return radAngle * (180.0f / M_PI);
+    return rad_angle * (180.0f / M_PI);
 }
 
-inline pxr::GfVec3f EmbreeSIMDToUSD(const embree::Vec3fa& embreeVector)
+inline pxr::GfVec3f EmbreeSIMDToUSD(
+    const embree::Vec3fa &embree_vec)
 {
-    return pxr::GfVec3f(embreeVector.x,
-        embreeVector.y,
-        embreeVector.z);
+    return pxr::GfVec3f(
+        embree_vec.x,
+        embree_vec.y,
+        embree_vec.z);
 }
 
-inline pxr::GfVec3f EmbreeToUSD(const embree::Vec3f& embreeVector)
+inline pxr::GfVec3f EmbreeToUSD(
+    const embree::Vec3f &embree_vec)
 {
-    return pxr::GfVec3f(embreeVector.x,
-        embreeVector.y,
-        embreeVector.z);
+    return pxr::GfVec3f(
+        embree_vec.x,
+        embree_vec.y,
+        embree_vec.z);
 }
 
-inline embree::Vec3f USDToEmbree(const pxr::GfVec3f& usdVector)
+inline embree::Vec3f USDToEmbree(
+    const pxr::GfVec3f &usd_vec)
 {
-    return embree::Vec3f(usdVector[0],
-        usdVector[1],
-        usdVector[2]);
+    return embree::Vec3f(
+        usd_vec[0],
+        usd_vec[1],
+        usd_vec[2]);
 }
 
-inline embree::Vec3fa USDToEmbreeSIMD(const pxr::GfVec3f& usdVector)
+inline embree::Vec3fa USDToEmbreeSIMD(
+    const pxr::GfVec3f &usd_vec)
 {
-    return embree::Vec3fa(usdVector[0],
-        usdVector[1],
-        usdVector[2]);
-}
-
-template<typename T, typename A>
-A USDToEmbreeMatrixMultiply(const A& embreeVector, const T& usdMatrix)
-{
-    return A(embreeVector.x * usdMatrix[0][0] +
-            embreeVector.y * usdMatrix[1][0] +
-            embreeVector.z * usdMatrix[2][0],
-        embreeVector.x * usdMatrix[0][1] +
-            embreeVector.y * usdMatrix[1][1] +
-            embreeVector.z * usdMatrix[2][1],
-        embreeVector.x * usdMatrix[0][2] +
-            embreeVector.y * usdMatrix[1][2] +
-            embreeVector.z * usdMatrix[2][2]);
+    return embree::Vec3fa(
+        usd_vec[0],
+        usd_vec[1],
+        usd_vec[2]);
 }
 
 template<typename T, typename A>
-A USDToUSDMatrixMultiply(const A& usdVector, const T& usdMatrix)
+A USDToEmbreeMatrixMultiply(
+    const A &embree_vec,
+    const T &usd_mat)
 {
-    return A(usdMatrix.TransformDir(usdVector));
+    return A(
+        embree_vec.x * usd_mat[0][0] +
+            embree_vec.y * usd_mat[1][0] +
+            embree_vec.z * usd_mat[2][0],
+        embree_vec.x * usd_mat[0][1] +
+            embree_vec.y * usd_mat[1][1] +
+            embree_vec.z * usd_mat[2][1],
+        embree_vec.x * usd_mat[0][2] +
+            embree_vec.y * usd_mat[1][2] +
+            embree_vec.z * usd_mat[2][2]);
+}
+
+template<typename T, typename A>
+A USDToUSDMatrixMultiply(
+    const A &usd_vec,
+    const T &usd_mat)
+{
+    return A(
+        usd_mat.TransformDir(usd_vec));
 }
 
 #endif // MATH_HELPER_H

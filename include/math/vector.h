@@ -18,38 +18,61 @@
 //         float z;
 
 //         Vector3();
-//         Vector3(float tempXYZ);
-//         Vector3(float tempX, float tempY, float tempZ);
-//         Vector3(const pxr::GfVec3f& usdVec3f);
+//         Vector3(
+//             float temp_xyz);
+//         Vector3(
+//             float temp_x,
+//             float temp_y,
+//             float temp_z);
+//         Vector3(
+//             const pxr::GfVec3f &usd_vec3f);
 
 //         float Length() const;
 //         Vector3 Normalize() const;
-//         float Dot(const Vector3 &tempVec3) const;
-//         Vector3 Cross(const Vector3 &tempVec3) const;
-//         Vector3 Lerp(const Vector3& tempVec3, float weightFactor);
+//         float Dot(
+//             const Vector3 &temp_vec3) const;
+//         Vector3 Cross(
+//             const Vector3 &temp_vec3) const;
+//         Vector3 Lerp(
+//             const Vector3 &temp_vec3,
+//             float weight);
 //         void Print();
 
-//         Vector3& operator+=(const Vector3 &tempVec3);
-//         Vector3& operator-=(const Vector3 &tempVec3);
-//         Vector3& operator*=(const Vector3 &tempVec3);
-//         Vector3& operator*=(float multFactor);
-//         Vector3& operator/=(const Vector3 &tempVec3);
-//         Vector3& operator/=(float divFactor);
-//         Vector3 operator+(const Vector3 &tempVec3) const;
-//         Vector3 operator+(float addFactor) const;
-//         Vector3 operator-(const Vector3 &tempVec3) const;
-//         Vector3 operator-(float subFactor) const;
+//         Vector3& operator+=(
+//             const Vector3 &temp_vec3);
+//         Vector3& operator-=(
+//             const Vector3 &temp_vec3);
+//         Vector3& operator*=(
+//             const Vector3 &temp_vec3);
+//         Vector3& operator*=(
+//             float factor);
+//         Vector3& operator/=(
+//             const Vector3 &temp_vec3);
+//         Vector3& operator/=(
+//             float factor);
+//         Vector3 operator+(
+//             const Vector3 &temp_vec3) const;
+//         Vector3 operator+(
+//             float factor) const;
+//         Vector3 operator-(
+//             const Vector3 &temp_vec3) const;
+//         Vector3 operator-(
+//             float factor) const;
 //         Vector3 operator-() const;
-//         Vector3 operator*(const Vector3 &tempVec3) const;
-//         Vector3 operator*(float multFactor) const;
-//         Vector3 operator/(const Vector3 &tempVec3) const;
-//         Vector3 operator/(float divFactor) const;
-//         bool operator==(const Vector3 &tempVec3) const;
-//         bool operator!=(const Vector3 &tempVec3) const;
-//         bool operator<(const Vector3 &tempVec3) const;
-
-//     private:
-
+//         Vector3 operator*(
+//             const Vector3 &temp_vec3) const;
+//         Vector3 operator*(
+//             float factor) const;
+//         Vector3 operator/(
+//             const Vector3 &temp_vec3) const;
+//         Vector3 operator/(
+//             float factor) const;
+//         bool operator==(
+//             const Vector3 &temp_vec3) const;
+//         bool operator!=(
+//             const Vector3 &temp_vec3) const;
+//         bool operator<(
+//             const Vector3 &temp_vec3) const;
 // };
 
 
@@ -60,38 +83,59 @@
 //         float y;
 
 //         Vector2();
-//         Vector2(float tempXY);
-//         Vector2(float tempX, float tempY);
-//         Vector2(const pxr::GfVec2f& usdVec2f);
+//         Vector2(
+//             float temp_xy);
+//         Vector2(
+//             float temp_x, float temp_y);
+//         Vector2(
+//             const pxr::GfVec2f &usd_vec2f);
 
 //         float Length() const;
 //         Vector2 Normalize() const;
-//         float Dot(const Vector2 &tempVec2) const;
+//         float Dot(
+//             const Vector2 &temp_vec2) const;
 //         void Print();
 
-//         Vector2& operator+=(const Vector2 &tempVec2);
-//         Vector2& operator-=(const Vector2 &tempVec2);
-//         Vector2& operator*=(const Vector2 &tempVec2);
-//         Vector2& operator*=(float multFactor);
-//         Vector2& operator/=(const Vector2 &tempVec2);
-//         Vector2& operator/=(float divFactor);
-//         Vector2 operator+(const Vector2 &tempVec2) const;
-//         Vector2 operator+(float addFactor) const;
-//         Vector2 operator-(const Vector2 &tempVec2) const;
-//         Vector2 operator-(float subFactor) const;
+//         Vector2& operator+=(
+//             const Vector2 &temp_vec2);
+//         Vector2& operator-=(
+//             const Vector2 &temp_vec2);
+//         Vector2& operator*=(
+//             const Vector2 &temp_vec2);
+//         Vector2& operator*=(
+//             float factor);
+//         Vector2& operator/=(
+//             const Vector2 &temp_vec2);
+//         Vector2& operator/=(
+//             float factor);
+//         Vector2 operator+(
+//             const Vector2 &temp_vec2) const;
+//         Vector2 operator+(
+//             float factor) const;
+//         Vector2 operator-(
+//             const Vector2 &temp_vec2) const;
+//         Vector2 operator-(
+//             float factor) const;
 //         Vector2 operator-() const;
-//         Vector2 operator*(const Vector2 &tempVec2) const;
-//         Vector2 operator*(float multFactor) const;
-//         Vector2 operator/(const Vector2 &tempVec2) const;
-//         Vector2 operator/(float divFactor) const;
-//         bool operator==(const Vector2 &tempVec2) const;
-//         bool operator!=(const Vector2 &tempVec2) const;
-
-//     private:
-
+//         Vector2 operator*(
+//             const Vector2 &temp_vec2) const;
+//         Vector2 operator*(
+//             float factor) const;
+//         Vector2 operator/(
+//             const Vector2 &temp_vec2) const;
+//         Vector2 operator/(
+//             float factor) const;
+//         bool operator==(
+//             const Vector2 &temp_vec2) const;
+//         bool operator!=(
+//             const Vector2 &temp_vec2) const;
 // };
 
-// std::ostream& operator<<(std::ostream &os, const Vector3 &tempVec3);
-// std::ostream& operator<<(std::ostream &os, const Vector2 &tempVec2);
+// std::ostream& operator<<(
+//     std::ostream &stream,
+//     const Vector3 &temp_vec3);
+// std::ostream& operator<<(
+//     std::ostream &stream,
+//     const Vector2 &temp_vec2);
 
 // #endif // VECTOR_H

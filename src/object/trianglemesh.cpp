@@ -1,6 +1,6 @@
 #include <spdlog/spdlog.h>
 
-#include "trianglemesh.h"
+#include "object/trianglemesh.h"
 
 
 TriangleMesh::TriangleMesh()
@@ -8,39 +8,43 @@ TriangleMesh::TriangleMesh()
     spdlog::trace("TriangleMesh::TriangleMesh()");
 }
 
-TriangleMesh::TriangleMesh(const pxr::UsdPrim& prim,
-    const pxr::UsdGeomMesh& usdGeom,
-    const pxr::VtArray<pxr::GfVec3f>& points,
-    const pxr::VtArray<int>& indices)
+TriangleMesh::TriangleMesh(
+    const pxr::UsdPrim &prim,
+    const pxr::UsdGeomMesh &usd_geom,
+    const pxr::VtArray<pxr::GfVec3f> &points,
+    const pxr::VtArray<int> &indices)
 {
-    _prim = prim;
-    _usdGeom = usdGeom;
-    _points = points;
-    _indices = indices;
+    this->prim = prim;
+    this->usd_geom = usd_geom;
+    this->points = points;
+    this->indices = indices;
 }
 
-bool TriangleMesh::CreatePrototype(const RTCDevice& device)
+bool TriangleMesh::CreatePrototype(
+    const RTCDevice &device)
 {
-    _scene = rtcNewScene(device);
-    _geom = rtcNewGeometry(device, RTC_GEOMETRY_TYPE_TRIANGLE);
-    _geomID = rtcAttachGeometry(_scene, _geom);
+    scene = rtcNewScene(device);
+    geom = rtcNewGeometry(device, RTC_GEOMETRY_TYPE_TRIANGLE);
+    geom_id = rtcAttachGeometry(scene, geom);
 
-    rtcSetSharedGeometryBuffer(_geom,
+    rtcSetSharedGeometryBuffer(
+        geom,
         RTC_BUFFER_TYPE_VERTEX,
         0,
         RTC_FORMAT_FLOAT3,
-        _points.cdata(),
+        points.cdata(),
         0,
         sizeof(pxr::GfVec3f),
-        _points.size());
-    rtcSetSharedGeometryBuffer(_geom,
+        points.size());
+    rtcSetSharedGeometryBuffer(
+        geom,
         RTC_BUFFER_TYPE_INDEX,
         0,
         RTC_FORMAT_UINT3,
-        _indices.cdata(),
+        indices.cdata(),
         0,
         sizeof(int) * 3,
-        _indices.size() / 3);
+        indices.size() / 3);
 
     return true;
 }
@@ -49,34 +53,38 @@ bool TriangleMesh::UpdatePrototype()
 {
     pxr::VtArray<pxr::GfVec3f> points;
     pxr::VtArray<int> indices;
-    pxr::VtArray<int> indicesCounts;
+    pxr::VtArray<int> indices_counts;
 
-    _usdGeom.GetPointsAttr().Get(&points);
-    _usdGeom.GetFaceVertexIndicesAttr().Get(&indices);
-    _usdGeom.GetFaceVertexCountsAttr().Get(&indicesCounts);
+    usd_geom.GetPointsAttr().Get(&points);
+    usd_geom.GetFaceVertexIndicesAttr().Get(&indices);
+    usd_geom.GetFaceVertexCountsAttr().Get(&indices_counts);
 
-    bool isTriangleMesh((static_cast<float>(indices.size()) /
-        static_cast<float>(indicesCounts.size()) == 3.0f) ? true : false);
+    bool is_triangle_mesh(
+        (static_cast<float>(indices.size()) / static_cast<float>(indices_counts.size()) == 3.0f) ? true : false);
 
-    if (isTriangleMesh)
+    if (is_triangle_mesh)
     {
-        if (_points != points)
+        if (this->points != points)
         {
-            _points = points;
-            const pxr::GfVec3f* pointsData((pxr::GfVec3f*)rtcGetGeometryBufferData(_geom,
-                RTC_BUFFER_TYPE_VERTEX,
-                0));
+            this->points = points;
+            const pxr::GfVec3f* points_data(
+                (pxr::GfVec3f*)rtcGetGeometryBufferData(
+                    geom,
+                    RTC_BUFFER_TYPE_VERTEX,
+                    0));
 
-            pointsData = _points.cdata();
+            points_data = this->points.cdata();
         }
-        if (_indices != indices)
+        if (this->indices != indices)
         {
-            _indices = indices;
-            const int* indicesData((int*)rtcGetGeometryBufferData(_geom,
-                RTC_BUFFER_TYPE_INDEX,
-                0));
+            this->indices = indices;
+            const int* indices_data(
+                (int*)rtcGetGeometryBufferData(
+                    geom,
+                    RTC_BUFFER_TYPE_INDEX,
+                    0));
 
-            indicesData = _indices.cdata();
+            indices_data = this->indices.cdata();
         }
     }
     else

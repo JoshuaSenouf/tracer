@@ -4,15 +4,14 @@
 #include <string>
 
 
-struct Material
+class Material
 {
-    Material();
+    public:
+        Material();
 
-    virtual bool Evaluate() = 0;
-    virtual bool Sample() = 0;
-    virtual bool Pdf() = 0;
-
-    std::string _name;
+        virtual bool Evaluate() = 0;
+        virtual bool Sample() = 0;
+        virtual bool Pdf() = 0;
 };
 
 #endif // MATERIAL_H

@@ -4,45 +4,57 @@
 #include <embree3/common/math/vec3.h>
 
 
-inline float Clamp(float colorChannel)
+inline float Clamp(
+    float color_channel,
+    float min = 0.0f,
+    float max = 1.0f)
 {
-    return colorChannel < 0.0f ? 0.0f : colorChannel > 1.0f ? 1.0f : colorChannel;
+    return (color_channel < min ? min : (color_channel > max ? max : color_channel));
 }
 
-inline embree::Vec3fa Clamp(const embree::Vec3fa &color)
+inline embree::Vec3fa Clamp(
+    const embree::Vec3fa &color)
 {
-    return embree::Vec3fa(Clamp(color.x),
+    return embree::Vec3fa(
+        Clamp(color.x),
         Clamp(color.y),
         Clamp(color.z));
 }
 
-inline float ToSRGB(float colorChannel)
+inline float LinearToSRGB(
+    float color_channel)
 {
-    return std::pow(colorChannel, 1.0f / 2.2f);
+    return std::pow(color_channel, 1.0f / 2.2f);
 }
 
-inline embree::Vec3fa ToSRGB(const embree::Vec3fa &color)
+inline embree::Vec3fa LinearToSRGB(
+    const embree::Vec3fa &color)
 {
-    return embree::Vec3fa(ToSRGB(color.x),
-        ToSRGB(color.y),
-        ToSRGB(color.z));
+    return embree::Vec3fa(
+        LinearToSRGB(color.x),
+        LinearToSRGB(color.y),
+        LinearToSRGB(color.z));
 }
 
-inline float ToLinear(float colorChannel)
+inline float SRGBToLinear(
+    float color_channel)
 {
-    return std::pow(colorChannel, 2.2f);
+    return std::pow(color_channel, 2.2f);
 }
 
-inline embree::Vec3fa ToLinear(const embree::Vec3fa &color)
+inline embree::Vec3fa SRGBToLinear(
+    const embree::Vec3fa &color)
 {
-    return embree::Vec3fa(ToLinear(color.x),
-        ToLinear(color.y),
-        ToLinear(color.z));
+    return embree::Vec3fa(
+        SRGBToLinear(color.x),
+        SRGBToLinear(color.y),
+        SRGBToLinear(color.z));
 }
 
-inline int ToRGB(float colorChannel)
+inline int ToRGB(
+    float color_channel)
 {
-    return static_cast<int>(Clamp(colorChannel) * 255);
+    return static_cast<int>(Clamp(color_channel) * 255);
 }
 
 #endif // COLOR_HELPER_H

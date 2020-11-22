@@ -10,13 +10,23 @@ struct Buffer
 {
     Buffer();
 
-    void Init(int width,
+    void Initialize(
+        int width,
         int height);
-    void Clean(int width,
+    void Clean();
+    void Clean(
+        int width,
         int height);
-    void Swap(Buffer& buffer);
+    void Swap(
+        Buffer &buffer);
+    void ToPPM(
+        const std::string &filename);
+    void ToEXR(
+        const std::string &filename);
 
-    std::vector<embree::Vec3f> _data;
+    int width;
+    int height;
+    std::vector<embree::Vec3f> data;
 };
 
 #endif // BUFFER_H

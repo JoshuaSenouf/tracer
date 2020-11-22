@@ -1,4 +1,4 @@
-#include "subdivmesh.h"
+#include "object/subdivmesh.h"
 
 
 SubdivMesh::SubdivMesh()

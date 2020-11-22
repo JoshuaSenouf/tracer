@@ -1,17 +1,19 @@
 #ifndef DEBUG_H
 #define DEBUG_H
 
-#include "integrator.h"
+#include "integrator/integrator.h"
 
 
-struct DebugIntegrator : public Integrator
+class DebugIntegrator : public Integrator
 {
-    DebugIntegrator();
+    public:
+        DebugIntegrator();
 
-    virtual embree::Vec3f GetPixelColor(Ray& ray,
-        PixelSample& sample,
-        SceneManager &scene,
-        const RenderGlobals& globals) override;
+        virtual embree::Vec3f GetPixelColor(
+            Ray &ray,
+            PixelSample &pixel_sample,
+            SceneManager &scene_manager,
+            const RenderGlobals &globals) override;
 };
 
 #endif // DEBUG_H

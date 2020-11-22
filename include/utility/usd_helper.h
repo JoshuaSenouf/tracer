@@ -26,174 +26,179 @@
 // #include <pxr/imaging/glf/simpleLight.h>
 
 
-inline void GetPrimFromType(const std::string& primType,
-    const pxr::UsdStageRefPtr& stage,
-    const pxr::SdfPath& primPath,
-    std::vector<pxr::UsdPrim>& primVector)
+inline void GetPrimsFromType(const std::string &prim_type,
+    const pxr::UsdStageRefPtr &stage,
+    const pxr::SdfPath &prim_path,
+    std::vector<pxr::UsdPrim> &prim_vector)
 {
-    pxr::UsdPrim basePrim;
-    basePrim = stage->GetPrimAtPath(primPath);
+    pxr::UsdPrim base_prim;
+    base_prim = stage->GetPrimAtPath(prim_path);
 
-    for(const pxr::UsdPrim& prim: basePrim.GetChildren())
+    for(const pxr::UsdPrim &prim: base_prim.GetChildren())
     {
-        if (prim.GetTypeName() == primType)
+        if (prim.GetTypeName() == prim_type)
         {
-            primVector.push_back(prim);
+            prim_vector.push_back(prim);
         }
 
         if (prim.GetChildren())
         {
-            GetPrimFromType(primType, stage, prim.GetPath(), primVector);
+            GetPrimsFromType(prim_type, stage, prim.GetPath(), prim_vector);
         }
     }
 }
 
 // /* Reimplementation of some USD's Hd API functions to triangulate/quadriangulate meshes,
 //     so they can be used outside of the Hd API. */
-// inline bool DoFanTriangulation(pxr::GfVec3i& triangulatedIndices,
-//     const pxr::VtArray<int>& meshVertexIndices,
-//     int meshVertexIndicesOffset,
-//     int meshVertexIndicesIdx,
-//     int meshIndicesCount,
-//     bool flipWindingOrder)
+// inline bool DoFanTriangulation(
+//     pxr::GfVec3i &triangulated_indices,
+//     const pxr::VtArray<int> &mesh_vertex_indices,
+//     int mesh_vertex_indices_offset,
+//     int mesh_vertex_indices_idx,
+//     int mesh_indices_count,
+//     bool flip_winding_order)
 // {
 //     // We check the topology.
-//     if (meshVertexIndicesOffset + meshVertexIndicesIdx + 2 >= meshIndicesCount)
+//     if (mesh_vertex_indices_offset + mesh_vertex_indices_idx + 2 >= mesh_indices_count)
 //     {
-//         triangulatedIndices = pxr::GfVec3i(0, 0, 0);
+//         triangulated_indices = pxr::GfVec3i(0, 0, 0);
 
 //         return false;
 //     }
 
-//     if (flipWindingOrder)
+//     if (flip_winding_order)
 //     {
-//         triangulatedIndices = pxr::GfVec3i(meshVertexIndices[meshVertexIndicesOffset],
-//         meshVertexIndices[meshVertexIndicesOffset + meshVertexIndicesIdx + 2],
-//         meshVertexIndices[meshVertexIndicesOffset + meshVertexIndicesIdx + 1]);
+//         triangulated_indices = pxr::GfVec3i(mesh_vertex_indices[mesh_vertex_indices_offset],
+//         mesh_vertex_indices[mesh_vertex_indices_offset + mesh_vertex_indices_idx + 2],
+//         mesh_vertex_indices[mesh_vertex_indices_offset + mesh_vertex_indices_idx + 1]);
 //     }
 //     else
 //     {
-//         triangulatedIndices = pxr::GfVec3i(meshVertexIndices[meshVertexIndicesOffset],
-//         meshVertexIndices[meshVertexIndicesOffset + meshVertexIndicesIdx + 1],
-//         meshVertexIndices[meshVertexIndicesOffset + meshVertexIndicesIdx + 2]);
+//         triangulated_indices = pxr::GfVec3i(mesh_vertex_indices[mesh_vertex_indices_offset],
+//         mesh_vertex_indices[mesh_vertex_indices_offset + mesh_vertex_indices_idx + 1],
+//         mesh_vertex_indices[mesh_vertex_indices_offset + mesh_vertex_indices_idx + 2]);
 //     }
 
 //     return true;
 // }
 
-// inline pxr::VtVec3iArray TriangulateMeshIndices(pxr::VtArray<int>& meshVertexCounts,
-//     const pxr::VtArray<int>& meshVertexIndices,
-//     const pxr::VtArray<int>& meshHoleIndices,
-//     const pxr::TfToken& meshOrientation)
+// inline pxr::VtVec3iArray TriangulateMeshIndices(
+//     pxr::VtArray<int> &mesh_vertex_counts,
+//     const pxr::VtArray<int> &mesh_vertex_indices,
+//     const pxr::VtArray<int> &mesh_hole_indices,
+//     const pxr::TfToken &mesh_orientation)
 // {
-//     pxr::VtVec3iArray meshTriangulatedIndices;
+//     pxr::VtVec3iArray mesh_triangulated_indices;
 
-//     int meshFacesCount = meshVertexCounts.size();
-//     int meshIndicesCount = meshVertexIndices.size();
-//     int meshHoleIndicesCount = meshHoleIndices.size();
-//     int meshTrianglesCount = 0;
-//     int meshHoleIdx = 0;
-//     bool flipWindingOrder = (meshOrientation != pxr::TfToken("rightHanded"));
-//     bool invalidTopology = false;
+//     int mesh_faces_count = mesh_vertex_counts.size();
+//     int mesh_indices_count = mesh_vertex_indices.size();
+//     int mesh_hole_indices_count = mesh_hole_indices.size();
+//     int mesh_triangles_count = 0;
+//     int mesh_hole_idx = 0;
+//     bool flip_winding_order = (mesh_orientation != pxr::TfToken("rightHanded"));
+//     bool invalid_topology = false;
 
-//     for (int faceIdx = 0; faceIdx < meshFacesCount; ++faceIdx)
+//     for (int face_idx = 0; face_idx < mesh_faces_count; ++face_idx)
 //     {
-//         int trianglesPerFace = meshVertexCounts[faceIdx] - 2;
+//         int triangles_per_face = mesh_vertex_counts[face_idx] - 2;
 
 //         // We skip the broken faces
-//         if (trianglesPerFace < 1)
+//         if (triangles_per_face < 1)
 //         {
-//             invalidTopology = true;
+//             invalid_topology = true;
 //         }
 //         // We skip the hole faces
-//         else if (meshHoleIdx < meshHoleIndicesCount && meshHoleIndices[meshHoleIdx] == faceIdx)
+//         else if (mesh_hole_idx < mesh_hole_indices_count & &mesh_hole_indices[mesh_hole_idx] == face_idx)
 //         {
-//             ++meshHoleIdx;
+//             ++mesh_hole_idx;
 //         }
 //         else
 //         {
-//             meshTrianglesCount += trianglesPerFace;
+//             mesh_triangles_count += triangles_per_face;
 //         }
 //     }
 
-//     if (invalidTopology)
+//     if (invalid_topology)
 //     {
 //         std::cout << std::string("WARNING - Broken faces have been found.") << std::endl;
-//         invalidTopology = false;
+//         invalid_topology = false;
 //     }
 
-//     meshTriangulatedIndices.resize(meshTrianglesCount);
-//     meshHoleIdx = 0;
+//     mesh_triangulated_indices.resize(mesh_triangles_count);
+//     mesh_hole_idx = 0;
 
-//     for (int faceIdx = 0, triangleFaceIdx = 0, faceVertexIdx = 0; faceIdx < meshFacesCount; ++faceIdx)
+//     for (int face_idx = 0, triangle_face_idx = 0, face_vertex_idx = 0; face_idx < mesh_faces_count; ++face_idx)
 //     {
-//         int faceVertexCount = meshVertexCounts[faceIdx];
+//         int face_vertex_count = mesh_vertex_counts[face_idx];
 
-//         if (faceVertexCount < 3)
+//         if (face_vertex_count < 3)
 //         {
 //             // We skip the invalid triangle faces.
 //         }
-//         else if (meshHoleIdx < meshHoleIndicesCount && meshHoleIndices[meshHoleIdx] == faceIdx)
+//         else if (mesh_hole_idx < mesh_hole_indices_count & &mesh_hole_indices[mesh_hole_idx] == face_idx)
 //         {
 //             // We skip the hole faces.
-//             ++meshHoleIdx;
+//             ++mesh_hole_idx;
 //         }
 //         else
 //         {
-//             for (int faceVertexCountIdx = 0; faceVertexCountIdx < faceVertexCount - 2; ++faceVertexCountIdx)
+//             for (int face_vertex_count_idx = 0; face_vertex_count_idx < face_vertex_count - 2; ++face_vertex_count_idx)
 //             {
-//                 meshTriangulatedIndices[triangleFaceIdx] = pxr::GfVec3i(0, 0, 0);
+//                 mesh_triangulated_indices[triangle_face_idx] = pxr::GfVec3i(0, 0, 0);
 
-//                 if (!DoFanTriangulation(meshTriangulatedIndices[triangleFaceIdx],
-//                     meshVertexIndices,
-//                     faceVertexIdx,
-//                     faceVertexCountIdx,
-//                     meshIndicesCount,
-//                     flipWindingOrder))
+//                 if (!DoFanTriangulation(
+//                     mesh_triangulated_indices[triangle_face_idx],
+//                     mesh_vertex_indices,
+//                     face_vertex_idx,
+//                     face_vertex_count_idx,
+//                     mesh_indices_count,
+//                     flip_winding_order))
 //                 {
-//                     invalidTopology = true;
+//                     invalid_topology = true;
 //                 }
 
-//                 if (faceVertexCount > 3)
+//                 if (face_vertex_count > 3)
 //                 {
-//                     if (faceVertexCountIdx == 0)
+//                     if (face_vertex_count_idx == 0)
 //                     {
-//                         if (flipWindingOrder)
+//                         if (flip_winding_order)
 //                         {
-//                             pxr::GfVec3i &triangulatedIndices = meshTriangulatedIndices[triangleFaceIdx];
+//                             pxr::GfVec3i &triangulated_indices = mesh_triangulated_indices[triangle_face_idx];
 
-//                             triangulatedIndices.Set(triangulatedIndices[1],
-//                                 triangulatedIndices[2],
-//                                 triangulatedIndices[0]);
+//                             triangulated_indices.Set(
+//                                 triangulated_indices[1],
+//                                 triangulated_indices[2],
+//                                 triangulated_indices[0]);
 //                         }
 //                     }
-//                     else if (faceVertexCountIdx == faceVertexCount - 3)
+//                     else if (face_vertex_count_idx == face_vertex_count - 3)
 //                     {
-//                         if (flipWindingOrder)
+//                         if (flip_winding_order)
 //                         {
-//                             pxr::GfVec3i &triangulatedIndices = meshTriangulatedIndices[triangleFaceIdx];
+//                             pxr::GfVec3i &triangulated_indices = mesh_triangulated_indices[triangle_face_idx];
 
-//                             triangulatedIndices.Set(triangulatedIndices[2],
-//                                 triangulatedIndices[0],
-//                                 triangulatedIndices[1]);
+//                             triangulated_indices.Set(
+//                                 triangulated_indices[2],
+//                                 triangulated_indices[0],
+//                                 triangulated_indices[1]);
 //                         }
 //                     }
 //                 }
 
-//                 ++triangleFaceIdx;
+//                 ++triangle_face_idx;
 //             }
 //         }
 
-//         faceVertexIdx += faceVertexCount;
+//         face_vertex_idx += face_vertex_count;
 //     }
 
-//     if (invalidTopology)
+//     if (invalid_topology)
 //     {
 //         std::cout << std::string("WARNING - An inconsistency between the mesh faceVertexCounts and faceVertexIndices "
 //             "has been found.") << std::endl;
 //     }
 
-//     return meshTriangulatedIndices;
+//     return mesh_triangulated_indices;
 // }
 
 #endif // USD_HELPER_H

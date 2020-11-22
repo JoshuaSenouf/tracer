@@ -1,16 +1,17 @@
 #ifndef DISNEY_H
 #define DISNEY_H
 
-#include "material.h"
+#include "material/material.h"
 
 
-struct Disney : public Material
+class Disney : public Material
 {
-    Disney();
+    public:
+        Disney();
 
-    virtual bool Evaluate() override;
-    virtual bool Sample() override;
-    virtual bool Pdf() override;
+        virtual bool Evaluate() override;
+        virtual bool Sample() override;
+        virtual bool Pdf() override;
 };
 
 #endif // DISNEY_H
