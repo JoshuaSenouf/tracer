@@ -1,6 +1,0 @@
-#ifndef EMBREE_HELPER_H
-#define EMBREE_HELPER_H
-
-
-
-#endif // EMBREE_HELPER_H

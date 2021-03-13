@@ -121,19 +121,24 @@ Download the source, build the project structure using CMake 3.x, open the proje
 Dependencies
 ------
 
-The versions exposed here are the ones I personally used to develop and build the project in its current state. Depending on the projects, different versions, older as newer, would certainly work.
+The following set of dependencies, when applicable, is more or less based on the VFX Reference Platform 2021.
+It should be noted that the versions exposed here are the ones I personally used to develop and build the project in its current state. Depending on the projects, different versions, older as newer, would certainly work.
 
 * Included:
-    * Arguments Parsing: CLI11 (1.8)
-    * Logging: spdlog (1.3.1)
-    * Math Operations: Intel Embree SIMD Library (3.12.1)
+    * Arguments Parsing: CLI11 (1.9.1)
+    * Logging: spdlog (1.8.1)
+    * Math Operations: Intel Common Library (3.5.2)
+        * **TODO :** Needs to update the codebase to make use of the appropriate 3.12.1 version.
     * EXR Handling: tinyexr (0.9.5)
-    * GUI System: ImGUI (1.81)
+    * OpenGL Functions Loader: GLAD (0.1.34)
+    * GUI System: ImGui (1.81)
 * Not Included:
-    * GUI System: Qt & QtQuick (5.12)
-    * Scene Description: Pixar USD (21.02)
-    * Ray Tracing Kernels: Intel Embree (3.12.1)
     * Multithreading: Intel TBB (2020.2)
+    * Ray Tracing Kernels: Intel Embree (3.12.1)
+    * Boost (1.73.0)
+    * Scene Description: Pixar USD (21.02)
+        * Core library only, Hydra/Imaging/Python support unnecessary.
+    * GUI System: Qt & QtQuick (5.15)
 
 Credits
 ------

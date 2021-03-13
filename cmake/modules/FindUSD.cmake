@@ -68,7 +68,7 @@ set (_usd_components
     work
 )
 
-set (USD_LIBRARIES "")
+set (USD_LIBRARIES "" CACHE STRING "")
 
 # Trying to find all the libraries.
 foreach (COMPONENT ${_usd_components})

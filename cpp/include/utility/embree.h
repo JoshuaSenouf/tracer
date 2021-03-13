@@ -1,0 +1,6 @@
+#ifndef EMBREE_UTILITY_H
+#define EMBREE_UTILITY_H
+
+
+
+#endif // EMBREE_UTILITY_H
