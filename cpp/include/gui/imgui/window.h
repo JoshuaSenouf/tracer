@@ -1,5 +1,5 @@
-#ifndef WINDOW_H
-#define WINDOW_H
+#ifndef WINDOWIMGUI_H
+#define WINDOWIMGUI_H
 
 #include <iostream>
 #include <fstream>
@@ -13,53 +13,67 @@
 #include <GLFW/glfw3.h>
 
 #include <imgui.h>
-#include <imgui_impl_glfw_gl3.h>
+#include <imgui_impl_glfw.h>
+#include <imgui_impl_opengl3.h>
 
 #include "camera/camera.h"
+#include "opengl/glshader.h"
 #include "object/buffer.h"
 #include "scene/scenemanager.h"
 #include "utility/render.h"
 // #include "rendermanager.h"
 
 
-class Window
+class WindowImGui
 {
     public:
-        Window();
+        WindowImGui();
 
         int RenderWindow();
         void ResetRenderer();
         void SetupGUI();
         void RenderGUI();
         void StopGUI();
-        void RenderConfigWindow(bool &guiOpen);
-        void ProfilingWindow(bool& guiOpen);
-        void AboutWindow(bool &guiOpen);
-        void KeyboardCallback(ImGuiIO &guiIO);
-        void MouseCallback(ImGuiIO &guiIO,
-            embree::Vec2fa mousePos);
+        void RenderConfigWindow(bool &gui_open);
+        void ProfilingWindow(bool& gui_open);
+        void AboutWindow(bool &gui_open);
+        void KeyboardCallback(ImGuiIO &gui_io);
+        void MouseCallback(ImGuiIO &gui_io,
+            embree::Vec2fa mouse_pos);
 
+        void RenderToScreenTexture(int width,
+            int height,
+            Buffer& buffer);
+        void SetupScreenQuad(int width,
+            int height);
+        void CleanScreenQuad();
+        void DrawScreenQuad();
     private:
-        bool firstMouse = true;
-        bool renderReset = false;
-        bool renderConfigState = false;
-        bool profilingState = true;
-        bool aboutState = false;
-        bool pauseState = false;
-        bool swapState = false;
+        bool first_mouse = true;
+        bool render_reset = false;
+        bool state_render_config = false;
+        bool state_profiling = true;
+        bool state_about = false;
+        bool state_pause = false;
+        bool state_swap = false;
         int iterations = 0;
-        float deltaTime = 0.0f;
-        float lastFrame = 0.0f;
-        embree::Vec2fa prevMousePos = embree::Vec2fa(globals.width / 2.0f, globals.height / 2.0f);
+        float delta_time = 0.0f;
+        float last_frame = 0.0f;
+        embree::Vec2fa previous_mouse_pos = embree::Vec2fa(globals.width / 2.0f, globals.height / 2.0f);
 
-        Buffer frontBuffer;
-        Buffer backBuffer;
+        Buffer buffer_front;
+        Buffer buffer_back;
         Camera camera;
         GLFWwindow* window;
         SceneManager scene;
-        RenderManager renderManager;
+        // RenderManager renderManager;
         RenderGlobals globals;
+
+        GLuint screen_quad_vao;
+        GLuint screen_quad_vbo;
+        GLuint screen_texture_id;
+        GLShader screen_quad_shader;
 };
 
 
-#endif // WINDOW_H
+#endif // WINDOWIMGUI_H

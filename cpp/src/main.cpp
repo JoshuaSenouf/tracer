@@ -6,7 +6,7 @@
 #include <spdlog/spdlog.h>
 
 #include "context/cli.h"
-// #include "context/imgui.h"
+#include "context/imgui.h"
 // #include "context/qt.h"
 #include "utility/cli.h"
 
@@ -65,17 +65,17 @@ int main(int argc, char** argv)
 
         context_cli.Execute();
     }
-    // // else if (args.mode == "imgui")
-    // // {
-    // //     ContextImGUI context_imgui(args);
+    else if (args.mode == "imgui")
+    {
+        ContextImGUI context_imgui(args);
 
-    // //     if(!context_imgui.Initialize())
-    // //     {
-    // //         return 0;
-    // //     }
+        if(!context_imgui.Initialize())
+        {
+            return 0;
+        }
 
-    // //     context_imgui.Execute();
-    // // }
+        context_imgui.Execute();
+    }
     // // else
     // // {
     // //     ContextQt context_qt(args);

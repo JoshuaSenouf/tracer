@@ -31,7 +31,7 @@ bool ContextQt::Initialize()
 
     globals_ = args_.globals;
     qt_app = new QApplication(args_.argc, args_.argv);
-    tracer_window = new TracerWindow();
+    window = new TracerWindow();
 
     spdlog::debug(
         "ContextQt::Initialize() - "
@@ -44,7 +44,7 @@ bool ContextQt::Execute()
 {
     spdlog::trace("ContextQt::Execute()");
 
-    tracer_window->show();
+    window->show();
 
     return qt_app->exec();
 }

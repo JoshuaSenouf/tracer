@@ -12,12 +12,12 @@
 #include <QMainWindow>
 
 
-class TracerWindow : public QMainWindow
+class WindowQt : public QMainWindow
 {
     Q_OBJECT
 
     public:
-        TracerWindow(
+        WindowQt(
             QWidget *parent = 0);
 
     private:

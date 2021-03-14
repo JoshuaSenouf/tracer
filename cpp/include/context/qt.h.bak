@@ -23,7 +23,7 @@ struct ContextQt : public Context
 
     private:
         RenderGlobals globals_;
-        TracerWindow *tracer_window;
+        WindowQt *window;
         QApplication *qt_app;
 };
 

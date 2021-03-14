@@ -2,7 +2,7 @@ file(GLOB TRACER_SOURCES
     bsdf/*.cpp
     camera/*.cpp
     context/*.cpp
-    # gui/imgui/*.cpp
+    gui/imgui/*.cpp
     # gui/qt/*.cpp
     integrator/*.cpp
     material/*.cpp
@@ -13,7 +13,6 @@ file(GLOB TRACER_SOURCES
     sampling/*.cpp
     scene/*.cpp
     utility/*.cpp
-    *.cpp
 )
 
 add_executable(

@@ -41,17 +41,10 @@ bool ContextImGUI::Initialize()
         return false;
     }
 
-    // Check if the user provided an output path.
-    if (args_.output.empty())
-    {
-        spdlog::error(
-            "ContextImGUI::Initialize() - "
-            "It is necessary to provide an output path when using the CLI mode.");
 
-        return false;
-    }
 
     globals_ = args_.globals;
+    window = new WindowImGui();
 
     spdlog::debug(
         "ContextImGUI::Initialize() - "
@@ -64,51 +57,53 @@ bool ContextImGUI::Execute()
 {
     spdlog::trace("ContextImGUI::Execute()");
 
-    auto scene_start_time = std::chrono::high_resolution_clock::now();
+    window->RenderWindow();
 
-    // Initializing the necessary data for the renderer_.
-    scene_manager_.LoadScene(args_.input);
+    // auto scene_start_time = std::chrono::high_resolution_clock::now();
 
-    auto scene_end_time = std::chrono::high_resolution_clock::now();
-	std::chrono::duration<float> scene_time = scene_end_time - scene_start_time;
+    // // Initializing the necessary data for the renderer_.
+    // scene_manager_.LoadScene(args_.input);
 
-    spdlog::info(
-        "ContextImGUI::Execute() - "
-        "Scene loaded successfully in " + std::to_string(scene_time.count()) + " seconds.");
+    // auto scene_end_time = std::chrono::high_resolution_clock::now();
+	// std::chrono::duration<float> scene_time = scene_end_time - scene_start_time;
 
-    camera_.Initialize(globals_.width, globals_.height);
-    buffer_.Initialize(globals_.width, globals_.height);
+    // spdlog::info(
+    //     "ContextImGUI::Execute() - "
+    //     "Scene loaded successfully in " + std::to_string(scene_time.count()) + " seconds.");
 
-    spdlog::info(
-        "ContextImGUI::Execute() - "
-        "Rendering the scene...");
+    // camera_.Initialize(globals_.width, globals_.height);
+    // buffer_.Initialize(globals_.width, globals_.height);
 
-    auto render_start_time = std::chrono::high_resolution_clock::now();
+    // spdlog::info(
+    //     "ContextImGUI::Execute() - "
+    //     "Rendering the scene...");
 
-    // Rendering the image as a single iteration.
-    renderer_.Trace(globals_,
-        scene_manager_,
-        camera_,
-        buffer_,
-        1);
+    // auto render_start_time = std::chrono::high_resolution_clock::now();
 
-    auto render_end_time = std::chrono::high_resolution_clock::now();
-	std::chrono::duration<float> render_time = render_end_time - render_start_time;
+    // // Rendering the image as a single iteration.
+    // renderer_.Trace(globals_,
+    //     scene_manager_,
+    //     camera_,
+    //     buffer_,
+    //     1);
 
-    spdlog::info(
-        "ContextImGUI::Execute() - "
-        "Scene rendered successfully in " + std::to_string(render_time.count()) + " seconds.");
+    // auto render_end_time = std::chrono::high_resolution_clock::now();
+	// std::chrono::duration<float> render_time = render_end_time - render_start_time;
 
-    if (args_.format == "exr")
-    {
-        buffer_.ToEXR(
-            args_.output);
-    }
-    else
-    {
-        buffer_.ToPPM(
-            args_.output);
-    }
+    // spdlog::info(
+    //     "ContextImGUI::Execute() - "
+    //     "Scene rendered successfully in " + std::to_string(render_time.count()) + " seconds.");
+
+    // if (args_.format == "exr")
+    // {
+    //     buffer_.ToEXR(
+    //         args_.output);
+    // }
+    // else
+    // {
+    //     buffer_.ToPPM(
+    //         args_.output);
+    // }
 
     spdlog::debug(
         "ContextImGUI::Execute() - "

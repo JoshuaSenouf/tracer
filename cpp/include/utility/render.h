@@ -107,13 +107,4 @@ struct ShadingPoint
     }
 };
 
-// GLfloat
-static const float screen_quad_vertices[] =
-{
-    -1.0f,  1.0f, 0.0f, 0.0f, 1.0f,
-    -1.0f, -1.0f, 0.0f, 0.0f, 0.0f,
-    1.0f,  1.0f, 0.0f, 1.0f, 1.0f,
-    1.0f, -1.0f, 0.0f, 1.0f, 0.0f,
-};
-
 #endif // RENDER_UTILITY_H

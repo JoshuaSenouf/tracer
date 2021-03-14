@@ -4,7 +4,7 @@
 
 
 /// Initialization of the Qt Window.
-TracerWindow::TracerWindow(
+WindowQt::WindowQt(
     QWidget *parent)
     : QMainWindow(parent)
 {
@@ -12,12 +12,12 @@ TracerWindow::TracerWindow(
     InitializeUI();
 
     spdlog::debug(
-        "TracerWindow() - "
+        "WindowQt() - "
         "The Qt window has been successfully initialized.");
 }
 
 /// Call upon each step of the UI and widgets initialization.
-void TracerWindow::InitializeUI()
+void WindowQt::InitializeUI()
 {
     InitializeUICreation();
     InitializeUISetup();
@@ -31,7 +31,7 @@ void TracerWindow::InitializeUI()
 }
 
 /// Create all the necessary Qt related elements, mostly widgets and layouts.
-void TracerWindow::InitializeUICreation()
+void WindowQt::InitializeUICreation()
 {
     // Window
     main_widget = new QWidget();
@@ -43,7 +43,7 @@ void TracerWindow::InitializeUICreation()
     menu_bar_file_exit_action = menu_bar_file_menu->addAction(
         "Exit", this, &QMainWindow::close);
     menu_bar_help_about_action = menu_bar_help_menu->addAction(
-        "About", this, &TracerWindow::ShowAboutWindow);
+        "About", this, &WindowQt::ShowAboutWindow);
 
     // StatusBar
     status_bar = new QStatusBar();
@@ -57,7 +57,7 @@ void TracerWindow::InitializeUICreation()
 }
 
 /// Set up the Qt related elements to ensure their proper behavior for the user.
-void TracerWindow::InitializeUISetup()
+void WindowQt::InitializeUISetup()
 {
     // Window
     main_widget->setObjectName("main_widget");
@@ -79,7 +79,7 @@ void TracerWindow::InitializeUISetup()
 }
 
 /// Connect the Qt related elements to their dedicated slots.
-void TracerWindow::InitializeUIConnects()
+void WindowQt::InitializeUIConnects()
 {
     spdlog::debug(
         "InitializeUIConnects() - "
@@ -87,7 +87,7 @@ void TracerWindow::InitializeUIConnects()
 }
 
 /// Set the settings and values of the Qt related elements.
-void TracerWindow::InitializeUISettings()
+void WindowQt::InitializeUISettings()
 {
     spdlog::debug(
         "InitializeUISettings() - "
@@ -95,7 +95,7 @@ void TracerWindow::InitializeUISettings()
 }
 
 /// Layout the Qt related elements.
-void TracerWindow::InitializeUILayout()
+void WindowQt::InitializeUILayout()
 {
     // MenuBar
     menu_bar->addMenu(menu_bar_file_menu);
@@ -115,7 +115,7 @@ void TracerWindow::InitializeUILayout()
 }
 
 /// Display a simple message box with some general information about the application.
-void TracerWindow::ShowAboutWindow()
+void WindowQt::ShowAboutWindow()
 {
     QMessageBox::information(
         this,
@@ -129,7 +129,7 @@ void TracerWindow::ShowAboutWindow()
 }
 
 /// Overriding the native Qt close event in order to allow us to save the state of the application first.
-void TracerWindow::closeEvent(QCloseEvent *event)
+void WindowQt::closeEvent(QCloseEvent *event)
 {
     event->accept();
 }
