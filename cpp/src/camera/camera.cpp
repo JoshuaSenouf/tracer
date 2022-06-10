@@ -18,10 +18,10 @@ void Camera::Initialize(
 
     // TODO: Hardcoded information for now.
     resolution = embree::Vec2fa(width, height);
-    position = embree::Vec3fa(0, 4, 15);
+    position = embree::Vec3fa(0, 4, 15); // 180 -350 110
     yaw = 90;
-    pitch = 6;
-    fov.x = 45;
+    pitch = 6; //-85
+    fov.x = 45; //140
     aperture_radius = 0;
     focal_distance = 4;
 
