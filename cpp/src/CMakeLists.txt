@@ -3,7 +3,6 @@ file(GLOB TRACER_SOURCES
     camera/*.cpp
     context/*.cpp
     gui/imgui/*.cpp
-    # gui/qt/*.cpp
     integrator/*.cpp
     material/*.cpp
     math/*.cpp
@@ -33,7 +32,7 @@ target_link_libraries(
     ${EMBREE_LIBRARIES}
     ${GLFW_LIBRARIES}
     ${TBB_LIBRARIES}
-    ${USD_LIBRARIES}
+    ${PXR_LIBRARIES}
 )
 
 set_target_properties(

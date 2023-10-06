@@ -21,7 +21,7 @@
 #include "object/buffer.h"
 #include "scene/scenemanager.h"
 #include "utility/render.h"
-// #include "rendermanager.h"
+#include "renderer/renderer.h"
 
 
 class WindowImGui
@@ -66,8 +66,8 @@ class WindowImGui
         Camera camera;
         GLFWwindow* window;
         SceneManager scene;
-        // RenderManager renderManager;
         RenderGlobals globals;
+        TracerRenderer renderer;
 
         GLuint screen_quad_vao;
         GLuint screen_quad_vbo;

@@ -29,6 +29,7 @@ class TracerRenderer
             Buffer &buffer,
             int iterations);
 
+        unsigned int integrator_id = kUDPT;
     private:
         std::vector<std::shared_ptr<Integrator>> integrators_ {
             std::make_shared<UDPTIntegrator>(),

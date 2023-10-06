@@ -20,9 +20,9 @@ int WindowImGui::RenderWindow()
     if (!glfwInit())
         return 1;
 
-    const char* glsl_version = "#version 450";
+    const char* glsl_version = "#version 460";
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 5);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
     glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
 
@@ -62,6 +62,8 @@ int WindowImGui::RenderWindow()
 
     SetupScreenQuad(globals.width, globals.height);
 
+    glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+
     while (!glfwWindowShouldClose(window))
     {
         float current_frame(glfwGetTime());
@@ -92,41 +94,39 @@ int WindowImGui::RenderWindow()
 
             render_reset = true;
         }
-        // if (renderManager.integrator_id != globals.integrator_id)
-        // {
-        //     renderManager.integrator_id = globals.integrator_id;
+        if (renderer.integrator_id != globals.integrator_id)
+        {
+            renderer.integrator_id = globals.integrator_id;
 
-        //     render_reset = true;
-        // }
+            render_reset = true;
+        }
 
         //--------------
         // CPU Rendering
         //--------------
-        // if (!state_pause)
-        // {
+        if (!state_pause)
+        {
             // If anything changed in the camera, scene, settings, etc, we flush the rendered data and reinit them again
-            // if (render_reset)
-            // {
-            //     ResetRenderer();
-            // }
+            if (render_reset)
+            {
+                ResetRenderer();
+            }
 
-            // iterations++;
+            iterations++;
 
             // Progressive rendering
-            // renderManager.Trace(globals,
-            //     scene,
-            //     camera,
-            //     buffer_front,
-            //     iterations);
-            // renderManager.RenderToScreenTexture(globals.width,
-            //     globals.height,
-            //     buffer_front);
-        // }
-
-        // renderManager.DrawScreenQuad();
-        RenderToScreenTexture(globals.width,
+            renderer.Trace(
+                globals,
+                scene,
+                camera,
+                buffer_front,
+                iterations);
+            RenderToScreenTexture(
+                globals.width,
                 globals.height,
                 buffer_front);
+        }
+
         DrawScreenQuad();
 
         //----------------
@@ -136,8 +136,6 @@ int WindowImGui::RenderWindow()
 
         glfwGetFramebufferSize(window, &globals.width, &globals.height);
         glViewport(0, 0, globals.width, globals.height);
-        glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
         glfwSwapBuffers(window);
@@ -279,18 +277,18 @@ void WindowImGui::SetupGUI()
             {
                 if (ImGui::MenuItem("Cup and Saucer"))
                 {
-                    // scene.LoadScene("resources/scenes/usd/cupandsaucer.usdz");
-                    // camera.Initialize(globals.width, globals.height);
+                    scene.LoadScene("resources/scenes/usd/cupandsaucer.usdz");
+                    camera.Initialize(globals.width, globals.height);
 
                     render_reset = true;
                 }
 
                 if (ImGui::MenuItem("Stormtroopers"))
                 {
-                    // scene.LoadScene("resources/scenes/usd/stormtroopers.usdc");
-                    // camera.Initialize(globals.width, globals.height);
+                    scene.LoadScene("resources/scenes/usd/stormtroopers.usdc");
+                    camera.Initialize(globals.width, globals.height);
 
-                    // render_reset = true;
+                    render_reset = true;
                 }
 
                 ImGui::EndMenu();
@@ -341,14 +339,14 @@ void WindowImGui::RenderConfigWindow(bool& gui_open)
     {
         if (ImGui::Button("Save To Back Buffer"))
         {
-            // buffer_back.Clean(globals.width, globals.height);
-            // buffer_back.data = buffer_front.data;
+            buffer_back.Clean(globals.width, globals.height);
+            buffer_back.data = buffer_front.data;
         }
     }
     if (ImGui::Button("Swap Buffers"))
     {
-        // buffer_front.Swap(buffer_back);
-        // renderManager.RenderToScreenTexture(globals.width, globals.height, buffer_front);
+        buffer_front.Swap(buffer_back);
+        RenderToScreenTexture(globals.width, globals.height, buffer_front);
 
         state_swap = !state_swap;
         state_pause = true;
@@ -387,25 +385,25 @@ void WindowImGui::KeyboardCallback(ImGuiIO& gui_io)
     }
     if (gui_io.KeysDown[GLFW_KEY_W])
     {
-        // camera.KeyboardCallback(kForward, delta_time);
+        camera.KeyboardCallback(kForward, delta_time);
 
         render_reset = true;
     }
     if (gui_io.KeysDown[GLFW_KEY_S])
     {
-        // camera.KeyboardCallback(kBackward, delta_time);
+        camera.KeyboardCallback(kBackward, delta_time);
 
         render_reset = true;
     }
     if (gui_io.KeysDown[GLFW_KEY_A])
     {
-        // camera.KeyboardCallback(kLeft, delta_time);
+        camera.KeyboardCallback(kLeft, delta_time);
 
         render_reset = true;
     }
     if (gui_io.KeysDown[GLFW_KEY_D])
     {
-        // camera.KeyboardCallback(kRight, delta_time);
+        camera.KeyboardCallback(kRight, delta_time);
 
         render_reset = true;
     }
@@ -414,11 +412,11 @@ void WindowImGui::KeyboardCallback(ImGuiIO& gui_io)
     {
         if (gui_io.KeysDown[GLFW_KEY_LEFT_CONTROL])
         {
-            // camera.focal_distance = camera.focal_distance + 0.1f;
+            camera.focal_distance = camera.focal_distance + 0.1f;
         }
         else
         {
-            // camera.aperture_radius = camera.aperture_radius + 0.005f;
+            camera.aperture_radius = camera.aperture_radius + 0.005f;
         }
 
         render_reset = true;
@@ -427,11 +425,11 @@ void WindowImGui::KeyboardCallback(ImGuiIO& gui_io)
     {
         if (gui_io.KeysDown[GLFW_KEY_LEFT_CONTROL])
         {
-            // camera.focal_distance = camera.focal_distance - 0.1f;
+            camera.focal_distance = camera.focal_distance - 0.1f;
         }
         else
         {
-            // camera.aperture_radius = camera.aperture_radius - 0.005f;
+            camera.aperture_radius = camera.aperture_radius - 0.005f;
         }
 
         render_reset = true;
@@ -457,7 +455,7 @@ void WindowImGui::MouseCallback(ImGuiIO& gui_io,
         if (mouseOffset != embree::Vec2fa())
 
         {
-            // camera.MouseCallback(mouseOffset);
+            camera.MouseCallback(mouseOffset);
 
             render_reset = true;
         }
@@ -498,7 +496,8 @@ void WindowImGui::SetupScreenQuad(int width,
     glBindVertexArray(0);
 
     // Screen quad shader and texture.
-    screen_quad_shader.Setup("resources/shaders/glsl/screen_quad.vert",
+    screen_quad_shader.Setup(
+        "resources/shaders/glsl/screen_quad.vert",
         "resources/shaders/glsl/screen_quad.frag");
 
     glGenTextures(1, &screen_texture_id);

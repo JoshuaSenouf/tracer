@@ -26,9 +26,9 @@ enum IntegratorIDs {
 struct RenderGlobals
 {
     // The width of the image to render.
-    int width = 800;
+    int width = 1024;
     // The height of the image to render.
-    int height = 600;
+    int height = 768;
     // The maximum ray depth, or number of bounces, the renderer can make use of.
     int depth = 3;
     // Total number of samples per pixel to compute.

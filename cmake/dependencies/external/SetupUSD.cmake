@@ -1,10 +1,9 @@
-set(USD_ROOT $ENV{REZ_USD_ROOT})
+find_package(pxr REQUIRED)
 
-find_package(USD REQUIRED)
-
-include_directories(
-    ${USD_INCLUDE_DIRS}
-)
-
-set(USD_INCLUDE_DIRS "${USD_INCLUDE_DIRS}" CACHE INTERNAL "USD_INCLUDE_DIRS")
-set(USD_LIBRARIES "${USD_LIBRARIES}" CACHE INTERNAL "USD_LIBRARIES")
+if(NOT pxr_FOUND)
+    message(FATAL_ERROR "Could not find USD!")
+else()
+    message(STATUS "Found USD (${PXR_MINOR_VERSION}.${PXR_PATCH_VERSION})!")
+    message(STATUS "    PXR_INCLUDE_DIRS: ${PXR_INCLUDE_DIRS}")
+    message(STATUS "    PXR_LIBRARIES: ${PXR_LIBRARIES}")
+endif()

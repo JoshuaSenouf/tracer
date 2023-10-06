@@ -66,7 +66,7 @@ void TracerRenderer::Trace(
         }
     });
 
-    spdlog::info(
+    spdlog::debug(
         "TracerRenderer::Trace() - "
         "Rendered iteration number " + std::to_string(iterations) + ".");
 }

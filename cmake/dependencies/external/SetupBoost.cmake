@@ -1,10 +1,10 @@
 set(Boost_NO_BOOST_CMAKE ON)
 set(Boost_NO_SYSTEM_PATHS ON)
-set(BOOST_ROOT $ENV{REZ_BOOST_ROOT})
-set(BOOST_INCLUDEDIR ${BOOST_ROOT}/include)
-set(BOOST_LIBRARYDIR ${BOOST_ROOT}/lib)
+set(Boost_ROOT $ENV{REZ_BOOST_ROOT})
+set(BOOST_INCLUDEDIR ${Boost_ROOT}/include)
+set(BOOST_LIBRARYDIR ${Boost_ROOT}/lib)
 
-find_package(Boost 1.73 REQUIRED COMPONENTS
+find_package(Boost 1.80 REQUIRED COMPONENTS
     regex
     system
     filesystem

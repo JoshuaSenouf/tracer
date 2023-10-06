@@ -7,7 +7,6 @@
 
 #include "context/cli.h"
 #include "context/imgui.h"
-// #include "context/qt.h"
 #include "utility/cli.h"
 
 
@@ -19,7 +18,7 @@ int main(int argc, char** argv)
     CLI::App cli{"Tracer CLI"};
 
     // Adding the excepted options to the argument parser.
-    cli.add_option("--mode", args.mode, "Mode, i.e. \"cli\", \"imgui\" or \"qt\". Default is \"cli\"");
+    cli.add_option("--mode", args.mode, "Mode, i.e. \"cli\" or \"imgui\". Default is \"cli\"");
     cli.add_option("--input", args.input, "Input USD scene to render");
     cli.add_option("--output", args.output, "Output path of rendered image");
     cli.add_option("--format", args.format, "Image format used to store the rendered image. "
@@ -76,17 +75,6 @@ int main(int argc, char** argv)
 
         context_imgui.Execute();
     }
-    // // else
-    // // {
-    // //     ContextQt context_qt(args);
-
-    // //     if(!context_qt.Initialize())
-    // //     {
-    // //         return 0;
-    // //     }
-
-    // //     context_qt.Execute();
-    // // }
 
     spdlog::debug("main() - "
         "No error detected. Exiting Tracer...");
