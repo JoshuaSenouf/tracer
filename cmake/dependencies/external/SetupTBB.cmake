@@ -1,8 +1,9 @@
-find_package(TBB REQUIRED)
+find_package(TBB 2020 REQUIRED)
 
-include_directories(
-    ${TBB_INCLUDE_DIRS}
-)
-
-set(TBB_INCLUDE_DIRS "${TBB_INCLUDE_DIRS}" CACHE INTERNAL "TBB_INCLUDE_DIRS")
-set(TBB_LIBRARIES "${TBB_LIBRARIES}" CACHE INTERNAL "TBB_LIBRARIES")
+if(NOT TBB_FOUND)
+    message(FATAL_ERROR "Could not find TBB!")
+else()
+    message(STATUS "Found TBB (${TBB_VERSION})!")
+    message(STATUS "    TBB_INCLUDE_DIRS: ${TBB_INCLUDE_DIRS}")
+    message(STATUS "    TBB_LIBRARIES: ${TBB_LIBRARIES}")
+endif()

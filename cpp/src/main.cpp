@@ -1,4 +1,4 @@
-// Tracer by Joshua Senouf - 2017-2021
+// Tracer by Joshua Senouf - 2017-2023
 
 // #define TINYEXR_IMPLEMENTATION
 
@@ -49,7 +49,7 @@ int main(int argc, char** argv)
         spdlog::error("main() - "
             "The provided mode is unknown. The only available mode are \"cli\" and \"gui\".");
 
-        return 0;
+        return 1;
     }
 
     // Use a different context depending on the mode we are using.
@@ -59,7 +59,7 @@ int main(int argc, char** argv)
 
         if(!context_cli.Initialize())
         {
-            return 0;
+            return 1;
         }
 
         context_cli.Execute();
@@ -70,7 +70,7 @@ int main(int argc, char** argv)
 
         if(!context_imgui.Initialize())
         {
-            return 0;
+            return 1;
         }
 
         context_imgui.Execute();
@@ -79,5 +79,5 @@ int main(int argc, char** argv)
     spdlog::debug("main() - "
         "No error detected. Exiting Tracer...");
 
-    return 1;
+    return 0;
 }

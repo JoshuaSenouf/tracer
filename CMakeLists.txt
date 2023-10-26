@@ -21,10 +21,10 @@ include(Options)
 include(CXX)
 
 # Setup external dependencies
-include(SetupBoost)
+# include(SetupBoost)
+include(SetupTBB)
 include(SetupEmbree)
 include(SetupGLFW)
-include(SetupTBB)
 include(SetupUSD)
 
 add_subdirectory(thirdparty)

@@ -22,13 +22,14 @@ add_executable(
 
 target_link_libraries(
     ${PROJECT_NAME}
+    # Internal dependencies.
     cli11
     embree_common
     glad
     imgui
     spdlog
     tinyexr
-    ${Boost_LIBRARIES}
+    # External dependencies.
     ${EMBREE_LIBRARIES}
     ${GLFW_LIBRARIES}
     ${TBB_LIBRARIES}
