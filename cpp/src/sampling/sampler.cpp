@@ -9,12 +9,9 @@ Sampler::Sampler():
 {
 }
 
-unsigned Sampler::NewSeed()
+pcg_extras::seed_seq_from<std::random_device> Sampler::NewSeed()
 {
-    std::uniform_int_distribution<unsigned> seed;
-    std::random_device rng;
-
-    return seed(rng);
+    return pcg_extras::seed_seq_from<std::random_device>();
 }
 
 float Sampler::Uniform1D()

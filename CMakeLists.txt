@@ -21,7 +21,6 @@ include(Options)
 include(CXX)
 
 # Setup external dependencies
-# include(SetupBoost)
 include(SetupTBB)
 include(SetupEmbree)
 include(SetupGLFW)

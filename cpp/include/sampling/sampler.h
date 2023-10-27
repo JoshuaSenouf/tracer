@@ -4,6 +4,8 @@
 #include <algorithm>
 #include <random>
 
+#include "pcg_random.hpp"
+
 #include <embree3/common/math/vec2.h>
 #include <embree3/common/math/vec3.h>
 
@@ -13,7 +15,7 @@ class Sampler
     public:
         Sampler();
 
-        unsigned NewSeed();
+        pcg_extras::seed_seq_from<std::random_device> NewSeed();
         float Uniform1D();
         embree::Vec2f Uniform2D();
         std::vector<embree::Vec2f> Stratified2D(
@@ -30,7 +32,7 @@ class Sampler
 
     private:
         std::uniform_real_distribution<float> float_uniform_distribution;
-        std::mt19937 prng;
+        pcg32 prng;
 };
 
 #endif // SAMPLER_H

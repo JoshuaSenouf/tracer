@@ -27,6 +27,7 @@ target_link_libraries(
     embree_common
     glad
     imgui
+    pcg
     spdlog
     tinyexr
     # External dependencies.
